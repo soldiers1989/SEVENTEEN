@@ -1,4 +1,4 @@
-/**index.wxss**/
+/**index.wxss
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -18,4 +18,170 @@
 
 .usermotto {
   margin-top: 200px;
+}
+**/
+
+/* 顶部图片 */
+
+.nav-baner {
+  width: 100%;
+  height: 450rpx;
+}
+
+.tab-info {
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+}
+
+.tab-info text {
+  line-height: 48px;
+  font-size: 18px;
+  color: gray;
+  margin-left: 20px;
+}
+
+.tab-info .is_checked {
+  font-size: 18px;
+  color: black;
+  font-weight: 600;
+}
+
+/* 地理位置 */
+
+.addres {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  line-height: 32px;
+  height: 32px;
+  margin-top: 12px;
+}
+.addres .addres-text{
+  margin-left:14px; 
+  width: 86%;
+}
+.addres .addres-map{
+  color: gray;
+  width:14% ;
+  right:20px; 
+}
+/* 日历 */
+.date{
+  display: flex;
+  flex-direction: row; 
+  margin-top: 10px;
+  height: 32px;
+  border-bottom: 1px solid #e5e5e5;  
+}
+.date image{
+  margin-left: 18rpx; 
+  top: 5rpx;
+  left: 18rpx;
+  width: 45rpx;
+  height: 45rpx;
+}
+.date .date-cent{
+  width: 65%;
+  font-size: 16px;
+  margin-left: 7rpx;
+  margin-top :2px; 
+}
+.date .date-right{
+  margin-top :2px; 
+  font-size: 16px;
+  margin-right: 7rpx; 
+   color: gray;
+}
+.date .date-right-icon{
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 6px;
+}
+
+/* 列表 */
+.info{
+  display: flex;
+  flex-direction: row;
+  width: 95%;
+  margin-left:5%;
+  margin-top:10px;  
+}
+.info-box{
+  display: block;
+  position: relative;
+}
+.info .info-box .info-box-icon{
+  width: 165rpx;
+  height: 165rpx;
+ border-radius: 3%;
+}
+.info-box-text{
+   position: relative;
+   top: -27px;
+   left: 90rpx;
+}
+
+
+.info-icon-top{
+ 
+  display: flex;
+  flex-direction: row;
+  width: 60rpx;
+  height: 20px;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fff; 
+  background-color: rgba(0,0,0,0.2); 
+
+   
+}
+.info-icon-top-img{
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 2px;
+  margin-left: 4rpx;
+ 
+ 
+}
+
+.info .info-box .info-icon-top text{
+  
+  margin-left: 8rpx;
+}
+
+
+
+.info .right-icon{
+  width: 50rpx;
+  height: 50rpx;
+}
+.info .info-msg{
+  display: flex;
+  margin-left: 30rpx;
+  margin-top: -2px;
+  flex-direction: column;
+  /* font-size: 14px; */
+}
+.msg-smail{
+  font-size: 20px;
+  color: black;
+  font-weight: 400;
+  line-height: 20px;
+  
+}
+.msg-smail{
+  font-size: 14px;
+  color: gray;
+  line-height: 20px;
+}
+
+.money-text{
+  color: #d36225;
+  font-size: 34px;
+  margin-top:20px; 
+}
+.money-smail{
+  font-size: 20px;
+  line-height: 20px;
 }

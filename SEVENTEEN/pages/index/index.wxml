@@ -1,4 +1,4 @@
-<!--index.wxml-->
+<!--index.wxml
 <view class="container">
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
@@ -10,4 +10,43 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+</view>
+-->
+<image class='nav-baner' src='/imgs/baner.png'></image>
+<view class='tab-info'  >
+  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked': ''}}">我要入住</text>
+  <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
+  <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked': ''}}">房屋委托</text>
+</view>
+<view class='addres' bindtap="showMap">
+  <text class="addres-text">体育西路13号骏汇大厦2楼 体育西路G出口</text>
+  <text class="addres-map" >地图</text>
+</view>
+<view class='date' bindtap="showDates">
+  <image src='/imgs/timg.jpg'></image>
+  <text class='date-cent'>3月10日-3月11日</text>
+  <text class='date-right'>入住1晚</text>
+ <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
+</view>
+<view class='info'>
+  <view class='info-box'>
+    <image class='info-box-icon' src='/imgs/room1.jpg'></image>
+    <view class='info-box-text'>
+      <view class='info-icon-top'>
+        <image  class='info-icon-top-img' src='/imgs/photo.png'></image>
+        <text>4</text>
+      </view>
+    </view>
+  </view>
+  <view class='info-msg'>
+    <text class='msg-big'>大床房</text>
+    <text class='msg-smail'>大床2米,1.8米  部分内窗</text>
+    <text class='msg-smail'>20-25m²</text>
+  </view>
+  <view class='money-text'>
+    <text class='money-smail'>￥</text>
+    <text>299</text>
+    <text class='money-smail'>起</text>
+  </view>
+  <image class='right-icon' src='/imgs/right_link.jpg'></image>
 </view>
