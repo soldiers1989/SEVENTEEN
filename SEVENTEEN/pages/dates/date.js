@@ -17,6 +17,34 @@ Page({
     var currentTab = e.target.dataset.current
     if (currentTab === 0) {
       this.dateData();
+      this.setData({
+        startDate: null,
+        endDate: null
+      })
+    } else {
+      var date = this.data.date;
+      var enddate = this.data.endDate.split("/");
+      var startdate = this.data.startDate.split("/");
+      var end = date[enddate[0]][enddate[1]];
+      var start = date[startdate[0]][startdate[1]];
+      var chooseDate = start.month + "/" + start.day + "-" + end.month + "/" + end.day
+      var pages = getCurrentPages();
+
+      var currPage = pages[pages.length - 1];   //当前页面
+      var prevPage = pages[pages.length - 2];  //上一个页面
+
+      var chooseDate = {
+        time: chooseDate,
+        start: this.data.startDate,
+        end: this.data.endDate
+      }
+      //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+      prevPage.setData({
+        chooseDate: chooseDate
+      })
+      wx.navigateBack({
+        url: '../index/index'
+      })
     }
     var that = this;
     if (this.data.currentTab === currentTab) {
@@ -41,6 +69,25 @@ Page({
     let dayscNow = 0//计数器
     let monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]//月份列表
     let nowMonthList = []//本年剩余年份
+    var startday = 0;
+    var startmonth = 0;
+    var endmonth = 0;
+    var endday = 0;
+
+    if (this.data.chooseDate) {
+      var time = this.data.chooseDate.split("-");
+      var startDate = time[0].split("/");
+      var endDate = time[1].split("/");
+
+      endday = endDate[1];
+      endmonth = endDate[0];
+      startday = startDate[1];
+      startmonth = startDate[0];
+    }
+
+
+
+
     for (let i = month; i < 13; i++) {
       nowMonthList.push(i)
     }
@@ -82,6 +129,19 @@ Page({
             }
             if (yearList[i] == year && mList[j] == month) {//判断当年当月
               if (k + 1 >= day) {
+
+                if ((Number(k + 1) >= Number(startday) && mList[j] >= Number(startmonth)) && (Number(k + 1) <= endday && mList[j] <= Number(endmonth))) {
+                  selected: 1;
+                }
+
+                console.log((k + 1 >= startday && mList[j] >= startmonth) && (k + 1 <= endday && mList[j] <= endmonth))
+
+                console.log(k + 1 >= startday && mList[j] >= startmonth)
+                console.log(k + 1 <= endday && mList[j] <= endmonth)
+
+
+                // 没完成
+
                 nowData = {
                   year: yearList[i],
                   month: mList[j],
@@ -128,13 +188,16 @@ Page({
 
 
     this.setData({
-      startDate: null,
-      endDate: null,
+      // startDate: null,
+      // endDate: null,
       date: dataAll2,
       weeks: weeks
     })
   },
-  onLoad: function () {
+  onLoad: function (options) {
+
+    var chooseDate = options.chooseDate;
+    var chooseEndDate = options.end;
     var that = this;
     var myAmapFun = new amapFile.AMapWX({ key: "bc738944276ec1564452d91e8e88b634" });
     myAmapFun.getWeather({
@@ -176,29 +239,53 @@ Page({
     });
 
     var time = util.formatTime2(new Date());
-    var date = new Date().getDay();
-    // 再通过setData更改Page()里面的data，动态更新页面的数据  
+    // 再通过setData更改Page()里面的data，动态更新页面的数据 
+
     this.setData({
       time: time
     });
+    if (chooseDate) {
+      this.setData({
+        chooseDate: chooseDate,
+      });
+    }
     this.dateData();
   },
   selectday: function (event) {
     var that = this
+    var lastdate = "";
+    var nextdate = "";
     var day = event.currentTarget.dataset.indexs;
     var month = event.currentTarget.dataset.index;
     var date = this.data.date;
-    var test = this.data.startDate;
-    date[month][day].selected = !date[month][day].selected
 
-    if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate && date[month][day].selected === false && this.data.endDate === month + '/' + day) {
-      console.log("hello");
-      // this.data.endDate = null;
-    } else if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate) {
-      return;
+    if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate) {
+      var enddate = this.data.endDate.split("/");
+      var startdate = this.data.startDate.split("/");
+      var end = date[enddate[0]][enddate[1]];
+      var start = date[startdate[0]][startdate[1]];
+      nextdate = date[month][day];
+      if (Number(end.date) > Number(nextdate.date) && Number(nextdate.date) >= Number(start.date)) {
+        return;
+      }
     }
 
-    if (!this.data.startDate) {
+    date[month][day].selected = !date[month][day].selected
+
+    if (this.data.startDate) {
+      var lastdate = this.data.startDate.split("/");
+      lastdate = date[lastdate[0]][lastdate[1]];
+      nextdate = date[month][day];
+    }
+    if (!this.data.startDate || Number(lastdate.date) > Number(nextdate.date)) {
+      if (this.data.startDate && this.data.endDate) {
+        lastdate.selected = true;
+        lastdate.live = "";
+        this.setDate(month, day);
+      } else if (this.data.startDate) {
+        lastdate.selected = false;
+        lastdate.live = "";
+      }
       this.data.startDate = month + '/' + day;
       date[month][day].live = "入住";
     } else if (this.data.startDate === month + '/' + day) {
@@ -206,43 +293,85 @@ Page({
       this.data.endDate = null;
       date[month][day].live = "";
     } else {
-      // this.data.endDate = month + '/' + day;
-
-      date[month][day].live = "离店";
-
-      var startDate = this.data.startDate.split('/');
-
-      var startDay = Number(startDate[1]) + 1;
-      var spEndDay = 34;
-
-      for (var m = startDate[0]; m <= month; m++) {
-        var days = date[m];
-
-        // 月份不同判断方法不同
-        if (startDate[0] == month) {
-          for (var d = startDay; d < day; d++) {
-            date[startDate[0]][d].selected = !date[startDate[0]][d].selected;
-          }
-        } else {
-          for (var d = startDay; d < spEndDay; d++) {
-            if (date[m][d]) {
-              date[m][d].selected = !date[m][d].selected;
-              console.log(m + "," + d);
-            } else {
-              if (Number(m) + 1 == month) {
-                spEndDay = day;
-              }
-              startDay = 0;
-              break;
-            }
-          }
-        }
-      }
+      this.setDate(month, day);
     };
     //设置当前样式
     this.setData({
       date
     })
-  }
+  },
+  setDate: function (month, day) {
+    var date = this.data.date;
+    date[month][day].live = "离店";
 
+    var startDate = this.data.startDate.split('/');
+    var startDay = Number(startDate[1]) + 1;
+    var startMonth = Number(startDate[0]);
+
+    var flag = true;
+
+    if (this.data.endDate) {
+      var endDate = this.data.endDate.split("/");
+      var startDate = this.data.startDate.split("/");
+
+      var startdayt = date[startDate[0]][startDate[1]].date;
+      var endday = date[endDate[0]][endDate[1]].date;
+      var nextday = date[month][day].date;
+      if (Number(endday) < Number(nextday)) {
+        flag = false;
+        this.data.endDate = month + '/' + day;
+      } else {
+        this.data.endDate = null;
+      }
+      if (Number(startdayt) > Number(nextday)) {
+        startDay = day;
+        startMonth = month;
+        this.data.startDate = startMonth + "/" + startDay;
+        day = Number(endDate[1]);
+        month = Number(endDate[0]);
+        flag = false;
+        this.data.endDate = month + '/' + day;
+      }
+    } else {
+      this.data.endDate = month + '/' + day;
+    }
+
+
+
+    var spEndDay = 34;
+
+    for (var m = startDate[0]; m <= month; m++) {
+      var days = date[m];
+
+      // 月份不同判断方法不同
+      if (startDate[0] == month) {
+        for (var d = startDay; d < day; d++) {
+          var selected = !date[startDate[0]][d].selected
+          if (!flag) {
+            selected = true;
+          }
+          date[startDate[0]][d].selected = selected;
+          date[startDate[0]][d].live = "";
+        }
+      } else {
+        for (var d = startDay; d < spEndDay; d++) {
+          if (date[m][d]) {
+
+            var selected = !date[m][d].selected;
+            if (!flag) {
+              selected = true;
+            }
+            date[m][d].selected = selected;
+            date[m][d].live = "";
+          } else {
+            if (Number(m) + 1 == month) {
+              spEndDay = day;
+            }
+            startDay = 0;
+            break;
+          }
+        }
+      }
+    }
+  }
 })
