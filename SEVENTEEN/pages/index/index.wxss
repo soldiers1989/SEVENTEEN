@@ -32,6 +32,10 @@
 }
 
 
+.tab-info .s1 {
+ background-color: black;
+}
+
 /* 地理位置 */
 
 .addres {
