@@ -170,3 +170,10 @@
   font-size: 20px;
   line-height: 20px;
 }
+
+.more-img {
+  width: 9rpx;
+  height: 16rpx;
+  margin-top: 25rpx;
+  margin-left: 5rpx;
+}
