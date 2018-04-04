@@ -1,8 +1,7 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/dates/date",
-    "pages/maps/map"
+    "pages/dates/date"
   ],
   "window":{
     "backgroundTextStyle":"light",

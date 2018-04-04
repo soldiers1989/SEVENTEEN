@@ -13,13 +13,8 @@
 </view>
 -->
 <image class='nav-baner' src='/imgs/baner.png'></image>
-<<<<<<< HEAD
 <view class='tab-info'  >
   <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked': ''}}" >我要入住</text>
-=======
-<view class='tab-info'>
-  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked': ''}}">我要入住</text>
->>>>>>> 7647986e68184076b0079e7d2c58007bf437bc21
   <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
   <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked': ''}}">房屋委托</text>
 </view>
@@ -33,13 +28,8 @@
 <view class='date' bindtap="showDates">
   <image src='/imgs/timg.jpg'></image>
   <text class='date-cent'>3月10日-3月11日</text>
-<<<<<<< HEAD
   <text class='date-right' >入住1晚</text>
- <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
-=======
-  <text class='date-right'>入住1晚</text>
   <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
->>>>>>> 7647986e68184076b0079e7d2c58007bf437bc21
 </view>
 <view class='info'>
   <view class='info-box'>
