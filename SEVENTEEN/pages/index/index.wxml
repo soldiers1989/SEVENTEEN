@@ -1,7 +1,7 @@
 
 <image class='nav-baner' src='/imgs/baner.png'></image>
 <view class='tab-info'  >
-  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked': ''}}" >我要入住</text>
+  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}" >我要入住</text>
   <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
   <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked': ''}}">房屋委托</text>
 </view>

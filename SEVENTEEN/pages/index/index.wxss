@@ -9,24 +9,28 @@
 }
 
 .tab-info {
+  margin-top: 1px;
   display: flex;
   flex-direction: row;
-  height: 48px;
-  font-family: 'RTWS YueRoundedGothic G0v1';
+  height: 104rpx;
 }
 
+
+
 .tab-info text {
-  line-height: 48px;
+  line-height: 104rpx;
   font-size: 18px;
-  color: gray;
-  margin-left: 20px;
+  color: black;
+  width: 30%;
+  text-align: center;
 }
 
 .tab-info .is_checked {
   font-size: 18px;
-  color: black;
+  color: white;
   font-weight: 600;
 }
+
 
 /* 地理位置 */
 
