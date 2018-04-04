@@ -20,12 +20,21 @@ Page({
     _obj.curHdIndex = _datasetId;
     // _obj.curBdIndex = _datasetId;
     this.setData({ tabArr: _obj });
-  
+
   },
   //日历模态框
   showDates: function () {
+    var chooseDate = this.data.chooseDate;
+    var time = "";
+    var url
+
+    if (chooseDate) {
+      url = '../dates/date?chooseDate=' + this.data.chooseDate.time + "?end=" + this.data.chooseDate.end
+    }else{
+      url = "../dates/date";
+    }
     wx.navigateTo({
-      url: '../dates/date'
+      url: url
     })
   },
   showMap: function () {
@@ -37,15 +46,33 @@ Page({
           latitude: res.latitude, // 纬度，范围为-90~90，负数表示南纬  
           longitude: res.longitude, // 经度，范围为-180~180，负数表示西经  
           scale: 28, // 缩放比例   
-          name:"巨大创意园",
-          address:"会江地铁站C出口"         
+          name: "巨大创意园",
+          address: "会江地铁站C出口"
         })
       }
     });
     // wx.navigateTo({
     //   url: '../maps/map'
     // })
+  },
+  onLoad: function (options) {
+
+  },
+  onShow: function () {
+    var chooseDate = this.data.chooseDate;
+    var time = "";
+    if (chooseDate) {
+      var date = chooseDate.time.split("-");
+      var startDate = date[0].split("/");
+      var endDate = date[1].split("/");
+      time = startDate[0] + "月" + startDate[1] + "日" + "-" + endDate[0] + "月" + endDate[1] + "日";
+    } else {
+      time = "入住日期"
+    }
+    this.setData({
+      time
+    });
   }
 
- 
+
 })

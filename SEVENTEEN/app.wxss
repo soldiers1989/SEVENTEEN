@@ -17,7 +17,7 @@
   justify-content: space-between;
   padding: 200rpx 0;
   box-sizing: border-box;
-} 
+}
 
 page{
  font-family: 'RTWS YueRoundedGothic G0v1';
