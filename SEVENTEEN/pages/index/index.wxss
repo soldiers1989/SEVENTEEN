@@ -1,27 +1,7 @@
-/**index.wxss
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 200px;
-}
-**/
 
 /* 顶部图片 */
+
 
 .nav-baner {
   width: 100%;
@@ -29,23 +9,28 @@
 }
 
 .tab-info {
+  margin-top: 1px;
   display: flex;
   flex-direction: row;
-  height: 48px;
+  height: 104rpx;
 }
 
+
+
 .tab-info text {
-  line-height: 48px;
+  line-height: 104rpx;
   font-size: 18px;
-  color: gray;
-  margin-left: 20px;
+  color: black;
+  width: 30%;
+  text-align: center;
 }
 
 .tab-info .is_checked {
   font-size: 18px;
-  color: black;
+  color: white;
   font-weight: 600;
 }
+
 
 /* 地理位置 */
 
@@ -67,6 +52,10 @@
   right:20px; 
 }
 /* 日历 */
+
+
+
+
 .date{
   display: flex;
   flex-direction: row; 

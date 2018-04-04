@@ -1,20 +1,7 @@
-<!--index.wxml
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
-</view>
--->
+
 <image class='nav-baner' src='/imgs/baner.png'></image>
-<view class='tab-info'>
-  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked': ''}}">我要入住</text>
+<view class='tab-info'  >
+  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}" >我要入住</text>
   <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
   <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked': ''}}">房屋委托</text>
 </view>
@@ -28,7 +15,7 @@
 <view class='date' bindtap="showDates">
   <image src='/imgs/timg.jpg'></image>
   <text class='date-cent'>3月10日-3月11日</text>
-  <text class='date-right'>入住1晚</text>
+  <text class='date-right' >入住1晚</text>
   <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
 </view>
 <view class='info'>
