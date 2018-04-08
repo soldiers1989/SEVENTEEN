@@ -19,7 +19,9 @@
   <image src='/imgs/index/rl.png'></image>
   <text class='date-cent'>{{time}}</text>
   <text class='date-right'>{{chooseDate.day?"入住"+chooseDate.day+"晚":"入住"}}</text>
+
   <image class="date-right-icon" src='/imgs/index/right-arr.png'></image>
+
 </view>
 <view class='info'>
   <view class='info-box'>
