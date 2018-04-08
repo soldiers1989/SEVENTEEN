@@ -4,7 +4,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: -2;
+}
+
+.charge-detail {
+  position: absolute;
+  margin-left: 590rpx; 
 }
 
 .good-container {
@@ -21,6 +25,9 @@
   flex-direction: row;
   align-items: center;
   font-size: 30rpx;
+}
+
+.title {
 }
 
 .other {
@@ -48,6 +55,7 @@
   opacity: 0.2;
   position: absolute;
   height: 420rpx;
+  z-index: -2;
 }
 
 .moto-container {

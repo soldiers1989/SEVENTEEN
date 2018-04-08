@@ -1,8 +1,10 @@
 <import src="/pages/money/money-good-template/money-good-template.wxml" />
-
+<text class='charge-detail'>余额明细</text>
 <view class='money-container'>
   <image class="money-img" src='{{image}}'></image>
-  <text class='title'>账户余额(元)</text>
+  <view class='charge-container'>
+    <text class='title'>账户余额(元)</text>
+  </view>
   <text class='money'>0.00</text>
   <view class='moto-container' bindtap='recharge'>
     <text class='moto'>充值</text>
@@ -25,8 +27,8 @@
   <view class='line'>
   </view>
   <view class='good-container'>
-    <template is="goodList"/>
-    <template is="goodList"/>
-    <template is="goodList"/>
+    <template is="goodList" />
+    <template is="goodList" />
+    <template is="goodList" />
   </view>
 </view>
