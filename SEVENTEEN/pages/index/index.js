@@ -28,8 +28,8 @@ Page({
     var time = "";
     var url
 
-    if (chooseDate) {
-      url = '../dates/date?chooseDate=' + this.data.chooseDate.time + "?end=" + this.data.chooseDate.end
+    if (chooseDate &&chooseDate.end) {
+      url = '../dates/date?chooseDate=' + this.data.chooseDate.start + "-" + this.data.chooseDate.end+ "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
     }else{
       url = "../dates/date";
     }
@@ -61,7 +61,7 @@ Page({
   onShow: function () {
     var chooseDate = this.data.chooseDate;
     var time = "";
-    if (chooseDate) {
+    if (chooseDate && chooseDate.end) {
       var date = chooseDate.time.split("-");
       var startDate = date[0].split("/");
       var endDate = date[1].split("/");

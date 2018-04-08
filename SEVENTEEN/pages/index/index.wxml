@@ -15,10 +15,10 @@
 <view class='date' bindtap="showDates">
   <image src='/imgs/timg.jpg'></image>
   <text class='date-cent'>{{time}}</text>
-  <text class='date-right'>入住1晚</text>
+  <text class='date-right'>{{chooseDate.day?"入住"+chooseDate.day+"晚":"入住"}}</text>
   <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
 </view>
-<view class='info'>
+<view class='info'> 
   <view class='info-box'>
     <image class='info-box-icon' src='/imgs/room1.jpg'></image>
     <view class='info-box-text'>

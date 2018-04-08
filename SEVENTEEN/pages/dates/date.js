@@ -14,7 +14,18 @@ Page({
   },
 
   swichNav: function (e) {
+    var time = 0;
+    var start = this.data.startDate;
+    var sDate = 0;
+    var end = this.data.endDate;
+    var eDate = 0;
+    var day = 0;
+
     var currentTab = e.target.dataset.current
+    var pages = getCurrentPages();
+    var currPage = pages[pages.length - 1];   //当前页面
+    var prevPage = pages[pages.length - 2];  //上一个页面
+
     if (currentTab === 0) {
       this.dateData();
       this.setData({
@@ -22,21 +33,32 @@ Page({
         endDate: null
       })
     } else {
-      var date = this.data.date;
-      var enddate = this.data.endDate.split("/");
-      var startdate = this.data.startDate.split("/");
-      var end = date[enddate[0]][enddate[1]];
-      var start = date[startdate[0]][startdate[1]];
-      var chooseDate = start.month + "/" + start.day + "-" + end.month + "/" + end.day
-      var pages = getCurrentPages();
-
-      var currPage = pages[pages.length - 1];   //当前页面
-      var prevPage = pages[pages.length - 2];  //上一个页面
-
+      if (this.data.startDate && !this.data.endDate) {
+        wx.showToast({
+          title: "请选择入住日期",
+          duration: 2000,
+          image: "../../imgs/icon/fail05.png"
+        })
+        return;
+      }
+      if (this.data.startDate && this.data.endDate) {
+        var date = this.data.date;
+        var enddate = this.data.endDate.split("/");
+        var startdate = this.data.startDate.split("/");
+        end = date[enddate[0]][enddate[1]];
+        start = date[startdate[0]][startdate[1]];
+        time = start.month + "/" + start.day + "-" + end.month + "/" + end.day
+        day = end.date - start.date;
+        sDate = start.date;
+        eDate = end.date;
+      }
       var chooseDate = {
-        time: chooseDate,
-        start: this.data.startDate,
-        end: this.data.endDate
+        time: time,
+        start: start,
+        sDate: sDate,
+        end: end,
+        eDate: eDate,
+        day: day
       }
       //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
       prevPage.setData({
@@ -69,24 +91,17 @@ Page({
     let dayscNow = 0//计数器
     let monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]//月份列表
     let nowMonthList = []//本年剩余年份
-    var startday = 0;
-    var startmonth = 0;
-    var endmonth = 0;
-    var endday = 0;
+    let startday = 0;
+    let startmonth = 0;
+    let endmonth = 0;
+    let endday = 0;
+    let eDate = 0;
+    let sDate = 0;
 
-    if (this.data.chooseDate) {
-      var time = this.data.chooseDate.split("-");
-      var startDate = time[0].split("/");
-      var endDate = time[1].split("/");
-
-      endday = endDate[1];
-      endmonth = endDate[0];
-      startday = startDate[1];
-      startmonth = startDate[0];
+    if (this.data.eDate) {
+      eDate = this.data.eDate;
+      sDate = this.data.sDate;
     }
-
-
-
 
     for (let i = month; i < 13; i++) {
       nowMonthList.push(i)
@@ -127,27 +142,29 @@ Page({
             if (days < 10) {
               days = "0" + days
             }
+
+            let selected = 0;
+            let live = "";
+            if (Number(yearList[i] + "" + mList[j] + days) >= sDate) {
+              if (Number(yearList[i] + "" + mList[j] + days) <= eDate) {
+                selected = 1;
+              }
+              if (Number(yearList[i] + "" + mList[j] + days) == sDate) {
+                live = "入住";
+              } else if (Number(yearList[i] + "" + mList[j] + days) == eDate) {
+                live = "离店";
+              }
+            }
+
             if (yearList[i] == year && mList[j] == month) {//判断当年当月
               if (k + 1 >= day) {
-
-                if ((Number(k + 1) >= Number(startday) && mList[j] >= Number(startmonth)) && (Number(k + 1) <= endday && mList[j] <= Number(endmonth))) {
-                  selected: 1;
-                }
-
-                console.log((k + 1 >= startday && mList[j] >= startmonth) && (k + 1 <= endday && mList[j] <= endmonth))
-
-                console.log(k + 1 >= startday && mList[j] >= startmonth)
-                console.log(k + 1 <= endday && mList[j] <= endmonth)
-
-
-                // 没完成
-
                 nowData = {
                   year: yearList[i],
                   month: mList[j],
                   day: k + 1,
                   date: yearList[i] + "" + mList[j] + days,
-                  selected: 0,
+                  selected: selected,
+                  live: live,
                   re: yearList[i] + "-" + mList[j] + "-" + days,
                 }
                 dataMonth.push(nowData)
@@ -163,7 +180,8 @@ Page({
                 month: mList[j],
                 day: k + 1,
                 date: yearList[i] + "" + mList[j] + days,
-                selected: 0,
+                selected: selected,
+                live: live,
                 re: yearList[i] + "-" + mList[j] + "-" + days,
               }
               dataMonth.push(nowData)
@@ -188,8 +206,9 @@ Page({
 
 
     this.setData({
-      // startDate: null,
-      // endDate: null,
+      eDate: null,
+      sDate: null,
+      chooseDate: null,
       date: dataAll2,
       weeks: weeks
     })
@@ -197,7 +216,9 @@ Page({
   onLoad: function (options) {
 
     var chooseDate = options.chooseDate;
-    var chooseEndDate = options.end;
+    var eDate = options.eDate;
+    var sDate = options.sDate;
+
     var that = this;
     var myAmapFun = new amapFile.AMapWX({ key: "bc738944276ec1564452d91e8e88b634" });
     myAmapFun.getWeather({
@@ -245,8 +266,15 @@ Page({
       time: time
     });
     if (chooseDate) {
+      let time = chooseDate.split("-");
+      let startDate = time[0];
+      let endDate = time[1];
       this.setData({
+        startDate: startDate,
+        endDate: endDate,
         chooseDate: chooseDate,
+        eDate: eDate,
+        sDate: sDate
       });
     }
     this.dateData();
@@ -259,15 +287,31 @@ Page({
     var month = event.currentTarget.dataset.index;
     var date = this.data.date;
 
+    // 旧业务 
+    // if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate) {
+    //   var enddate = this.data.endDate.split("/");
+    //   var startdate = this.data.startDate.split("/");
+    //   var end = date[enddate[0]][enddate[1]];
+    //   var start = date[startdate[0]][startdate[1]];
+    //   nextdate = date[month][day];
+    //   if (Number(end.date) > Number(nextdate.date) && Number(nextdate.date) >= Number(start.date)) {
+    //     return;
+    //   }
+    // }
+
     if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate) {
-      var enddate = this.data.endDate.split("/");
-      var startdate = this.data.startDate.split("/");
-      var end = date[enddate[0]][enddate[1]];
-      var start = date[startdate[0]][startdate[1]];
-      nextdate = date[month][day];
-      if (Number(end.date) > Number(nextdate.date) && Number(nextdate.date) >= Number(start.date)) {
-        return;
-      }
+      this.dateData();
+      var date = this.data.date;
+      date[month][day].selected = !date[month][day].selected;
+      date[month][day].live = "入住";
+
+      var startDate = month + "/" + day;
+      this.setData({
+        startDate,
+        endDate: null,
+        date
+      });
+      return;
     }
 
     date[month][day].selected = !date[month][day].selected
