@@ -1,24 +1,27 @@
 
-<image class='nav-baner' src='/imgs/baner.png'></image>
+<image class='nav-baner' src='/imgs/index/brand.jpg'></image>
 <view class='tab-info'  >
   <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}" >我要入住</text>
+  <image wx:if="{{tabArr.curHdIndex=='t1'}}" class="{{tabArr.curHdIndex=='t1'?'bag1': 'none'}}" src='/imgs/index/wyrz.jpg'></image>
   <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
-  <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked': ''}}">房屋委托</text>
+  <image  class="{{tabArr.curHdIndex=='t2'?'bag2': 'none'}}" src='/imgs/index/wyzf.svg'></image>
+  <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked bag3a': ''}}">房屋委托</text>
+  <image  class="{{tabArr.curHdIndex=='t3'?'bag3': 'none'}}" src='/imgs/index/fwwt.jpg'></image>
 </view>
 <view class='addres' bindtap="showMap">
   <text class="addres-text">体育西路13号骏汇大厦2楼 体育西路G出口</text>
   <view class="addres-map">
-    <text >地图</text>
+    <text>地图</text>
     <image class="more-img" src='/imgs/arrow-right.png'></image>
   </view>
 </view>
 <view class='date' bindtap="showDates">
-  <image src='/imgs/timg.jpg'></image>
+  <image src='/imgs/index/rl.png'></image>
   <text class='date-cent'>{{time}}</text>
   <text class='date-right'>{{chooseDate.day?"入住"+chooseDate.day+"晚":"入住"}}</text>
   <image class="date-right-icon" src='/imgs/right_link.jpg'></image>
 </view>
-<view class='info'> 
+<view class='info'>
   <view class='info-box'>
     <image class='info-box-icon' src='/imgs/room1.jpg'></image>
     <view class='info-box-text'>
