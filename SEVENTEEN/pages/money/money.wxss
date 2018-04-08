@@ -1,0 +1,89 @@
+@import "money-good-template/money-good-template.wxss";
+
+.money-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.charge-detail {
+  position: absolute;
+  margin-left: 590rpx; 
+}
+
+.good-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.other-container {
+  margin-top: 80rpx;
+  margin-bottom: 20rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+}
+
+.title {
+}
+
+.other {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coupon {
+  width: 100%;
+  border-right: 1px solid white;
+}
+
+.point {
+  width: 100%;
+}
+
+.card {
+  width: 100%;
+  border-left: 1px solid white;
+}
+
+.money-img {
+  width: 100%;
+  opacity: 0.2;
+  position: absolute;
+  height: 420rpx;
+  z-index: -2;
+}
+
+.moto-container {
+  border: 1px solid #f96;
+  border-radius: 5px;
+  width: 200rpx;
+  height: 60rpx;
+  margin-top: 40rpx;
+  text-align: center;
+}
+
+.moto {
+  font-size: 40rpx;
+  line-height: 60rpx;
+  color: #f96;
+}
+
+.money {
+  margin-top: 30rpx;
+  font-size: 90rpx;
+}
+
+.line {
+  background-color: #f0f0f0;
+  width: 100%;
+  height: 20rpx;
+}
+
+.good-list {
+  margin-top: 20rpx;
+}
