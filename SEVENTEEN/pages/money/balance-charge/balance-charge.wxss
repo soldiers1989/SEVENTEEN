@@ -1,0 +1,38 @@
+.charge-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.charge-detail-container {
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.balance-charge {
+  background-color: #f0f0f0;
+  height: 90rpx;
+  line-height: 90rpx;
+  padding-left: 30rpx;
+}
+
+.charge-date {
+  margin-top: 10rpx;
+  color: #888;
+  line-height: 0rpx;
+  font-size: 30rpx;
+  width: 500rpx;
+}
+
+.charge-name {
+  line-height: 70rpx;
+}
+
+.charge-value {
+  width: 100%;
+  text-align: end;
+  margin: auto 0;
+}

@@ -1,0 +1,45 @@
+<view class='recharge-container'>
+  <view class='charge-container'>
+    <text class='charge-name'>当前余额(元)</text>
+    <text class='charge'>0.00</text>
+  </view>
+  <text class='vip-recharge'>- 会员充值 -</text>
+  <view class='charge-type-container'>
+    <view class="recharge-type {{selected==1? 'type2':''}}" data-idx='1' bindtap='selectCharge'>
+      <text class='charge-value'>1000元</text>
+      <text class='charge-remark'>送190卷</text>
+    </view>
+    <view class="recharge-type {{selected==2? 'type2':''}}" data-idx='2' bindtap='selectCharge'>
+      <text class='charge-value'>2000元</text>
+      <text class='charge-remark'>送380卷</text>
+    </view>
+    <view class="recharge-type {{selected==3? 'type2':''}}" data-idx='3' bindtap='selectCharge'>
+      <text class='charge-value'>3000元</text>
+      <text class='charge-remark'>送免费房、540卷</text>
+    </view>
+    <view class="recharge-type {{selected==4? 'type2':''}}" data-idx='4' bindtap='selectCharge'>
+      <text class='charge-value'>5000元</text>
+      <text class='charge-remark'>送免费房、900卷</text>
+    </view>
+    <view class="recharge-type {{selected==5? 'type2':''}}" data-idx='5' bindtap='selectCharge'>
+      <text class='charge-value'>其他金额</text>
+      <text class='charge-remark'>充值立享优惠</text>
+    </view>
+  </view>
+  <text class='remark'>
+  会员充值最低1元，单次最高5000元。具体限额以支付平台和发行卡规则为准。
+  </text>
+</view>
+<view class='access-container'>
+  <image bindtap='accessChoose' class='choose-img' src="{{accessChoose?'/imgs/icon/choose.png':'/imgs/icon/nochoose.png'}}"></image>
+  <text class='access-read'>我已阅读并理解</text>
+  <text class='access-text'>《充值服务协议》</text>
+</view>
+
+<view class='recharge' bindtap=''>
+  <text>立即充值</text>
+</view>
+<view class='question-container'>
+  <image class='question-img' src="/imgs/icon/question.png"></image>
+  <text class='question-text'>常见问题</text>
+</view>

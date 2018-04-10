@@ -6,6 +6,22 @@ Page({
   data: {
     
   },
+  accessChoose:function(event) {
+    var accessChoose = this.data.accessChoose;
+    accessChoose = !accessChoose;
+    this.setData({
+      accessChoose
+    })
+  },
+  selectCharge:function(event){
+    var selected = event.currentTarget.dataset.idx
+    if (this.data.selected == selected){
+      selected = 0
+    }
+    this.setData({
+      selected
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
