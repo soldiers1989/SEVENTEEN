@@ -1,0 +1,38 @@
+.point-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.point-detail-container {
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.balance-point {
+  background-color: #f0f0f0;
+  height: 90rpx;
+  line-height: 90rpx;
+  padding-left: 30rpx;
+}
+
+.point-date {
+  margin-top: 10rpx;
+  color: #888;
+  line-height: 0rpx;
+  font-size: 30rpx;
+  width: 500rpx;
+}
+
+.point-name {
+  line-height: 70rpx;
+}
+
+.point-value {
+  width: 100%;
+  text-align: end;
+  margin: auto 0;
+}

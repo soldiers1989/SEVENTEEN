@@ -1,12 +1,48 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
+    "pages/money/coupon-detail/coupon-detail",
+    "pages/money/money",
+    "pages/money/vip-card/vip-card",
+    "pages/money/balance-charge/balance-charge",
+    "pages/money/point-detail/point-detail",
+    "pages/money/recharge/recharge",
     "pages/dates/date"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "SEVENTEEN",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "borderStyle": "white",
+    "position": "bottom",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "imgs/icon/shouye.png",
+        "selectedIconPath": "imgs/icon/shouye_se.png"
+      },
+      {
+        "pagePath": "pages/money/money",
+        "text": "钱包",
+        "iconPath": "imgs/icon/qianbao.png",
+        "selectedIconPath": "imgs/icon/qianbao_se.png"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "消息",
+        "iconPath": "imgs/icon/xiaoxi.png",
+        "selectedIconPath": "imgs/icon/xiaoxi_se.png"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "我的",
+        "iconPath": "imgs/icon/user.png",
+        "selectedIconPath": "imgs/icon/user_se.png"
+      }
+    ]
   }
 }

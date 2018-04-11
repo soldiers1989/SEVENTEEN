@@ -1,0 +1,17 @@
+<view class='point-container'>
+  <text class='balance-point'>当前积分 :￥0.00 </text>
+  <view class='point-detail-container'>
+    <view class='point-container'> 
+      <text class='point-name'>离店送积分</text>
+      <text class='point-date'>2017-10-08</text>
+    </view>
+    <text class='point-value'>+200</text>
+  </view>
+  <view class='point-detail-container'>
+    <view class='point-container'> 
+      <text class='point-name'>积分商城兑换</text>
+      <text class='point-date'>2017-10-08</text>
+    </view>
+    <text class='point-value'>-5000</text>
+  </view>
+</view>

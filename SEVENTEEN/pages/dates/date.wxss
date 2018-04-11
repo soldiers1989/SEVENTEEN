@@ -43,11 +43,6 @@
   margin-left: 200rpx;
 }
 
-text {
-  font-family: Microsoft Yahei;
-  font-weight: bold;
-}
-
 .headdate {
   height: 30px;
   background-color: white;
