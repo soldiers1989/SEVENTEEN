@@ -1,9 +1,9 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/money/vip-card/vip-card",
     "pages/money/coupon-detail/coupon-detail",
     "pages/money/money",
-    "pages/money/vip-card/vip-card",
     "pages/money/balance-charge/balance-charge",
     "pages/money/point-detail/point-detail",
     "pages/money/recharge/recharge",
