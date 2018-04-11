@@ -1,24 +1,5 @@
-<view class='charge-container'>
-  <text class='balance-charge'>当前余额 :￥0.00 </text>
-  <view class='charge-detail-container'>
-    <view class='charge-container'> 
-      <text class='charge-name'>下单扣减</text>
-      <text class='charge-date'>2017-10-08</text>
-    </view>
-    <text class='charge-value'>-9000.35</text>
-  </view>
-  <view class='charge-detail-container'>
-    <view class='charge-container'> 
-      <text class='charge-name'>下单扣减</text>
-      <text class='charge-date'>2017-10-08</text>
-    </view>
-    <text class='charge-value'>-9000.35</text>
-  </view>
-  <view class='charge-detail-container'>
-    <view class='charge-container'> 
-      <text class='charge-name'>取消订单</text>
-      <text class='charge-date'>2017-10-08</text>
-    </view>
-    <text class='charge-value'>+90.35</text>
-  </view>
+<view class='vip-container'>
+  <view class='vip-background'></view>
+  <text class='card-title'>会员卡</text>
+  <image class='card-img' src='http://119.29.196.106:8080/seventeen/vip-card.png'></image>
 </view>

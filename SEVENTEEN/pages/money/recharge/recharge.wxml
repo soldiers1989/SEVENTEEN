@@ -32,7 +32,7 @@
 </view>
 <view class='access-container'>
   <image bindtap='accessChoose' class='choose-img' src="{{accessChoose?'/imgs/icon/choose.png':'/imgs/icon/nochoose.png'}}"></image>
-  <text class='access-read'>我已阅读并理解</text>
+  <text class='access-read' bindtap='accessChoose'>我已阅读并理解</text>
   <text class='access-text'>《充值服务协议》</text>
 </view>
 

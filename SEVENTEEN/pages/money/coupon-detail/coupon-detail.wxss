@@ -122,14 +122,14 @@ page {
   line-height: 75rpx;
   text-align: center;
   font-size: 30rpx;
-  width: 33%;
+  flex: 1;
 }
 
 .active {
   line-height: 75rpx;
   text-align: center;
   font-size: 30rpx;
-  width: 33%;
+  flex: 1;
 }
 
 .test{

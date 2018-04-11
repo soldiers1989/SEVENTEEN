@@ -17,6 +17,7 @@
   height: 90rpx;
   line-height: 90rpx;
   padding-left: 30rpx;
+  font-size: 30rpx;
 }
 
 .charge-date {
@@ -28,7 +29,9 @@
 }
 
 .charge-name {
-  line-height: 70rpx;
+  line-height: 65rpx;
+  font-size: 30rpx;
+
 }
 
 .charge-value {
