@@ -7,7 +7,7 @@ const app = getApp()
 Page({
   data: {
     tabArr: {
-      curHdIndex: "t1"
+      curHdIndex: "wyrz"
       //  curBdIndex: 0 
     }
   },
