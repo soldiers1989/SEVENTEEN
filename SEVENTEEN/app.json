@@ -1,6 +1,9 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/message/reply/reply",
+    "pages/message/system/system",
+    "pages/message/message",
     "pages/money/vip-card/vip-card",
     "pages/money/coupon-detail/coupon-detail",
     "pages/money/money",
@@ -32,7 +35,7 @@
         "selectedIconPath": "imgs/icon/qianbao_se.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/message/message",
         "text": "消息",
         "iconPath": "imgs/icon/xiaoxi.png",
         "selectedIconPath": "imgs/icon/xiaoxi_se.png"

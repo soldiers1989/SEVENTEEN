@@ -1,10 +1,15 @@
 //app.js
 App({
+  globalData: {
+    userInfo: null,
+    baseUrl:"http://localhost:8090"
+  },
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    console.log(this.globalData.baseUrl)
 
     wx.login({
       success: function (r) {
@@ -16,7 +21,7 @@ App({
               console.log({ encryptedData: res.encryptedData, iv: res.iv, code: code })
               //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
               wx.request({
-                url: 'https://xxxx.com/wxsp/decodeUserInfo',//自己的服务接口地址
+                url: 'http://localhost:8090/sys/decodeUserInfo',//自己的服务接口地址
                 method: 'post',
                 header: {
                   'content-type': 'application/x-www-form-urlencoded'
@@ -51,8 +56,6 @@ App({
         console.log('登陆失败')
       }
     })
-  },
-  globalData: {
-    userInfo: null
   }
+  
 })

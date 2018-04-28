@@ -33,6 +33,7 @@ spring:
       max-active: 600
       max-wait: 5000
       initial-size: 8
+#  没有配置redis 使用cache
 #  cache:
 #    type: redis
 #  redis:

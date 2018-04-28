@@ -7,7 +7,7 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info
   path: /root/logs/chrs
 
 spring:
@@ -30,6 +30,7 @@ spring:
       max-active: 600
       max-wait: 5000
       initial-size: 8
+#  没有配置redis 使用cache
 #  cache:
 #    type: redis
 #  redis:
@@ -52,7 +53,6 @@ management:
     enabled: false
 mybatis:
   type-aliases-package: com.seventeen
-  mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
 pagehelper:
@@ -65,3 +65,9 @@ info:
     name: seventeen
     description: seventeen服务
     version: v1.0.0
+
+wx:
+  app:
+    Appid: wxe6f9450a01336cb9
+    Secret: 056c145f98060d326ea53187f548d778
+    grant_type: authorization_code

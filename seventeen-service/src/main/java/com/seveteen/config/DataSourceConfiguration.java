@@ -32,7 +32,6 @@ import java.util.Properties;
  * @createDate Nov 19, 2018 11:16:44 AM
  */
 @Configuration
-@MapperScan(basePackages = "com.seventeen.mapper.*", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class DataSourceConfiguration {
 
 	@Value("${spring.datasource.url}")

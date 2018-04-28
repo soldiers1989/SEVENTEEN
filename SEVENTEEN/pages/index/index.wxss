@@ -1,5 +1,4 @@
-@import "wyzf-template/wyzf-template.wxss";
-@import "fwwt-template/fwwt-template.wxss";
+
 
 /* 顶部图片 */
 .none{
