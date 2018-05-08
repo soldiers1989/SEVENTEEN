@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="logo">微服务后台管理系统</div>
+        <div class="logo">SEVENTEEN后台管理系统</div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
@@ -18,7 +18,7 @@
     export default {
         data() {
             return {
-                name: 'himasoft'
+                name: 'seventeen'
             }
         },
         computed: {

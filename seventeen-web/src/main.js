@@ -7,7 +7,6 @@ import router from './router';
 import App from './App';
 import global from './Global';
 import {Message} from 'element-ui';
-import store from './store'
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$global = global;
@@ -53,7 +52,6 @@ axios.interceptors.response.use(response => {
 
 new Vue({
     router,
-    store,
     render: h => h(App)
 }).$mount('#app');
 

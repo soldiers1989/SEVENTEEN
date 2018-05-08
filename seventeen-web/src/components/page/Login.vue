@@ -1,6 +1,6 @@
 <template>
     <div class="login-wrap" v-loading="loading">
-        <div class="ms-title">微服务后台管理系统</div>
+        <div class="ms-title">SEVENTEEN后台管理系统</div>
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">

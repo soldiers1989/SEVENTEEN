@@ -13,87 +13,56 @@ const router = new Router({
             path: '/readme',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             meta: {requiresAuth: true},
-            children: [
+            children:[
                 {
-                    path: '/',
-                    component: resolve => require(['../components/page/Readme.vue'], resolve),
-                    meta: {requiresAuth: true},
-                },
-                {
-                    path: '/sys/authorities',
-                    component: resolve => require(['../components/page/SysAuthorities.vue'], resolve),
+                    path: '/dashboard',
+                    component: resolve => require(['../components/page/Dashboard.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/sys/roles',
-                    component: resolve => require(['../components/page/SysRoles.vue'], resolve),
+                    path: '/table',
+                    component: resolve => require(['../components/page/BaseTable.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/sys/users',
-                    component: resolve => require(['../components/page/SysUsers.vue'], resolve),
-                    meta: {requiresAuth: true}
-                }, {
-                    path: '/sys/file',
-                    component: resolve => require(['../components/page/SysFiles.vue'], resolve),
+                    path: '/tabs',
+                    component: resolve => require(['../components/page/Tabs.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/doc/swaggerAPI',
-                    component: resolve => require(['../components/page/SwaggerApi.vue'], resolve),
+                    path: '/form',
+                    component: resolve => require(['../components/page/BaseForm.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/doc/chrsAPI',
-                    component: resolve => require(['../components/page/ChrsApi.vue'], resolve),
+                    // 富文本编辑器组件
+                    path: '/editor',
+                    component: resolve => require(['../components/page/VueEditor.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/doc/dataCleanAPI',
-                    component: resolve => require(['../components/page/DataCleanApi.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    path: '/food/book/clawer',
-                    component: resolve => require(['../components/page/FoodBookCrawlerList.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    name: 'foodBookClawerEdit',
-                    path: '/food/book/clawer/edit',
-                    component: resolve => require(['../components/page/FoodBookCrawlerEdit.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    path: '/food/books',
-                    component: resolve => require(['../components/page/FoodBookList.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    name: 'foodBookView',
-                    path: '/food/books/view',
-                    component: resolve => require(['../components/page/FoodBookView.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    path: '/vueeditor',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve)    // Vue-Quill-Editor组件
-                },
-                {
-                    path: '/markdown',
-                    component: resolve => require(['../components/page/Markdown.vue'], resolve)     // Vue-Quill-Editor组件
-                },
-                {
+                    // 图片上传组件
                     path: '/upload',
-                    component: resolve => require(['../components/page/Upload.vue'], resolve)       // Vue-Core-Image-Upload组件
+                    component: resolve => require(['../components/page/Upload.vue'], resolve),
+                    meta: {requiresAuth: true}
                 },
                 {
-                    path: '/basecharts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve)   // vue-schart组件
+                    // vue-schart组件
+                    path: '/charts',
+                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
+                    meta: {requiresAuth: true}
                 },
                 {
+                    // 拖拽列表组件
                     path: '/drag',
-                    component: resolve => require(['../components/page/DragList.vue'], resolve)    // 拖拽列表组件
+                    component: resolve => require(['../components/page/DragList.vue'], resolve),
+                    meta: {requiresAuth: true}
+                },
+                {
+                    // 权限页面
+                    path: '/permission',
+                    component: resolve => require(['../components/page/Permission.vue'], resolve),
+                    meta: {requiresAuth: true}
                 }
             ]
         },
@@ -101,6 +70,18 @@ const router = new Router({
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },
+        {
+            path: '/404',
+            component: resolve => require(['../components/page/404.vue'], resolve)
+        },
+        {
+            path: '/403',
+            component: resolve => require(['../components/page/403.vue'], resolve)
+        },
+        {
+            path: '*',
+            redirect: '/404'
+        }
     ]
 });
 router.beforeEach((to, from, next) => {
@@ -123,4 +104,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-
