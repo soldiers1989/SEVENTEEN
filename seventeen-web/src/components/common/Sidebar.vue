@@ -35,9 +35,9 @@
                         title: '系统首页'
                     },
                     {
-                        icon: 'el-icon-tickets',
-                        index: 'table',
-                        title: '基础表格'
+                        icon: 'el-icon-star-off',
+                        index: 'room',
+                        title: '房间列表'
                     },
                     {
                         icon: 'el-icon-message',

@@ -20,8 +20,8 @@ const router = new Router({
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/table',
-                    component: resolve => require(['../components/page/BaseTable.vue'], resolve),
+                    path: '/room',
+                    component: resolve => require(['../components/page/Room.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {

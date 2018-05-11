@@ -7,6 +7,9 @@ server:
 
 logging:
   level:
+    com:
+      seventeen:
+        mapper: debug
     root: info
   path: /root/logs/chrs
 
@@ -18,7 +21,7 @@ spring:
   application:
     name: seveteen-service
   jpa:
-    show-sql: false
+    show-sql: true
     database: MYSQL
   datasource:
     url: jdbc:mysql://119.29.196.106:3306/seventeen?useSSL=false&&characterEncoding=UTF-8

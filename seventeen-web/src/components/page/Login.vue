@@ -41,7 +41,7 @@
         methods: {
             submitForm(formName) {
                 const self = this;
-                self.url = self.$global.baseUrl + "/token/auth";
+                self.url = self.$global.baseUrl + "/login";
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.loading = true;
@@ -49,7 +49,7 @@
                             "username": self.ruleForm.username,
                             "password": self.ruleForm.password
                         }).then((response) => {
-                            if (response.data.status == 200) {
+                            if (response.data.resultCode == 200) {
                                 self.$message.success("登录成功")
                                 sessionStorage.setItem('token', response.data.data.token);
                                 sessionStorage.setItem('username', self.ruleForm.username);
@@ -102,6 +102,6 @@
     }
 
     .login-btn-submit {
-        width: 220px;
+        width: 215px;
     }
 </style>
