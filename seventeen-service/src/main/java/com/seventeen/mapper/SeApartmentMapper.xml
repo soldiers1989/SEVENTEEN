@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seventeen.mapper.SeApartmentMapper">
+    <resultMap id="BaseResultMap" type="com.seventeen.bean.SeApartment">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ap_num" property="apNum" jdbcType="CHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="floor" property="floor" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="structure" property="structure" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, ap_num, name, type, title, status, floor, area, structure, price, create_time, 
+    create_by
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from se_apartment
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="deleteApartment">
+        UPDATE se_apartment SET status = '0' WHERE id IN
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="getSeApartments" resultMap="BaseResultMap">
+        select
+        id, ap_num, name, title,
+        CASE STATUS
+        WHEN 1 THEN
+        '入住'
+        WHEN 2 THEN
+        '空房'
+        ELSE
+        '已删除'
+        END
+        as STATUS
+        ,
+        CASE type
+        WHEN 1 THEN
+        '日组'
+        WHEN 2 THEN
+        '长租'
+        ELSE
+        '已删除'
+        END as type,
+        floor, area, structure, price, create_time,
+        create_by
+        from se_apartment
+        where 1=1
+        <if test="status != null and status  != ''">
+            AND status = #{status}
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (ap_num like CONCAT('%',#{remark},'%' ) or name like CONCAT('%',#{remark},'%' ) or status like CONCAT('%',#{remark},'%' ) or type like CONCAT('%',#{remark},'%' ) )
+        </if>
+        ORDER BY ap_num ASC
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from se_apartment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.seventeen.bean.SeApartment">
+    insert into se_apartment (id, ap_num, name, 
+      type, title, status, 
+      floor, area, structure, 
+      price, create_time, create_by
+      )
+    values (#{id,jdbcType=VARCHAR}, #{apNum,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{floor,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{structure,jdbcType=VARCHAR}, 
+      #{price,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.seventeen.bean.SeApartment">
+        insert into se_apartment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="apNum != null">
+                ap_num,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="floor != null">
+                floor,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="structure != null">
+                structure,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="apNum != null">
+                #{apNum,jdbcType=CHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="floor != null">
+                #{floor,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="structure != null">
+                #{structure,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.seventeen.bean.SeApartment">
+        update se_apartment
+        <set>
+            <if test="apNum != null">
+                ap_num = #{apNum,jdbcType=CHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="floor != null">
+                floor = #{floor,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="structure != null">
+                structure = #{structure,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seventeen.bean.SeApartment">
+    update se_apartment
+    set ap_num = #{apNum,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      structure = #{structure,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
