@@ -57,7 +57,7 @@
         </div>
 
         <!-- 新建弹出框 -->
-        <el-dialog title="新建" :visible.sync="addVisible" width="55%">
+        <el-dialog :title="title" :visible.sync="visible" width="55%">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="房号" prop="apNum">
                     <el-input v-model="ruleForm.apNum" class="handle-input"></el-input>
@@ -96,12 +96,13 @@
                         :action="uploadUrl"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
-                        :file-list="fileList2"
+                        :file-list="fileList"
                         :headers="headers"
-                        :auto-upload="false"
                         multiple
-                        list-type="picture">
-                        <el-button size="small" type="primary">点击上传</el-button>
+                        list-type="picture"
+                        :auto-upload="false">
+                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                        <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>-->
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过50mb,默认第一张为主图，可点击图片修改</div>
                     </el-upload>
                 </el-form-item>
@@ -112,26 +113,26 @@
             </el-form>
         </el-dialog>
 
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="40%">
-            <el-form ref="form" :model="form" label-width="50px">
-                <el-form-item label="日期">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd"
-                                    style="width: 100%;"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="姓名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
-                </el-form-item>
+        <!--&lt;!&ndash; 编辑弹出框 &ndash;&gt;-->
+        <!--<el-dialog title="编辑" :visible.sync="editVisible" width="40%">-->
+            <!--<el-form ref="form" :model="form" label-width="50px">-->
+                <!--<el-form-item label="日期">-->
+                    <!--<el-date-picker type="date" placeholder="选择日期" v-model="form.date" value-format="yyyy-MM-dd"-->
+                                    <!--style="width: 100%;"></el-date-picker>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="姓名">-->
+                    <!--<el-input v-model="form.name"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="地址">-->
+                    <!--<el-input v-model="form.address"></el-input>-->
+                <!--</el-form-item>-->
 
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
+            <!--</el-form>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="editVisible = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="saveEdit">确 定</el-button>-->
+            <!--</span>-->
+        <!--</el-dialog>-->
 
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
@@ -151,22 +152,22 @@
                 ApartmentUrl: this.$global.baseUrl + "/room",
                 uploadUrl: this.$global.baseUrl + "/file",
                 tableData: [],
-                fileList2: [],
+                fileList: [],
                 headers: {
                     Authorization: "Bearer " + sessionStorage.getItem("token"),
-                    Room: this.roomId
+                    Room: ''
                 },
                 curPage: 1,
                 checkFlag: false,
                 total: 0,
-                roomId:'',
+                title:'',
                 multipleSelection: [],
                 select_cate: '',
                 select_word: '',
                 del_list: [],
                 is_search: false,
                 editVisible: false,
-                addVisible: false,
+                visible: false,
                 delVisible: false,
                 ids: '',
                 ruleForm: {
@@ -211,18 +212,10 @@
                     goods: [
                         {type: 'array', required: true, message: '请至少选择一个房间物品', trigger: 'change'}
                     ],
+                    img:[
+                        {type: 'array', required: true, message: '请上传至少一张图片', trigger: 'change'}
+                    ]
                 },
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
-                ,
                 idx: -1
             }
         },
@@ -241,39 +234,45 @@
             handlePreview(file) {
                 console.log(file);
             },
+            submitUpload(id) {
+                this.$refs.upload.headers.Room = id;
+                this.$refs.upload.submit();
+            },
             submitForm(formName) {
-                var that = this
-                this.$axios.get(this.ApartmentUrl + '/' + this.ruleForm.apNum).then((res) => {
-                    if (res.data.resultCode == 200) {
-                        if (!res.data.data) {
-                            this.$refs[formName].validate((valid) => {
-                                if (valid) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$axios.get(this.ApartmentUrl + '/' + this.ruleForm.apNum).then((res) => {
+                            if (res.data.resultCode == 200) {
+                                if (!res.data.data) {
                                     this.$axios.post(this.ApartmentUrl, this.ruleForm).then((res) => {
                                         if (res.data.resultCode == 200) {
                                             this.tableData = res.data.data;
-                                            this.roomId = res.data.data.id
-                                            that.$refs.upload.submit();
+                                            this.submitUpload(res.data.data.id);
                                             this.$message.success('创建成功');
+                                            this.resetForm('ruleForm');
+                                            this.getData();
+                                            this.visible = false;
                                         } else {
                                             this.$message.error('创建失败');
                                         }
                                     })
                                 } else {
-                                    console.log('error submit!!');
-                                    return false;
+                                    this.$message.error('房号已存在，请更改或者删除已经存在房号！');
                                 }
-                            });
-                        } else {
-                            this.$message.error('房号已存在，请更改或者删除已经存在房号！');
-                        }
+                            } else {
+                                this.$message.error('创建失败');
+                            }
+                        })
                     } else {
-                        this.$message.error('创建失败');
+                        console.log('error submit!!');
+                        return false;
                     }
-                })
+                });
+
             },
             resetForm(formName) {
                 this.ruleForm.goodsCheck = [];
-                this.fileList2 = [];
+                this.fileList = [];
                 this.$refs[formName].resetFields();
                 this.handleAdd()
             },
@@ -304,7 +303,8 @@
                 return row.tag === value;
             },
             handleAdd() {
-                this.addVisible = true;
+                this.visible = true;
+                this.title = "新建";
                 const param = {
                     "type": 'g'
                 }
@@ -318,12 +318,13 @@
             handleEdit(index, row) {
                 this.idx = index;
                 const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
-                this.editVisible = true;
+//                this.form = {
+//                    name: item.name,
+//                    date: item.date,
+//                    address: item.address
+//                }
+                this.title = "编辑";
+                this.visible = true;
             },
 
             handleDelete(index, row) {
@@ -349,7 +350,7 @@
             },
             // 保存编辑
             saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
+                this.$set(this.tableData, this.idx);
                 this.editVisible = false;
                 this.$message.success(`修改第 ${this.idx + 1} 行成功`);
             },
