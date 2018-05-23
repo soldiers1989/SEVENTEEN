@@ -29,6 +29,16 @@ public class SeApartment{
 
     private String createBy;
 
+    private String remark;
+
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getId() {
         return id;

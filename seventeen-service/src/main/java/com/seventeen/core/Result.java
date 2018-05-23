@@ -20,6 +20,11 @@ public class Result<T> {
 		return this;
 	}
 
+	public Result(int resultCode, String message) {
+		this.resultCode = resultCode;
+		this.message = message;
+	}
+
 	public Result<T> setPageInfo(PageInfo pageInfo) {
 		this.pageInfo = pageInfo;
 		return this;

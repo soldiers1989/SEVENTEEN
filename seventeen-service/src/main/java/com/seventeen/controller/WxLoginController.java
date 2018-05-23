@@ -2,10 +2,10 @@ package com.seventeen.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seventeen.core.Result;
-import com.seventeen.core.ResultGenerator;
 import com.seventeen.util.AesCbcUtil;
 import com.seventeen.util.HttpRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,11 +34,11 @@ public class WxLoginController {
 
     @PostMapping("/decodeUserInfo")
     @ResponseBody
-    public Result<Map> decodeUserInfo(String encryptedData, String iv, String code) {
+    public ResponseEntity decodeUserInfo(String encryptedData, String iv, String code) {
         Map map = new HashMap();
         //登录凭证不能为空
         if (code == null || code.length() == 0) {
-            return ResultGenerator.genSuccessResult("code 不能为空",-200);
+            return ResponseEntity.ok(new Result(-200,"code 不能为空"));
         }
 
 
@@ -72,13 +72,13 @@ public class WxLoginController {
                 userInfo.put("avatarUrl", userInfoJSON.get("avatarUrl"));
                 userInfo.put("unionId", userInfoJSON.get("unionId"));
                 map.put("userInfo", userInfo);
-                return ResultGenerator.genSuccessResult(new Result(map));
+                return ResponseEntity.ok(new Result(map));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         map.put("status", 0);
         map.put("msg", "解密失败");
-        return ResultGenerator.genSuccessResult(new Result(map));
+        return ResponseEntity.ok(new Result(map));
     }
 }

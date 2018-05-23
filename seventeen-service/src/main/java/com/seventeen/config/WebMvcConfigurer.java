@@ -83,7 +83,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                     } else {
                         message = e.getMessage();
                     }
-                    if (result.getResultCode() != 200) {
+                    if (result.getResultCode() == 200) {
                         result.setResultCode(ResultCode.FAIL.getCode());
                     }
                     result.setMessage(message);

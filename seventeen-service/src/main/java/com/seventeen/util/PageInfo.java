@@ -2,7 +2,10 @@ package com.seventeen.util;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+/**
+ * @Author: csk
+ * @Date: 2018/5/18 16:49
+ */
 @ApiModel("PageInfo(分页信息)")
 public class PageInfo {
     @ApiModelProperty(value = "第几页，不传递则默认为第1页", example = "1")

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author
- * @version 1.0
+ * @Author: csk
+ * @Date: 2018/5/18 16:49
  */
 public class IDGenerator {
 	private static List<Integer> array = new ArrayList<>(30);

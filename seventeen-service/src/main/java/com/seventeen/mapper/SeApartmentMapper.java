@@ -7,9 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 
-@SuppressWarnings({"ALL", "AlibabaClassMustHaveAuthor"})
 @Mapper
-public interface SeApartmentMapper{
+public interface SeApartmentMapper extends CoreMapper<SeApartment>{
 
     ArrayList<SeApartment> getSeApartments(@Param("status") String status,@Param("remark")String remark);
 

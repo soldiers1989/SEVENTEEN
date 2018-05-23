@@ -8,7 +8,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @Author: csk
+ * @Date: 2018/5/18 16:49
+ */
 public class HttpRequest {
 
     public static void main(String[] args) {

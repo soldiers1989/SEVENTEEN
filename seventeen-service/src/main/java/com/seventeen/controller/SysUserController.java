@@ -3,7 +3,6 @@ package com.seventeen.controller;
 
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
-import com.seventeen.core.ResultGenerator;
 import com.seventeen.mapper.SysUserMapper;
 import com.seventeen.service.impl.SysUserService;
 import com.seventeen.util.IDGenerator;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -38,7 +38,7 @@ public class SysUserController {
 	@ApiOperation("新增用户")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	@CacheEvict(value = "sysUserList", allEntries = true)
-	public Result<String> add(@RequestBody SysUser sysUser) {
+	public ResponseEntity add(@RequestBody SysUser sysUser) {
 		sysUser.setId(IDGenerator.getId());
 		sysUser.setCreateDate(new Date());
 		if (StringUtils.hasText(sysUser.getPassword())) {
@@ -46,7 +46,7 @@ public class SysUserController {
 			sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
 		}
 		sysUserService.insert(sysUser);
-		return ResultGenerator.genSuccessResult("保存成功。");
+		return ResponseEntity.ok("保存成功。");
 	}
 
 
@@ -60,9 +60,9 @@ public class SysUserController {
 			@CacheEvict(value = "sysRoleList", allEntries = true),
 			@CacheEvict(value = "sysAuthorityList", allEntries = true),
 			@CacheEvict(value = "sysUserDetails", allEntries = true) })
-	public Result<String> delete(@PathVariable String userId) {
+	public ResponseEntity delete(@PathVariable String userId) {
 		int count = sysUserService.deleteById(userId);
-		return ResultGenerator.genSuccessResult("删除成功" + count + "条数据。");
+		return ResponseEntity.ok("删除成功" + count + "条数据。");
 	}
 
 	@DeleteMapping
@@ -75,9 +75,9 @@ public class SysUserController {
 			@CacheEvict(value = "sysRoleList", allEntries = true),
 			@CacheEvict(value = "sysAuthorityList", allEntries = true),
 			@CacheEvict(value = "sysUserDetails", allEntries = true) })
-	public Result<String> deleteList(@RequestParam String userIds) {
+	public ResponseEntity deleteList(@RequestParam String userIds) {
 		int count = sysUserService.deleteByIds(userIds);
-		return ResultGenerator.genSuccessResult("删除成功" + count + "条数据。");
+		return ResponseEntity.ok("删除成功" + count + "条数据。");
 	}
 
 	@PutMapping("/{userId}")
@@ -90,7 +90,7 @@ public class SysUserController {
 			@CacheEvict(value = "sysRoleList", allEntries = true),
 			@CacheEvict(value = "sysAuthorityList", allEntries = true),
 			@CacheEvict(value = "sysUserDetails", allEntries = true) })
-	public Result<String> update(@RequestBody SysUser sysUser, @PathVariable String userId) {
+	public ResponseEntity update(@RequestBody SysUser sysUser, @PathVariable String userId) {
 		SysUser oldSysUser = sysUserService.findById(userId);
 		if (oldSysUser != null) {
 			sysUser.setId(userId);
@@ -108,23 +108,23 @@ public class SysUserController {
 			sysUser.setModifyDate(new Date());
 			sysUserService.update(sysUser);
 		}
-		return ResultGenerator.genSuccessResult("更新成功。");
+		return ResponseEntity.ok("更新成功。");
 	}
 
 	@GetMapping("/all")
 	@ApiOperation("查询所有用户列表")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	@Cacheable(value = "sysUserList")
-	public Result<List<SysUser>> findList() {
-		return ResultGenerator.genSuccessResult(sysUserService.findAll());
+	public ResponseEntity findList() {
+		return ResponseEntity.ok(sysUserService.findAll());
 	}
 
 	@GetMapping
 	@ApiOperation("分页查询用户列表")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	@Cacheable(value = "sysUserList")
-	public Result<List<SysUser>> findList(PageInfo pageInfo) {
-		return ResultGenerator.genSuccessResult(new Result(sysUserService.findAll(pageInfo),pageInfo));
+	public ResponseEntity findList(PageInfo pageInfo) {
+		return ResponseEntity.ok(new Result(sysUserService.findAll(pageInfo),pageInfo));
 	}
 
 	@GetMapping("{userId}")
@@ -133,15 +133,15 @@ public class SysUserController {
 //	@Cacheable(value = "sysUser", key = "#userId")
 //	@MyDs(value = "slaveDataSource")
 //	@PreAuthorize("hasRole('sys_user')")
-	public Result<SysUser> findOne(@PathVariable String userId) {
-		return ResultGenerator.genSuccessResult(SysUsermapper.selectElementsByIds(userId));
+	public ResponseEntity findOne(@PathVariable String userId) {
+		return ResponseEntity.ok(SysUsermapper.selectElementsByIds(userId));
 	}
 
 	@GetMapping("clear")
 	@ApiOperation("清除所有用户缓存")
 	@Caching(evict = { @CacheEvict(value = "sysUser", allEntries = true),
 			@CacheEvict(value = "sysUserList", allEntries = true) })
-	public Result<String> clearCache() {
-		return ResultGenerator.genSuccessResult("用户缓存清除成功。");
+	public ResponseEntity clearCache() {
+		return ResponseEntity.ok("用户缓存清除成功。");
 	}
 }
