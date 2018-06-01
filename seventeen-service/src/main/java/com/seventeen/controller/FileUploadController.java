@@ -173,17 +173,17 @@ public class FileUploadController {
     }
 
 
-    @PostMapping("")
-    @Transactional
-    public ResponseEntity<Result> updateImgMaster(@RequestParam String id) {
-        Result result = new Result();
-
-        try {
-            seApartmentImgMapper.updateImgMaster(id);
-        } catch (Exception e) {
-            log.error("ERROR", e);
-            result.setResultCode(ResultCode.FAIL.getCode()).setMessage(e.toString());
-        }
-        return ResponseEntity.ok(result);
-    }
+//    @PostMapping("")
+//    @Transactional
+//    public ResponseEntity<Result> updateImgMaster(@RequestParam String id) {
+//        Result result = new Result();
+//
+//        try {
+//            seApartmentImgMapper.updateImgMaster(id);
+//        } catch (Exception e) {
+//            log.error("ERROR", e);
+//            result.setResultCode(ResultCode.FAIL.getCode()).setMessage(e.toString());
+//        }
+//        return ResponseEntity.ok(result);
+//    }
 }

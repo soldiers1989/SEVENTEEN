@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @ApiModel(description = "系统用户")
@@ -48,14 +49,14 @@ public class SysUser implements UserDetails {
 
 	@ApiModelProperty(value = "创建时间", dataType = "Date", hidden = true)
 //	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private String createDate;
+	private Date createDate;
 
 	@ApiModelProperty(value = "修改时间", dataType = "Date", hidden = true)
 //	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private String modifyDate;
+	private Date modifyDate;
 
 	@ApiModelProperty(value = "密码最后修改时间", dataType = "Date", hidden = true)
-	private String lastPasswordResetDate;
+	private Date lastPasswordResetDate;
 
 	@ApiModelProperty(value = "用户权限，只用作spring-security编码使用，不作为接口用。", hidden = true)
 	@Transient
@@ -141,19 +142,19 @@ public class SysUser implements UserDetails {
 		this.openId = openId;
 	}
 
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
-	public String getModifyDate() {
+	public Date getModifyDate() {
 		return modifyDate;
 	}
 
-	public void setModifyDate(String modifyDate) {
+	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
 
@@ -169,11 +170,11 @@ public class SysUser implements UserDetails {
 
 	// 这个是自定义的，返回上次密码重置日期
 	@JsonIgnore
-	public String getLastPasswordResetDate() {
+	public Date getLastPasswordResetDate() {
 		return lastPasswordResetDate;
 	}
 
-	public void setLastPasswordResetDate(String lastPasswordResetDate) {
+	public void setLastPasswordResetDate(Date lastPasswordResetDate) {
 		this.lastPasswordResetDate = lastPasswordResetDate;
 	}
 
