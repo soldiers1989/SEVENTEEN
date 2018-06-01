@@ -1,6 +1,7 @@
 package com.seventeen.service;
 
 import com.seventeen.bean.SeApartment;
+import com.seventeen.bean.SeApartmentDetail;
 import com.seventeen.bean.SeTag;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
@@ -39,5 +40,19 @@ public interface SeApartmentService{
      * @return
      */
     Result<Boolean> apartmentCheck(String apNum);
+
+    /**
+     *
+     * @param apNum
+     * @return
+     */
+    Result<SeApartmentDetail> getApartmentDetail(String apNum);
+
+    /**
+     *
+     * @param seApartment
+     * @return
+     */
+    Result<SeApartment> updateApartment(SeApartment seApartment);
 
 }

@@ -1,7 +1,6 @@
 package com.seventeen.bean.core;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModel;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @ApiModel(description = "系统用户")
@@ -33,16 +31,31 @@ public class SysUser implements UserDetails {
 	@ApiModelProperty(value = "描述")
 	private String description;
 
+	@ApiModelProperty(value = "电话")
+	private String phone;
+
+	@ApiModelProperty(value = "年龄")
+	private String age;
+
+	@ApiModelProperty(value = "性别")
+	private String sex;
+
+	@ApiModelProperty(value = "unionId")
+	private String unionId;
+
+	@ApiModelProperty(value = "openId")
+	private String openId;
+
 	@ApiModelProperty(value = "创建时间", dataType = "Date", hidden = true)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date createDate;
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private String createDate;
 
 	@ApiModelProperty(value = "修改时间", dataType = "Date", hidden = true)
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date modifyDate;
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private String modifyDate;
 
 	@ApiModelProperty(value = "密码最后修改时间", dataType = "Date", hidden = true)
-	private Date lastPasswordResetDate;
+	private String lastPasswordResetDate;
 
 	@ApiModelProperty(value = "用户权限，只用作spring-security编码使用，不作为接口用。", hidden = true)
 	@Transient
@@ -88,19 +101,59 @@ public class SysUser implements UserDetails {
 		this.description = description;
 	}
 
-	public Date getCreateDate() {
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getUnionId() {
+		return unionId;
+	}
+
+	public void setUnionId(String unionId) {
+		this.unionId = unionId;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	public Date getModifyDate() {
+	public String getModifyDate() {
 		return modifyDate;
 	}
 
-	public void setModifyDate(Date modifyDate) {
+	public void setModifyDate(String modifyDate) {
 		this.modifyDate = modifyDate;
 	}
 
@@ -116,11 +169,11 @@ public class SysUser implements UserDetails {
 
 	// 这个是自定义的，返回上次密码重置日期
 	@JsonIgnore
-	public Date getLastPasswordResetDate() {
+	public String getLastPasswordResetDate() {
 		return lastPasswordResetDate;
 	}
 
-	public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+	public void setLastPasswordResetDate(String lastPasswordResetDate) {
 		this.lastPasswordResetDate = lastPasswordResetDate;
 	}
 

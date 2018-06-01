@@ -71,6 +71,10 @@ info:
     description: seventeen服务
     version: v1.0.0
 
+file:
+  upload:
+    url: http://localhost:8090
+
 wx:
   app:
     Appid: wxe6f9450a01336cb9

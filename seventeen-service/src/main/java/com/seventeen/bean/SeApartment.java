@@ -1,6 +1,9 @@
 package com.seventeen.bean;
 
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.util.ArrayList;
+
 
 public class SeApartment{
 
@@ -31,6 +34,17 @@ public class SeApartment{
 
     private String remark;
 
+    @Transient
+    private ArrayList<String> good;
+
+
+    public ArrayList<String> getGood() {
+        return good;
+    }
+
+    public void setGood(ArrayList<String> good) {
+        this.good = good;
+    }
 
     public String getRemark() {
         return remark;

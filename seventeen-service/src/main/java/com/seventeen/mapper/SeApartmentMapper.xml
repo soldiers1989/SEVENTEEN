@@ -23,7 +23,7 @@
   </sql>
 
     <update id="deleteApartment">
-        UPDATE se_apartment SET status = '0' WHERE id IN
+        delete  from se_apartment WHERE id IN
         <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>

@@ -2,11 +2,12 @@ package com.seventeen.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.seventeen.bean.SeApartment;
-import com.seventeen.bean.SeTag;
+import com.seventeen.bean.*;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
+import com.seventeen.mapper.SeApartmentGoodMapper;
+import com.seventeen.mapper.SeApartmentImgMapper;
 import com.seventeen.mapper.SeApartmentMapper;
 import com.seventeen.mapper.SeTagMapper;
 import com.seventeen.service.SeApartmentService;
@@ -32,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: csk
@@ -46,6 +48,12 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
     @Autowired
     private SeTagMapper seTagMapper;
+
+    @Autowired
+    private SeApartmentGoodMapper seApartmentGoodMapper;
+
+    @Autowired
+    private SeApartmentImgMapper seApartmentImgMapper;
 
 
     @Override
@@ -66,14 +74,30 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<String> deleteApartment(String ids) {
         Result<String> result = new Result<>();
         try {
             String[] split = ids.split(",");
-            seApartmentMapper.deleteApartment(split);
+             seApartmentMapper.deleteApartment(split);
+            for (String id : split) {
+                List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(id);
+                for (SeApartmentImg seApartmentImg : seApartmentImgs) {
+                    Path path = Paths.get(FileUploadUtil.roomImg, seApartmentImg.getApId());
+                    String fileSuffix = seApartmentImg.getName().substring(seApartmentImg.getName().lastIndexOf("."), seApartmentImg.getName().length());
+                    String fileName = seApartmentImg.getId();
+                    Path path_mix = Paths.get(FileUploadUtil.roomImg, fileName + "_mix" + fileSuffix);
+                    if (Files.exists(path)) {
+                        Files.delete(path);
+                    }
+                    if (Files.exists(path_mix)) {
+                        Files.delete(path_mix);
+                    }
+                }
+            }
+            seApartmentImgMapper.deleteByApId(split);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -97,7 +121,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<SeApartment> addApartment(SeApartment seApartment) {
         Result<SeApartment> result = new Result<>();
 
@@ -108,6 +132,17 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             seApartment.setStatus("1");
             seApartment.setCreateTime(DateUtil.now());
             seApartmentMapper.insert(seApartment);
+
+            ArrayList<String> goods = seApartment.getGood();
+            for (String good : goods) {
+                SeApartmentGood seApartmentGood = new SeApartmentGood();
+                seApartmentGood.setTagId(good);
+                seApartmentGood.setApId(seApartment.getId());
+                seApartmentGood.setId(IDGenerator.getId());
+                seApartmentGood.setCreateTime(DateUtil.now());
+                seApartmentGood.setCreateBy(authentication.getName());
+                seApartmentGoodMapper.insert(seApartmentGood);
+            }
             result.setData(seApartment);
         } catch (Exception e) {
             logger.error("error", e);
@@ -129,6 +164,59 @@ public class SeApartmentServiceImpl implements SeApartmentService {
                 result.setData(flag = true);
             }
             result.setData(flag);
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<SeApartmentDetail> getApartmentDetail(String apNum) {
+
+        Result<SeApartmentDetail> result = new Result<>();
+
+        try {
+            SeApartmentDetail seApartmentDetail = new SeApartmentDetail();
+
+            SeApartment seApartment = seApartmentMapper.selectByPrimaryKey(apNum);
+            List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(apNum);
+            List<SeApartmentGood> seApartmentGoods = seApartmentGoodMapper.selectByApids(apNum);
+
+            seApartmentDetail.setSeApartment(seApartment);
+            seApartmentDetail.setSeApartmentImg(seApartmentImgs);
+            seApartmentDetail.setGood(seApartmentGoods.stream().map(SeApartmentGood::getTagId).collect(Collectors.toList()));
+            result.setData(seApartmentDetail);
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result<SeApartment> updateApartment(SeApartment seApartment) {
+        Result<SeApartment> result = new Result<>();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            seApartment.setCreateBy(authentication.getName());
+            seApartment.setCreateTime(DateUtil.now());
+            seApartmentMapper.updateByPrimaryKey(seApartment);
+
+            ArrayList<String> goods = seApartment.getGood();
+
+            seApartmentGoodMapper.deleteByApid(seApartment.getId());
+            for (String good : goods) {
+                SeApartmentGood seApartmentGood = new SeApartmentGood();
+                seApartmentGood.setTagId(good);
+                seApartmentGood.setApId(seApartment.getId());
+                seApartmentGood.setId(IDGenerator.getId());
+                seApartmentGood.setCreateTime(DateUtil.now());
+                seApartmentGood.setCreateBy(authentication.getName());
+                seApartmentGoodMapper.insert(seApartmentGood);
+            }
+            result.setData(seApartment);
         } catch (Exception e) {
             logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
