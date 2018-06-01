@@ -42,10 +42,10 @@ public class SysUser implements UserDetails {
 	private String sex;
 
 	@ApiModelProperty(value = "unionId")
-	private String unionId;
+	private String unionid;
 
 	@ApiModelProperty(value = "openId")
-	private String openId;
+	private String openid;
 
 	@ApiModelProperty(value = "创建时间", dataType = "Date", hidden = true)
 //	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -126,20 +126,20 @@ public class SysUser implements UserDetails {
 		this.sex = sex;
 	}
 
-	public String getUnionId() {
-		return unionId;
+	public String getUnionid() {
+		return unionid;
 	}
 
-	public void setUnionId(String unionId) {
-		this.unionId = unionId;
+	public void setUnionid(String unionid) {
+		this.unionid = unionid;
 	}
 
-	public String getOpenId() {
-		return openId;
+	public String getOpenid() {
+		return openid;
 	}
 
-	public void setOpenId(String openId) {
-		this.openId = openId;
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 
 	public Date getCreateDate() {
