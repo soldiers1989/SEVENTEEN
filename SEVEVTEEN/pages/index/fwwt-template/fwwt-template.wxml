@@ -1,0 +1,17 @@
+<template name="fwwt">
+  <view class='fwwt'>
+    <view class='fwwt-text'>
+      <text>帮您管理爱屋</text>
+      <text space="emsp"> 收益准时到账</text>
+    </view>
+    <view class='fwwt-btns'>
+        <view class='btn-dh'>
+          电话咨询
+        </view>
+        <view class='btn-zx'>
+          在线咨询
+        </view>
+    </view>
+
+  </view>
+</template>

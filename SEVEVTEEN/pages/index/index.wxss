@@ -1,0 +1,223 @@
+
+
+/* 顶部图片 */
+.none{
+  display: none;
+}
+
+.nav-baner {
+  width: 100%;
+  height: 450rpx;
+}
+
+.tab-info {
+  margin-top: 1px;
+  display: flex;
+  flex-direction: row;
+  height: 104rpx;
+}
+
+
+.tab-info text {
+  line-height: 104rpx;
+  font-size: 14px;
+  color: black;
+  width: 30%;
+  text-align: center;
+}
+
+.tab-info .is_checked {
+  font-size: 14px;
+  color: white;
+}
+
+
+
+
+
+.bag1{
+  position: absolute;
+  width: 33%;
+  height: 104rpx;
+  z-index: -1;
+}
+.bag2{
+  position: absolute;
+  width: 33%;
+  height: 104rpx;
+  left: 29%;
+  z-index: -1;
+}
+.bag3{
+  position: absolute;
+  width: 50%;
+  height: 104rpx;
+  left: 59%;
+  z-index: -1;
+}
+
+
+
+/* 地理位置 */
+
+.addres {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  line-height: 32px;
+  height: 32px;
+  margin-top: 12px;
+}
+.addres .addres-text{
+  margin-left:14px; 
+  width: 86%;
+  color: #434343;
+}
+.addres .addres-map{
+  width:14% ;
+  right:20px; 
+}
+.addres text{
+   color: #707070;
+}
+
+
+/* 日历 */
+
+
+
+
+.date{
+  display: flex;
+  flex-direction: row; 
+  margin-top: 10px;
+  height: 32px;
+  border-bottom: 1px solid #bcbcbc;  
+}
+.date image{
+  margin-left: 18rpx; 
+  top: 5rpx;
+  left: 18rpx;
+  width: 45rpx;
+  height: 45rpx;
+}
+.date .date-cent{
+  width: 65%;
+  font-size: 16px;
+  margin-left: 7rpx;
+  margin-top :2px; 
+  color: #434343;
+}
+.date .date-right{
+  margin-top :2px; 
+  font-size: 16px;
+  margin-right: 7rpx; 
+   color: gray;
+}
+.date .date-right-icon{
+  width: 30rpx;
+  height: 30rpx;
+  color: #e5e5e6;
+  margin-top: 4px;
+}
+
+/* 列表 */
+.info{
+  display: flex;
+  flex-direction: row;
+  width: 98%;
+  margin-left:1%;
+  margin-top:10px;  
+  border-bottom: 1px solid #bcbcbc;
+}
+.info-box{
+  display: block;
+  position: relative;
+  width: 23%;
+}
+.info .info-box .info-box-icon{
+  width: 165rpx;
+  height: 165rpx;
+ border-radius: 3%;
+}
+.info-box-text{
+   position: relative;
+   top: -27px;
+   left: 90rpx;
+}
+
+
+.info-icon-top{
+ 
+  display: flex;
+  flex-direction: row;
+  width: 60rpx;
+  height: 20px;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fff; 
+  background-color: rgba(0,0,0,0.2); 
+
+   
+}
+.info-icon-top-img{
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 2px;
+  margin-left: 4rpx;
+ 
+ 
+}
+
+.info .info-box .info-icon-top text{
+  
+  margin-left: 8rpx;
+}
+
+
+
+.info .right-icon{
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 38px;
+}
+.info .info-msg{
+  display: flex;
+  width: 50%;
+  margin-left: 5px;
+  margin-top: 12px;
+  flex-direction: column;
+  /* font-size: 14px; */
+}
+.msg-smail{
+  font-size: 20px;
+  color: black;
+  font-weight: 400;
+  line-height: 20px;
+  
+}
+.msg-smail{
+  font-size: 14px;
+  color: gray;
+  line-height: 20px;
+}
+
+.money-text{
+  color: #cc6c32;
+  font-size: 32px;
+  margin-top:20px; 
+  margin-right:0px; 
+}
+.money-smail{
+
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.more-img {
+  width: 9rpx;
+  height: 16rpx;
+  margin-top: 25rpx;
+  margin-left: 5px;
+   
+}
