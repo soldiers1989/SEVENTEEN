@@ -113,5 +113,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.10.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.10.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.10" level="project" />
+    <orderEntry type="library" name="Maven: net.coobird:thumbnailator:0.4.8" level="project" />
   </component>
 </module>

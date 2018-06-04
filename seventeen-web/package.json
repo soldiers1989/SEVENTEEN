@@ -13,13 +13,15 @@
         "axios": "^0.15.3",
         "babel-polyfill": "^6.23.0",
         "element-ui": "^2.3.7",
-        "vue": "^2.5.9",
+        "vue": "^2.5.16",
         "vue-core-image-upload": "2.1.11",
+        "vue-cropperjs": "^2.2.0",
         "vue-datasource": "1.0.9",
-        "vue-schart": "^0.1.2",
         "vue-quill-editor": "2.1.6",
         "vue-router": "^2.3.1",
+        "vue-schart": "^0.1.2",
         "vue-simplemde": "0.3.8",
+        "vuedraggable": "^2.16.0",
         "vuex": "^3.0.1"
     },
     "devDependencies": {
