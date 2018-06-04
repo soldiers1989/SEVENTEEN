@@ -1,0 +1,44 @@
+<view>
+  <view class="nav-tabs">
+    <block wx:for="{{tabArray}}" wx:for-index="idx" wx:for-item="itemName">
+      <view class="tab-list  {{currentTab == idx?'active':'default'}}" data-current="{{idx}}" catchtap="swichNav">
+        <view class="{{currentTab == idx?'test':''}}">
+          {{itemName}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+<view class="search-container">
+  <input class='input' placeholder-class="placeholder" placeholder="请输入口令或者兑换码" />
+  <view class='button' bindtap="bindButtonTap">
+    <text class='button-value'>兑换</text>
+  </view>
+</view>
+<view class='coupon-container'>
+  <view class='coupon-background'>
+    <view class='detail-container'>
+      <image class='coupon-img' src='/imgs/icon/coupon_icon.png'></image>
+      <view class='money-container'>
+        <text class='money'>20元</text>
+        <text class='remark'>会员生日(通用劵)</text>
+      </view>
+      <text class='use'>立即使用</text>
+      <image src='/imgs/index/right-arr.png' class='use-img'></image>
+    </view>
+    <text class='date'>2018-01-11至2018-04-11</text>
+  </view>
+  <view class='coupon-background'>
+    <view class='detail-container'>
+      <image class='coupon-img' src='/imgs/icon/coupon_icon.png'></image>
+      <view class='money-container'>
+        <text class='money'>20元</text>
+        <text class='remark'>会员生日(通用劵)</text>
+      </view>
+      <text class='use'>立即使用</text>
+      <image src='/imgs/index/right-arr.png' class='use-img'></image>
+    </view>
+    <text class='date'>2018-01-11至2018-04-11</text>
+  </view>
+  <text class='use-remark'>使用说明</text>
+</view>

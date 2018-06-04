@@ -1,0 +1,23 @@
+<view class='message-container'>
+  <view class='message-show-container' bindtap='systemMessageTap'>
+    <image class='message-img' src='/imgs/message/system.png'></image>
+    <view class='message-sys-container'>
+      <text class='sys-title'>系统通知</text>
+      <text class='sys-detail'>支付成功</text>
+    </view>
+  </view>
+  <view class='message-show-container'>
+    <image class='message-img' src='/imgs/message/activity.png'></image>
+    <view class='message-sys-container'>
+      <text class='sys-title'>专题活动</text>
+      <text class='sys-detail'>好运开抢！</text>
+    </view>
+  </view>
+  <view class='message-show-container' bindtap='replyMessageTap'>
+    <image class='message-img' src='/imgs/message/reply.png'></image>
+    <view class='message-sys-container'>
+      <text class='sys-title'>店长回复</text>
+      <text class='sys-detail'>你的点评有了新的回复</text>
+    </view>
+  </view>
+</view>

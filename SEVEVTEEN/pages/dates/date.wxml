@@ -1,0 +1,38 @@
+<view class='date-container'>
+  <image class="weather-img" src='{{weatherImg}}'></image>
+  <view class="weather-container">
+    <text class='temperature'>{{weather.temperature.data}} ℃</text>
+    <text class='weather'>{{weather.weather.data}}</text>
+  </view>
+  <text class='date'>{{time}}</text>
+</view>
+<view class="headbox2">
+  <view class="headdate">日</view>
+  <view class="headdate">一</view>
+  <view class="headdate">二</view>
+  <view class="headdate">三</view>
+  <view class="headdate">四</view>
+  <view class="headdate">五</view>
+  <view class="headdate">六</view>
+</view>
+<view class="mouth-container">
+  <view class="mouth" wx:for="{{date}}" wx:for-item="date" wx:for-index="index">
+    <view class="mouthhead">{{date[index].year}}年{{date[index].month}}月</view>
+    <view class="daybox">
+      <view class="day" wx:if="{{weeks[index]>0}}"></view>
+      <view class="day" wx:if="{{weeks[index]>1}}"></view>
+      <view class="day" wx:if="{{weeks[index]>2}}"></view>
+      <view class="day" wx:if="{{weeks[index]>3}}"></view>
+      <view class="day" wx:if="{{weeks[index]>4}}"></view>
+      <view class="day" wx:if="{{weeks[index]>5}}"></view>
+      <view class="day {{item.selected? 'bc':''}}" wx:for="{{date}}" wx:for-index="idx" data-index="{{index}}" data-indexs="{{idx}}" bindtap="selectday">
+        {{date[idx].day}}
+        <view class="actname2 {{item.selected ? 'bc2':''}}" wx:if="{{item.selected? 'bc2':''}}">{{item.live}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="nav-tabs">
+  <view class="tab-list  {{currentTab == idx?'active':'default'}}" wx:for="{{tabArray}}" wx:for-index="idx" wx:for-item="itemName" data-current="{{idx}}" bindtap="swichNav">{{itemName}}</view>
+</view>

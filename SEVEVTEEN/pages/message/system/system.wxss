@@ -1,0 +1,49 @@
+page {
+  background-color: #f0f0f0;
+}
+
+.time {
+  margin-top: 70rpx;
+  color: #a0a0a0;
+  font-size: 30rpx;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15rpx;
+  background-color: white;
+  width: 93%;
+  height: 450rpx;
+}
+
+.message-title {
+  margin-top: 30rpx;
+  font-size: 45rpx;
+  color: #a0a0a0;
+}
+
+.message {
+  margin-top: 20rpx;
+  font-size: 25rpx;
+  color: #a0a0a0;
+}
+
+.detail {
+  color: black;
+  font-size: 35rpx;
+}
+
+.detail-container {
+  margin-top: 110rpx;
+}
+
+.message-container text {
+  margin-left: 30rpx;
+}
+
+.system-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
