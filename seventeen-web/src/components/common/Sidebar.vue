@@ -40,6 +40,16 @@
                         title: '房间列表'
                     },
                     {
+                        icon: 'el-icon-star-on',
+                        index: 'room',
+                        title: '优惠券管理'
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: 'room',
+                        title: '积分管理'
+                    },
+                    {
                         icon: 'el-icon-message',
                         index: 'tabs',
                         title: 'tab选项卡'

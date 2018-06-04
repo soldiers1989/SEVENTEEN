@@ -22,19 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @Author: csk
@@ -173,17 +167,23 @@ public class FileUploadController {
     }
 
 
-//    @PostMapping("")
-//    @Transactional
-//    public ResponseEntity<Result> updateImgMaster(@RequestParam String id) {
-//        Result result = new Result();
-//
-//        try {
-//            seApartmentImgMapper.updateImgMaster(id);
-//        } catch (Exception e) {
-//            log.error("ERROR", e);
-//            result.setResultCode(ResultCode.FAIL.getCode()).setMessage(e.toString());
-//        }
-//        return ResponseEntity.ok(result);
-//    }
+    @PostMapping("/updateMaster")
+    @Transactional
+    public ResponseEntity<Result> updateImgMaster(@RequestParam(value = "id") String id) {
+        Result result = new Result();
+
+        try {
+            List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectById(id);
+
+            for (SeApartmentImg seApartmentImg : seApartmentImgs) {
+                seApartmentImg.setMaster(null);
+                seApartmentImgMapper.updateByPrimaryKey(seApartmentImg);
+            }
+            seApartmentImgMapper.updateImgMaster(id);
+        } catch (Exception e) {
+            log.error("ERROR", e);
+            result.setResultCode(ResultCode.FAIL.getCode()).setMessage(e.toString());
+        }
+        return ResponseEntity.ok(result);
+    }
 }

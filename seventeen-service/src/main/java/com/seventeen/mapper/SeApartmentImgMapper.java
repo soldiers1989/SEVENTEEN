@@ -3,7 +3,6 @@ package com.seventeen.mapper;
 import com.seventeen.bean.SeApartmentImg;
 import org.apache.ibatis.annotations.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -25,6 +24,16 @@ public interface SeApartmentImgMapper extends CoreMapper<SeApartmentImg>{
     void deleteByIdsArr(@Param("ids") String[] split);
 
 
+    @Select("<script> SELECT * FROM se_apartment_img sai1 WHERE\n" +
+            "sai1.ap_id IN ( " +
+            "SELECT " +
+            "sai.ap_id " +
+            "FROM " +
+            "se_apartment_img sai " +
+            "WHERE " +
+            "sai.id = #{id}" +
+            ") </script>")
+    List<SeApartmentImg> selectById(@Param("id") String id);
     /**
      *
      * @param id
@@ -33,6 +42,6 @@ public interface SeApartmentImgMapper extends CoreMapper<SeApartmentImg>{
     @Select("select * from se_apartment_img where ap_id = #{id}")
     List<SeApartmentImg> selectByApids(@Param("id") String id);
 
-    @Update("update se_apartment_img se set se.master='1' where se.id =#{id} ")
+    @Update("<script> update se_apartment_img se set se.master='1' where se.id =#{id} </script>")
     void updateImgMaster(@Param("id") String id);
 }

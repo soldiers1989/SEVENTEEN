@@ -57,7 +57,7 @@ management:
   security:
     enabled: false
 mybatis:
-  type-aliases-package: com.seventeen
+  type-aliases-package: com.seventeen.mapper
   configuration:
     map-underscore-to-camel-case: true
 pagehelper:

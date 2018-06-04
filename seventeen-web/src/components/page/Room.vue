@@ -128,6 +128,8 @@
 </template>
 
 <script>
+    var qs = require('qs');
+
     export default {
         data() {
             return {
@@ -141,7 +143,7 @@
                     Room: '',
                 },
                 curPage: 1,
-                master: 0,
+                master: '0',
                 total: 0,
                 title: '',
                 multipleSelection: [],
@@ -234,7 +236,7 @@
 
             },
             handlePreview(file) {
-                this.master = file.name;
+                let id = file.id;
 
                 this.$notify({
                     title: '成功',
@@ -243,16 +245,8 @@
                 });
 
                 if (this.edit) {
-                    this.$axios.put(this.ApartmentUrl, {id: file.id}).then((res) => {
-                        if (res.data.resultCode === 200) {
-
-                        } else {
-                            this.$message.error('更新失败');
-                            return false;
-                        }
-                    })
+                    this.master = file.id;
                 }
-
             },
             submitUpload() {
                 this.$refs.upload.headers.Room = this.ruleForm.id + "_" + this.master;
@@ -311,6 +305,13 @@
                                     return false;
                                 }
                             })
+
+                            this.$axios.post(this.uploadUrl + "/updateMaster", qs.stringify({id:this.master})).then((res) => {
+                                if (res.data.resultCode === 200) {
+                                } else {
+                                    return false;
+                                }
+                            })
                         }
                     } else {
                         console.log('error submit!!');
@@ -321,6 +322,7 @@
             resetForm(formName) {
                 this.ruleForm.good = [];
                 this.fileList = [];
+                this.master='0';
                 this.removeFileList = '';
                 this.$refs[formName].resetFields();
                 this.handleAdd()
