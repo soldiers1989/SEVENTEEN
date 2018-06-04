@@ -1,5 +1,0 @@
-<view class='vip-container'>
-  <view class='vip-background'></view>
-  <text class='card-title'>会员卡</text>
-  <image class='card-img' src='http://119.29.196.106:8080/seventeen/vip-card.png'></image>
-</view>
