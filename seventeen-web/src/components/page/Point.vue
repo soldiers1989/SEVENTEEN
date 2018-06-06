@@ -106,6 +106,58 @@
             </el-form>
         </el-dialog>
 
+
+        <!-- 优惠券使用记录 -->
+        <el-dialog :title="优惠券使用记录" :visible.sync="couponLog" width="80%" >
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="优惠券名称" prop="name">
+                    <el-input v-model="ruleForm.name" class="handle-input"></el-input>
+                </el-form-item>
+                <el-form-item label="发放模式" prop="sendTypeArr">
+                    <el-checkbox-group v-model="ruleForm.sendTypeArr">
+                        <el-checkbox label="新用户"></el-checkbox>
+                        <el-checkbox label="分享"></el-checkbox>
+                        <el-checkbox label="普通"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="有效时间" required>
+
+                    <el-col :span="7">
+                        <el-form-item prop="startTime">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.startTime"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="1">至</el-col>
+
+                    <el-col :span="7">
+                        <el-form-item prop="endTime">
+                            <el-date-picker
+                                v-model="ruleForm.endTime"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="优惠金额" prop="price">
+                    <el-input v-model="ruleForm.price" class="handle-input"></el-input>
+                </el-form-item>
+                <el-form-item label="金额上限" prop="maxPrice">
+                    <el-input placeholder="满多少立减" v-model="ruleForm.maxPrice" class="handle-input"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input v-model="ruleForm.remark"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+                    <el-button v-if="add" @click="resetForm('ruleForm')">重置</el-button>
+                    <el-button v-if="edit" @click="resetForm('ruleForm');visible=false">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>

@@ -2,6 +2,7 @@ package com.seventeen.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
@@ -141,6 +142,24 @@ public class SeCouponServiceImpl implements SeCouponService {
             logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
+
+    @Override
+    public Result<List<CouponLog>> getCouponLog(String status, String remark, String startTime, String endTime, PageInfo pageInfo) {
+        Result<List<CouponLog>> result = new Result<>();
+
+        try {
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            ArrayList<CouponLog> couponLogs = SeCouponMapper.getCouponLog(status, remark, startTime, endTime);
+            pageInfo.setTotal(page.getTotal());
+            result.setData(couponLogs, pageInfo);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+
     }
 
 

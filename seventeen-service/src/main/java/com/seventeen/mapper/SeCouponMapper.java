@@ -1,5 +1,6 @@
 package com.seventeen.mapper;
 
+import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +24,7 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     @Select("select * from  se_coupon where end_time < #{date} and status ='1'")
     List<SeCoupon> selectCouponEveryDay(@Param("date") String date);
+
+    ArrayList<CouponLog> getCouponLog(String status, String remark, String startTime, String endTime);
+
 }

@@ -1,6 +1,7 @@
 package com.seventeen.controller;
 
 
+import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeCouponService;
@@ -66,6 +67,14 @@ public class CouponController {
 	public ResponseEntity updateCoupon(@RequestBody SeCoupon seCoupon) {
 		Result<SeCoupon> flag = seCouponService.updateCoupon(seCoupon);
 		return ResponseEntity.ok(flag);
+	}
+
+	@GetMapping("couponLog")
+	@ApiOperation(value = "获取优惠卷使用情况")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getCouponLog(String status,String remark,String startTime,String endTime,PageInfo pageInfo) {
+		Result<List<CouponLog>> couponLogs = seCouponService.getCouponLog(status,remark,startTime,endTime,pageInfo);
+		return ResponseEntity.ok(couponLogs);
 	}
 
 	/**

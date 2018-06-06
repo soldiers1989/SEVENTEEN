@@ -1,5 +1,6 @@
 package com.seventeen.service;
 
+import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
@@ -52,5 +53,16 @@ public interface SeCouponService {
      *
      */
     void updateCouponStatus();
+
+    /**
+     *
+     * @param status
+     * @param remark
+     * @param startTime
+     * @param endTime
+     * @param pageInfo
+     * @return
+     */
+    Result<List<CouponLog>> getCouponLog(String status, String remark, String startTime, String endTime, PageInfo pageInfo);
 
 }

@@ -42,4 +42,30 @@
         </if>
         ORDER BY id ASC
     </select>
+
+
+    <select id="getCouponLog" resultMap="BaseResultMap">
+        select
+        id, name,
+        CASE STATUS
+        WHEN 1 THEN
+        '可用'
+        WHEN 2 THEN
+        '失效'
+        ELSE
+        '已删除'
+        END
+        as STATUS
+        , start_time,end_time,send_type,max_price,price,remarkw
+        from se_coupon
+        where 1=1
+        <if test="status != null and status  != ''">
+            AND status = #{status}
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (name like CONCAT('%',#{remark},'%' ) or send_type like CONCAT('%',#{remark},'%' ) or price like
+            CONCAT('%',#{remark},'%' ) or max_price like CONCAT('%',#{remark},'%' ))
+        </if>
+        ORDER BY id ASC
+    </select>
 </mapper>

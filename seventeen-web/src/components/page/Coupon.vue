@@ -15,8 +15,8 @@
                 </el-select>
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-                <el-button type="primary"  icon="el-icon-plus" @click="handleAdd">新建</el-button>
-                <el-button type="primary"  icon="el-icon-search" @click="handleAdd">使用记录</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新建</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="handleLog">使用记录</el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable"
                       @selection-change="handleSelectionChange">
@@ -107,6 +107,57 @@
             </el-form>
         </el-dialog>
 
+
+        <!-- 优惠券使用记录 -->
+        <el-dialog title="优惠券使用记录" :visible.sync="couponLog" width="70%">
+            <div class="container">
+                <div class="handle-box">
+                    <el-select v-model="select_cate" placeholder="房间状态" class="handle-select mr10">
+                        <el-option key="0" label="全部" value=""></el-option>
+                        <el-option key="1" label="可用" value="1"></el-option>
+                        <el-option key="2" label="已过期" value="2"></el-option>
+                    </el-select>
+                    <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                    <el-col :span="3">
+                        <el-date-picker type="logDate1" placeholder="开始日期"
+                                        style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="0.1">-</el-col>
+                    <el-col :span="3">
+                        <el-date-picker
+                            type="logDate2" placeholder="结束日期"
+                            style="width: 100%;" value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-col>
+                    <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+                </div>
+                <el-table
+                    :data="logData"
+                    stripe
+                    style="width: 100%">
+                    <el-table-column prop="userId" label="用户id" sortable width="201">
+                    </el-table-column>
+                    <el-table-column prop="userName" label="用户名">
+                    </el-table-column>
+                    <el-table-column prop="couponId" label="优惠号" width="201">
+                    </el-table-column>
+                    <el-table-column prop="useStatus" label="使用情况">
+                    </el-table-column>
+                    <el-table-column prop="couponStatus" label="优惠券状态">
+                    </el-table-column>
+                    <el-table-column prop="couponStatus" label="优惠券有效时间">
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        layout="total,sizes,prev,pager,next,jumper"
+                        :total="logTotal" :current-page="logCurPage">
+                    </el-pagination>
+                </div>
+            </div>
+        </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -126,8 +177,11 @@
             return {
                 CouponUrl: this.$global.baseUrl + "/coupon",
                 tableData: [],
+                logData: [],
                 curPage: 1,
                 total: 0,
+                logCurPage: 1,
+                logTotal: 0,
                 title: '',
                 multipleSelection: [],
                 select_cate: '',
@@ -135,11 +189,11 @@
                 del_list: [],
                 is_search: false,
                 visible: false,
+                couponLog: false,
                 delVisible: false,
                 add: false,
                 edit: false,
                 ids: '',
-                couponFlag: false,
                 ruleForm: {
                     name: '',
                     price: '',
@@ -194,7 +248,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
 
-                        if(that.ruleForm.startTime>that.ruleForm.endTime){
+                        if (that.ruleForm.startTime > that.ruleForm.endTime) {
                             this.$message.error('结束时间不能大于开始时间');
                             return false;
                         }
@@ -264,7 +318,9 @@
                 this.title = "新建";
                 this.add = true;
                 this.edit = false;
-                this.couponFlag = false;
+            },
+            handleLog() {
+                this.couponLog = true;
             },
 
             handleEdit(index, row) {
@@ -282,7 +338,6 @@
                 this.edit = true;
                 this.add = false;
                 this.visible = true;
-                this.couponFlag = true;
             },
 
             handleDelete(index, row) {
