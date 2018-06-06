@@ -25,43 +25,23 @@ const router = new Router({
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/tabs',
-                    component: resolve => require(['../components/page/Tabs.vue'], resolve),
+                    path: '/user',
+                        component: resolve => require(['../components/page/User.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    path: '/form',
-                    component: resolve => require(['../components/page/BaseForm.vue'], resolve),
+                    path: '/order',
+                        component: resolve => require(['../components/page/Order.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve),
+                    path: '/coupon',
+                        component: resolve => require(['../components/page/Coupon.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {
-                    // 图片上传组件
-                    path: '/upload',
-                    component: resolve => require(['../components/page/Upload.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    // vue-schart组件
-                    path: '/charts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: resolve => require(['../components/page/DragList.vue'], resolve),
-                    meta: {requiresAuth: true}
-                },
-                {
-                    // 权限页面
-                    path: '/permission',
-                    component: resolve => require(['../components/page/Permission.vue'], resolve),
+                    path: '/point',
+                        component: resolve => require(['../components/page/Point.vue'], resolve),
                     meta: {requiresAuth: true}
                 }
             ]
