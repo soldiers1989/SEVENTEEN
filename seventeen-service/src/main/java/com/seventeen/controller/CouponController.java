@@ -70,7 +70,7 @@ public class CouponController {
 	}
 
 	@GetMapping("couponLog")
-	@ApiOperation(value = "获取优惠卷使用情况")
+	@ApiOperation(value = "获取优惠卷使用记录")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getCouponLog(String status,String remark,String startTime,String endTime,PageInfo pageInfo) {
 		Result<List<CouponLog>> couponLogs = seCouponService.getCouponLog(status,remark,startTime,endTime,pageInfo);

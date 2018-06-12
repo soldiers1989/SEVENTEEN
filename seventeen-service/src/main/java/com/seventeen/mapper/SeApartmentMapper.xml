@@ -10,12 +10,13 @@
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="floor" property="floor" jdbcType="VARCHAR"/>
         <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="bed" property="bed" jdbcType="VARCHAR"/>
+        <result column="room_type" property="roomType" jdbcType="VARCHAR"/>
         <result column="structure" property="structure" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
-
     </resultMap>
     <sql id="Base_Column_List">
     id, ap_num, name, type, title, status, floor, area, structure, price, create_time,remark,
@@ -32,8 +33,8 @@
 
     <select id="getSeApartments" resultMap="BaseResultMap">
         select
-        id, ap_num, name, title,
-        CASE STATUS
+        sa.id, sa.ap_num, sa.name, sa.title,st.`name` as room_type,
+        CASE sa.STATUS
         WHEN 1 THEN
         '入住'
         WHEN 2 THEN
@@ -43,7 +44,7 @@
         END
         as STATUS
         ,
-        CASE type
+        CASE sa.type
         WHEN 1 THEN
         '短租'
         WHEN 2 THEN
@@ -51,16 +52,19 @@
         ELSE
         '已删除'
         END as type,
-        floor, area, structure, price, create_time,
-        create_by,remark
-        from se_apartment
+        sa.floor, sa.area, sa.structure, sa.price, sa.create_time,
+        sa.create_by,sa.remark
+        from se_apartment sa LEFT JOIN  se_tag st ON sa.room_type = st.id
         where 1=1
         <if test="status != null and status  != ''">
-            AND status = #{status}
+            AND sa.status = #{status}
+        </if>
+        <if test="roomType != null and roomType  != ''">
+            AND st.id = #{roomType}
         </if>
         <if test="remark != null and remark  != ''">
-            AND (ap_num like CONCAT('%',#{remark},'%' ) or name like CONCAT('%',#{remark},'%' ) or status like
-            CONCAT('%',#{remark},'%' ) or type like CONCAT('%',#{remark},'%' ) )
+            AND (sa.ap_num like CONCAT('%',#{remark},'%' ) or sa.name like CONCAT('%',#{remark},'%' ) or sa.status like
+            CONCAT('%',#{remark},'%' ) or sa.type like CONCAT('%',#{remark},'%' ) )
         </if>
         ORDER BY ap_num ASC
     </select>

@@ -57,13 +57,13 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
 
     @Override
-    public Result<List<SeApartment>> getSeApartments(String status, String remark, PageInfo pageInfo) {
+    public Result<List<SeApartment>> getSeApartments(String status,String roomType,String remark, PageInfo pageInfo) {
         Result<List<SeApartment>> result = new Result<>();
 
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-            ArrayList<SeApartment> seApartments = seApartmentMapper.getSeApartments(status, remark);
+            ArrayList<SeApartment> seApartments = seApartmentMapper.getSeApartments(status, remark,roomType);
             pageInfo.setTotal(page.getTotal());
             result.setData(seApartments, pageInfo);
         } catch (Exception e) {
@@ -219,6 +219,38 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             result.setData(seApartment);
         } catch (Exception e) {
             logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result addTags(String type, String name) {
+        Result result = new Result<>();
+
+        try {
+            SeTag seTag = new SeTag();
+            seTag.setId(IDGenerator.getId());
+            seTag.setType(type);
+            seTag.setName(name);
+            seTagMapper.insert(seTag);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<String> deleteTag(String ids) {
+        Result result = new Result<>();
+        try {
+            SeTag seTag = new SeTag();
+            seTag.setId(ids);
+            seTagMapper.delete(seTag);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

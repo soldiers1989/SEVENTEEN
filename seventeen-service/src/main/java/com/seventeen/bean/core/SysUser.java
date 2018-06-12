@@ -47,6 +47,11 @@ public class SysUser implements UserDetails {
 	@ApiModelProperty(value = "openId")
 	private String openid;
 
+	@ApiModelProperty(value = "最后订单时间")
+	private String lastOrderTime;
+	@ApiModelProperty(value = "最后登录时间")
+	private String lastLoginTime;
+
 	@ApiModelProperty(value = "创建时间", dataType = "Date", hidden = true)
 //	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createDate;
@@ -81,6 +86,22 @@ public class SysUser implements UserDetails {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getLastOrderTime() {
+		return lastOrderTime;
+	}
+
+	public void setLastOrderTime(String lastOrderTime) {
+		this.lastOrderTime = lastOrderTime;
+	}
+
+	public String getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(String lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
 	}
 
 	@Override

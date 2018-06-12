@@ -134,7 +134,7 @@ public class SeCouponServiceImpl implements SeCouponService {
             List<SeCoupon> seCoupons = SeCouponMapper.selectCouponEveryDay(date);
             if (!seCoupons.isEmpty()) {
                 for (SeCoupon seCoupon : seCoupons) {
-                    seCoupon.setStatus("0");
+                    seCoupon.setStatus("2");
                     SeCouponMapper.updateByPrimaryKey(seCoupon);
                 }
             }
@@ -155,7 +155,7 @@ public class SeCouponServiceImpl implements SeCouponService {
             pageInfo.setTotal(page.getTotal());
             result.setData(couponLogs, pageInfo);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("error",e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

@@ -33,8 +33,8 @@ public class ApartmentController {
 	@GetMapping
 	@ApiOperation(value = "获取房间列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity apartmentList(String status,String remark,PageInfo pageInfo) {
-        Result<List<SeApartment>> seApartments = seApartmentService.getSeApartments(status,remark,pageInfo);
+	public ResponseEntity apartmentList(String status,String remark,String roomType,PageInfo pageInfo) {
+        Result<List<SeApartment>> seApartments = seApartmentService.getSeApartments(status,roomType,remark,pageInfo);
         return ResponseEntity.ok(seApartments);
 	}
 
@@ -84,6 +84,22 @@ public class ApartmentController {
 	public ResponseEntity getTags(String type, String name) {
 		Result<List<SeTag>> seApartments = seApartmentService.getTags(type,name);
 		seApartments.setMessage(IDGenerator.getId());
+		return ResponseEntity.ok(seApartments);
+	}
+
+	@PostMapping("/tags")
+	@ApiOperation(value = "插入tag信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addTags(@RequestBody SeTag seTag) {
+		Result seApartments = seApartmentService.addTags(seTag.getType(),seTag.getName());
+		seApartments.setMessage(IDGenerator.getId());
+		return ResponseEntity.ok(seApartments);
+	}
+	@DeleteMapping("/tags")
+	@ApiOperation(value = "删除tag")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity deleteTag(@RequestParam String ids) {
+		Result<String> seApartments = seApartmentService.deleteTag(ids);
 		return ResponseEntity.ok(seApartments);
 	}
 }

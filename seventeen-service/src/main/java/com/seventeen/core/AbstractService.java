@@ -2,6 +2,7 @@ package com.seventeen.core;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.util.PageInfo;
 import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.CoreMapper;
@@ -103,4 +104,5 @@ public abstract class AbstractService<T> implements Service<T> {
 		pageInfo.setTotal(page.getTotal());
 		return list;
 	}
+
 }

@@ -16,7 +16,7 @@
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新建</el-button>
-                <el-button type="primary" icon="el-icon-search" @click="handleLog">使用记录</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchLog">使用记录</el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable"
                       @selection-change="handleSelectionChange">
@@ -112,24 +112,24 @@
         <el-dialog title="优惠券使用记录" :visible.sync="couponLog" width="70%">
             <div class="container">
                 <div class="handle-box">
-                    <el-select v-model="select_cate" placeholder="房间状态" class="handle-select mr10">
+                    <el-select v-model="select_catelog" placeholder="房间状态" class="handle-select mr10">
                         <el-option key="0" label="全部" value=""></el-option>
                         <el-option key="1" label="可用" value="1"></el-option>
-                        <el-option key="2" label="已过期" value="2"></el-option>
+                        <el-option key="2" label="已过期" value="0"></el-option>
                     </el-select>
-                    <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                    <el-input v-model="select_wordlog" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                     <el-col :span="3">
-                        <el-date-picker type="logDate1" placeholder="开始日期"
+                        <el-date-picker type="date" placeholder="开始日期" v-model="logStartTime"
                                         style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-col>
                     <el-col class="line" :span="0.1">-</el-col>
                     <el-col :span="3">
                         <el-date-picker
-                            type="logDate2" placeholder="结束日期"
-                            style="width: 100%;" value-format="yyyy-MM-dd">
+                            type="date" placeholder="结束日期"
+                            style="width: 100%;" value-format="yyyy-MM-dd" v-model="logEndTime">
                         </el-date-picker>
                     </el-col>
-                    <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="searchLog">搜索</el-button>
                 </div>
                 <el-table
                     :data="logData"
@@ -145,12 +145,17 @@
                     </el-table-column>
                     <el-table-column prop="couponStatus" label="优惠券状态">
                     </el-table-column>
-                    <el-table-column prop="couponStatus" label="优惠券有效时间">
+                    <el-table-column prop="useTime" label="优惠券有效时间" width="201">
                     </el-table-column>
+                    <el-table-column prop="price" label="优惠金额">
+                    </el-table-column>
+                    <el-table-column prop="maxPrice" label="金额上限" >
+                    </el-table-column>
+
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        @current-change="handleCurrentChange"
+                        @current-change="loghandleCurrentChange"
                         layout="total,sizes,prev,pager,next,jumper"
                         :total="logTotal" :current-page="logCurPage">
                     </el-pagination>
@@ -185,7 +190,9 @@
                 title: '',
                 multipleSelection: [],
                 select_cate: '',
+                select_catelog:'',
                 select_word: '',
+                select_wordlog:'',
                 del_list: [],
                 is_search: false,
                 visible: false,
@@ -194,6 +201,8 @@
                 add: false,
                 edit: false,
                 ids: '',
+                logStartTime:'',
+                logEndTime:'',
                 ruleForm: {
                     name: '',
                     price: '',
@@ -241,6 +250,11 @@
             // 分页导航
             handleCurrentChange(val) {
                 this.curPage = val;
+                this.getData(val);
+            },
+            // 分页导航
+            loghandleCurrentChange(val) {
+                this.logCurPage = val;
                 this.getData(val);
             },
             submitForm(formName) {
@@ -305,7 +319,12 @@
             },
             search() {
                 this.is_search = true;
+                this.curPage=1;
                 this.getData()
+            },
+            searchLog(){
+                this.logCurPage=1;
+                this.handleLog();
             },
             formatter(row, column) {
                 return row.address;
@@ -321,8 +340,21 @@
             },
             handleLog() {
                 this.couponLog = true;
+                const param = {
+                    "pageNum": this.logCurPage,
+                    "remark": this.select_wordlog === null ? "" : this.select_wordlog.trim(),
+                    "status": this.select_catelog === null ? "" : this.select_catelog.trim(),
+                    "startTime": this.logStartTime === null ? "" : this.logStartTime.trim(),
+                    "endTime": this.logEndTime === null ? "" : this.logEndTime.trim()
+                }
+                this.$axios.get(this.CouponUrl+"/couponLog", {params: param}).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.logData = res.data.data;
+                        this.logTotal = res.data.pageInfo.total;
+                        this.logCurPage = res.data.pageInfo.pageNum;
+                    }
+                })
             },
-
             handleEdit(index, row) {
                 this.idx = index;
                 let that = this;

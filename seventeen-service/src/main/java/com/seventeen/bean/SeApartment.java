@@ -20,6 +20,9 @@ public class SeApartment{
 
     private String status;
 
+    private String bed;
+
+
     private String floor;
 
     private String area;
@@ -33,10 +36,28 @@ public class SeApartment{
     private String createBy;
 
     private String remark;
+    private String roomType;
+
+
 
     @Transient
     private ArrayList<String> good;
 
+    public String getBed() {
+        return bed;
+    }
+
+    public void setBed(String bed) {
+        this.bed = bed;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
 
     public ArrayList<String> getGood() {
         return good;

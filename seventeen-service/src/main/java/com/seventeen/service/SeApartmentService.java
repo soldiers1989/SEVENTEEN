@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface SeApartmentService{
 
-    Result<List<SeApartment>> getSeApartments(String status,String remark, PageInfo pageInfo);
+    Result<List<SeApartment>> getSeApartments(String status,String roomType,String remark, PageInfo pageInfo);
 
     Result<String> deleteApartment(String ids);
 
@@ -54,5 +54,9 @@ public interface SeApartmentService{
      * @return
      */
     Result<SeApartment> updateApartment(SeApartment seApartment);
+
+    Result addTags(String type, String name);
+
+    Result<String> deleteTag(String ids);
 
 }

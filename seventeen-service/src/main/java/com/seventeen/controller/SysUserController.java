@@ -1,6 +1,7 @@
 package com.seventeen.controller;
 
 
+import com.seventeen.bean.core.SysRoleAuthority;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.mapper.SysUserMapper;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -111,11 +113,20 @@ public class SysUserController {
 		return ResponseEntity.ok("更新成功。");
 	}
 
+	@GetMapping("/condition")
+	@ApiOperation("查询所有用户列表")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+//	@Cacheable(value = "sysUserList")
+	public ResponseEntity findListByCondition(String status,PageInfo pageInfo) {
+		Result<List<SysUser>> sysUsers= sysUserService.findList(status,pageInfo);
+		return ResponseEntity.ok(sysUsers);
+	}
+
 	@GetMapping("/all")
 	@ApiOperation("查询所有用户列表")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	@Cacheable(value = "sysUserList")
-	public ResponseEntity findList() {
+	public ResponseEntity findList(String status,PageInfo pageInfo) {
 		return ResponseEntity.ok(sysUserService.findAll());
 	}
 
