@@ -41,10 +41,10 @@ public class SysUser implements UserDetails {
 	@ApiModelProperty(value = "性别")
 	private String sex;
 
-	@ApiModelProperty(value = "unionId")
+	@ApiModelProperty(value = "unionid")
 	private String unionid;
 
-	@ApiModelProperty(value = "openId")
+	@ApiModelProperty(value = "openid")
 	private String openid;
 
 	@ApiModelProperty(value = "最后订单时间")

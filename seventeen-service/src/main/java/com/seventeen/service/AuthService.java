@@ -1,5 +1,7 @@
 package com.seventeen.service;
 
+import com.seventeen.bean.core.SysUser;
+
 /**
  * 认证服务
  *
@@ -23,4 +25,12 @@ public interface AuthService {
 	 * @return
 	 */
 	String refresh(String oldToken);
+
+	/**
+	 * 注册
+	 *
+	 * @param userToAdd
+	 * @return
+	 */
+	String register(SysUser userToAdd);
 }

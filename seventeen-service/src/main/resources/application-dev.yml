@@ -81,5 +81,5 @@ file:
 wx:
   app:
     Appid: wxe6f9450a01336cb9
-    Secret: 056c145f98060d326ea53187f548d778
+    Secret: 650b185beafa0fabb74c7cbc9b2ac338
     grant_type: authorization_code

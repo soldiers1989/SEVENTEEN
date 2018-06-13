@@ -3,6 +3,7 @@ package com.seventeen.service.impl;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.config.JwtTokenConfig;
 import com.seventeen.filter.JwtAuthenticationTokenFilter;
+import com.seventeen.mapper.SysUserMapper;
 import com.seventeen.service.AuthService;
 import com.seventeen.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -23,6 +30,28 @@ public class AuthServiceImpl implements AuthService {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private JwtTokenConfig jwtTokenConfig;
+	@Autowired
+	private SysUserService sysUserService;
+	@Autowired
+	private SysUserDetailsServiceImpl sysUserDetailsServiceImpl;
+
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public String register(SysUser userToAdd) {
+		final String openid = userToAdd.getOpenid();
+		UserDetails userDetails=sysUserDetailsServiceImpl.loadUserByOpenId(openid);
+		if(userDetails!=null) {
+			return jwtTokenConfig.generateToken(userDetails);
+		}
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		final String rawPassword = userToAdd.getPassword();
+		userToAdd.setPassword(encoder.encode(rawPassword));
+		userToAdd.setLastPasswordResetDate(new Date());
+		userToAdd.setRoleIds(Arrays.asList("20170802115412744304269"));
+		sysUserService.insert(userToAdd);
+		return jwtTokenConfig.generateToken(userToAdd);
+	}
 
 	@Override
 	public String login(String username, String password) {

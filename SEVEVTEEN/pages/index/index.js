@@ -9,7 +9,8 @@ Page({
     tabArr: {
       curHdIndex: "t1"
       //  curBdIndex: 0 
-    }
+    },
+    canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   tabSel: function (e) {
 
