@@ -25,8 +25,9 @@ public interface SysUserRoleMapper extends CoreMapper<SysUserRole> {
             "AND sur.user_id = su.id " +
             "<if test=\"status != null and status  != ''\">" +
             "  AND (su.username like CONCAT('%',#{status},'%' ) or su.phone like CONCAT('%',#{status},'%' ) or su.last_order_time like " +
-            "  CONCAT('%',#{status},'%' ) or su.last_login_time like CONCAT('%',#{status},'%' ) or su.create_date like CONCAT('%',#{status},'%' ) ) " +
-            "</if>" +
+            "  CONCAT('%',#{status},'%' ) or su.last_login_time like CONCAT('%',#{status},'%' )) " +
+            "</if> " +
+            "order by su.last_login_time desc" +
             "</script> ")
     ArrayList<SysUser> findList(@Param("status") String status);
 }

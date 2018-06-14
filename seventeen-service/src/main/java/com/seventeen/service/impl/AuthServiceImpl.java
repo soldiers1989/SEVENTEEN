@@ -40,14 +40,17 @@ public class AuthServiceImpl implements AuthService {
 	@Transactional(rollbackFor = Exception.class)
 	public String register(SysUser userToAdd) {
 		final String openid = userToAdd.getOpenid();
-		UserDetails userDetails=sysUserDetailsServiceImpl.loadUserByOpenId(openid);
-		if(userDetails!=null) {
-			return jwtTokenConfig.generateToken(userDetails);
+		SysUser userDetail=(SysUser)sysUserDetailsServiceImpl.loadUserByOpenId(openid);
+		if(userDetail!=null) {
+			userDetail.setLastLoginTime(DateUtil.nowDate());
+			sysUserService.update(userDetail);
+			return jwtTokenConfig.generateToken(userDetail);
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		final String rawPassword = userToAdd.getPassword();
 		userToAdd.setPassword(encoder.encode(rawPassword));
 		userToAdd.setLastPasswordResetDate(new Date());
+		userToAdd.setLastLoginTime(DateUtil.nowDate());
 		userToAdd.setRoleIds(Arrays.asList("20170802115412744304269"));
 		sysUserService.insert(userToAdd);
 		return jwtTokenConfig.generateToken(userToAdd);

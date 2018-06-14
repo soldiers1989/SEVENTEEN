@@ -81,6 +81,7 @@ public class WxLoginController {
                 sysUser.setSex(userInfoJSON.getString("gender"));
                 sysUser.setUsername(userInfoJSON.getString("nickName"));
                 sysUser.setUnionid(userInfoJSON.getString("unionId"));
+                sysUser.setDescription("小程序用户");
                 sysUser.setPhone(StringUtils.isEmpty(phone) == true ? "" : phone);
                 String token = authService.register(sysUser);
                 return ResponseEntity.ok(new Result(token));
