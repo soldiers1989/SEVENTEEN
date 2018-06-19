@@ -1,0 +1,54 @@
+<view>
+  <view class="nav-tabs">
+    <block wx:for="{{tabArray}}" wx:for-index="idx" wx:for-item="itemName">
+      <view class="tab-list  {{currentTab == idx?'active':'default'}}" data-current="{{idx}}" catchtap="swichNav">
+        <view class="{{currentTab == idx?'test':''}}">
+          {{itemName}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+<view class='reply-container'>
+  <view class='box'>
+    <view class='head-container'>
+      <view class='message-container'>
+        <text class='message-address'>福华店</text>
+        <text class='message-val'>情侣出行</text>
+      </view>
+      <text class='point'>5.0分</text>
+    </view>
+    <view class='sugg'>
+      <text>好评</text>
+    </view>
+    <view class='reply-user-container'>
+      <view class='reply-user-box'>
+        <text class='reply-title'>[店长回复: ]</text>
+        <text class='reply'>尊敬的客人，非常感谢你使用，本店致力于为你提供亲切周到的服务t体验!</text>
+      </view>
+    </view>
+    <view></view>
+    <text class='time'>2018-02-10 14:54</text>
+  </view>
+<view class='box'>
+    <view class='head-container'>
+      <view class='message-container'>
+        <text class='message-address'>福华店</text>
+        <text class='message-val'>情侣出行</text>
+      </view>
+      <text class='point'>5.0分</text>
+    </view>
+    <view class='sugg'>
+      <text>好评</text>
+    </view>
+    <view class='reply-user-container'>
+      <view class='reply-user-box'>
+        <text class='reply-title'>[店长回复: ]</text>
+        <text class='reply'>尊敬的客人，非常感谢你使用，本店致力于为你提供亲切周到的服务t体验!</text>
+      </view>
+    </view>
+    <view></view>
+    <text class='time'>2018-02-10 14:54</text>
+  </view>
+  
+</view>

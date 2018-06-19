@@ -1,0 +1,5 @@
+.DS_Store
+seventeen-web/node_modules/
+seventeen-web/dist/
+seventeen-web/.idea/
+npm-debug.log

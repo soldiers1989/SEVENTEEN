@@ -1,0 +1,4 @@
+<view class='container'>
+  <image  class='user-avatar' src='/imgs/logo.png'></image>
+  <button class='moto' wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">Hello，Seventeen</button>
+</view>

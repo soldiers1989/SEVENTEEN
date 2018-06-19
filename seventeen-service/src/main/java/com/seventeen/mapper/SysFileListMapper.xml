@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是UserMapper接口的路径，不然要运行的时候要报错 "is not known to the MapperRegistry" -->
+<mapper namespace="com.himasoft.mapper.db2.SysFileListMapper">
+	<select id="selectAllByCondition" resultType="SysFileList">
+ 		<![CDATA[select fl.*,u.username from sys_file_list fl inner join sys_user u on fl.user_id = u.id ]]>
+		<where>
+			<if test="fileListParam.username!=null">
+    			<![CDATA[and u.username like CONCAT ('%',#{fileListParam.username},'%')]]>
+			</if>
+			<if test="fileListParam.fileName!=null">
+    			<![CDATA[and fl.file_name like CONCAT ('%',#{fileListParam.fileName},'%')]]>
+			</if>
+			<if test="fileListParam.createBeginDate!=null">
+    			<![CDATA[and fl.create_date >= #{fileListParam.createBeginDate}]]>
+			</if>
+			<if test="fileListParam.createEndDate!=null">
+    			<![CDATA[and fl.create_date <= #{fileListParam.createEndDate}]]>
+			</if>
+		</where>
+		<if test="condition.orderByClause!=null">
+			order by ${condition.orderByClause}
+		</if>
+	</select>
+</mapper>

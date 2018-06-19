@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seventeen.mapper.SeCouponMapper">
+    <resultMap id="BaseResultMap" type="com.seventeen.bean.SeCoupon">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="VARCHAR"/>
+        <result column="end_time" property="endTime" jdbcType="VARCHAR"/>
+        <result column="send_type" property="sendType" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="VARCHAR"/>
+        <result column="max_price" property="maxPrice" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, status, start_time, end_time, send_type, price, max_price, remark, create_time, 
+    create_by
+  </sql>
+    <select id="getSeCoupons" resultMap="BaseResultMap">
+        select
+        id, name,
+        CASE STATUS
+        WHEN 1 THEN
+        '可用'
+        WHEN 2 THEN
+        '失效'
+        ELSE
+        '已删除'
+        END
+        as STATUS
+        , start_time,end_time,send_type,max_price,price,remark
+        from se_coupon
+        where 1=1
+        AND status !='0'
+        <if test="status != null and status  != ''">
+            AND status = #{status}
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (name like CONCAT('%',#{remark},'%' ) or send_type like CONCAT('%',#{remark},'%' ) or price like
+            CONCAT('%',#{remark},'%' ) or max_price like CONCAT('%',#{remark},'%' ) or id like CONCAT('%',#{remark},'%' ))
+        </if>
+        ORDER BY id ASC
+    </select>
+
+
+    <select id="getCouponLog" resultType="com.seventeen.bean.CouponLog">
+
+        SELECT
+        suc.user_id userId,
+        su.username userName,
+        suc.coupon_id couponId,
+        CASE suc.STATUS
+        WHEN 1 THEN
+        '未用'
+        WHEN 2 THEN
+        '已用'
+        ELSE
+        '失效'
+        END useStatus,
+        if(sc.STATUS=1,'可用','失效') couponStatus,
+        sc.price,
+        sc.max_price maxPrice,
+        CONCAT_WS('至',sc.start_time,sc.end_time) useTime
+        FROM
+        se_coupon sc,
+        se_user_coupon suc,
+        sys_user su
+        WHERE
+        suc.coupon_id = sc.id
+        AND suc.user_id = su.id
+        <if test="status != null and status  != ''">
+            <choose>
+                <when test="status ==0 ">
+                    AND ( sc.status = '2' or sc.status = '0')                </when>
+                <otherwise>
+                    AND sc.status = #{status}
+                </otherwise>
+            </choose>
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (su.username like CONCAT('%',#{remark},'%' ) or su.id like CONCAT('%',#{remark},'%' ) or sc.id like
+            CONCAT('%',#{remark},'%' ))
+        </if>
+        <if test="startTime != null and startTime  != ''">
+            AND sc.start_time  &lt;= #{startTime} AND sc.end_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime  != ''">
+            AND sc.start_time  &lt;= #{endTime} AND sc.end_time &gt;= #{endTime}
+        </if>
+        ORDER BY sc.id ASC
+    </select>
+</mapper>

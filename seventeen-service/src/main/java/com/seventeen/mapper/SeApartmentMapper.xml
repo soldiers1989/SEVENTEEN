@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seventeen.mapper.SeApartmentMapper">
+    <resultMap id="BaseResultMap" type="com.seventeen.bean.SeApartment">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ap_num" property="apNum" jdbcType="CHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="floor" property="floor" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="bed" property="bed" jdbcType="VARCHAR"/>
+        <result column="room_type" property="roomType" jdbcType="VARCHAR"/>
+        <result column="structure" property="structure" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, ap_num, name, type, title, status, floor, area, structure, price, create_time,remark,
+    create_by
+  </sql>
+
+    <update id="deleteApartment">
+        delete  from se_apartment WHERE id IN
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="getSeApartments" resultMap="BaseResultMap">
+        select
+        sa.id, sa.ap_num, sa.name, sa.title,st.`name` as room_type,
+        CASE sa.STATUS
+        WHEN 1 THEN
+        '入住'
+        WHEN 2 THEN
+        '空房'
+        ELSE
+        '已删除'
+        END
+        as STATUS
+        ,
+        CASE sa.type
+        WHEN 1 THEN
+        '短租'
+        WHEN 2 THEN
+        '长租'
+        ELSE
+        '已删除'
+        END as type,
+        sa.floor, sa.area, sa.structure, sa.price, sa.create_time,
+        sa.create_by,sa.remark
+        from se_apartment sa LEFT JOIN  se_tag st ON sa.room_type = st.id
+        where 1=1
+        <if test="status != null and status  != ''">
+            AND sa.status = #{status}
+        </if>
+        <if test="roomType != null and roomType  != ''">
+            AND st.id = #{roomType}
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (sa.ap_num like CONCAT('%',#{remark},'%' ) or sa.name like CONCAT('%',#{remark},'%' ) or sa.status like
+            CONCAT('%',#{remark},'%' ) or sa.type like CONCAT('%',#{remark},'%' ) )
+        </if>
+        ORDER BY ap_num ASC
+    </select>
+
+</mapper>
