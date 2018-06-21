@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/auth/auth", 
-    "pages/index/index",
+    
+    "pages/index/index","pages/auth/auth",
     "pages/message/reply/reply",
     "pages/message/system/system",
     "pages/message/message",
@@ -16,7 +16,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "SEVENTEEN",
+    "navigationBarTitleText": "17INN",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -48,5 +48,5 @@
         "selectedIconPath": "imgs/icon/user_se.png"
       }
     ]
-  }
-}
+   }
+ }

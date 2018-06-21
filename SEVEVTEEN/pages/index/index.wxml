@@ -1,47 +1,107 @@
-
-<image class='nav-baner' src='/imgs/index/brand.jpg'></image>
-<view class='tab-info'  >
-  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}" >我要入住</text>
-  <image wx:if="{{tabArr.curHdIndex=='t1'}}" class="{{tabArr.curHdIndex=='t1'?'bag1': 'none'}}" src='/imgs/index/wyrz.jpg'></image>
-  <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">我要租房</text>
-  <image  class="{{tabArr.curHdIndex=='t2'?'bag2': 'none'}}" src='/imgs/index/wyzf.svg'></image>
-  <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked bag3a': ''}}">房屋委托</text>
-  <image  class="{{tabArr.curHdIndex=='t3'?'bag3': 'none'}}" src='/imgs/index/fwwt.jpg'></image>
+<image class='nav-baner' src='{{imgUrl}}/imgs/index/brand.jpg'>
+</image>
+<view class='tab-info'>
+  <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}">我要入住</text>
+  <image wx:if="{{tabArr.curHdIndex=='t1'}}" class="{{tabArr.curHdIndex=='t1'?'bag1': 'none'}}" src='{{imgUrl}}/imgs/index/wyrz.jpg'></image>
+  <text data-id='t2' bindtap="tabSel" class="{{tabArr.curHdIndex=='t2'?'is_checked': ''}}">住客评价</text>
+  <image class="{{tabArr.curHdIndex=='t2'?'bag2': 'none'}}" src='{{imgUrl}}/imgs/index/wyzf.svg'></image>
+  <!-- <text data-id='t3' bindtap="tabSel" class="{{tabArr.curHdIndex=='t3'?'is_checked bag3a': ''}}">房屋委托</text>
+  <image class="{{tabArr.curHdIndex=='t3'?'bag3': 'none'}}" src='/imgs/index/fwwt.jpg'></image> -->
 </view>
-<view class='addres' bindtap="showMap">
-  <text class="addres-text">体育西路13号骏汇大厦2楼 体育西路G出口</text>
-  <view class="addres-map">
-    <text>地图</text>
-    <image class="more-img" src='/imgs/index/right-arr.png'></image>
-  </view>
-</view>
-<view class='date' bindtap="showDates">
-  <image src='/imgs/index/rl.png'></image>
-  <text class='date-cent'>{{time}}</text>
-  <text class='date-right'>{{chooseDate.day?"入住"+chooseDate.day+"晚":"入住"}}</text>
 
-  <image class="date-right-icon" src='/imgs/index/right-arr.png'></image>
 
-</view>
-<view class='info'>
-  <view class='info-box'>
-    <image class='info-box-icon' src='/imgs/room1.jpg'></image>
-    <view class='info-box-text'>
-      <view class='info-icon-top'>
-        <image class='info-icon-top-img' src='/imgs/photo.png'></image>
-        <text>4</text>
-      </view>
+<view class='{{tabArr.curHdIndex=="t1"?"":"none"}}' >
+
+  <view class='addres' bindtap="showMap">
+    <image class='map-icon' src='{{imgUrl}}/imgs/index/map.png'></image>
+    <text class="addres-text">番禺大学城外环西路13号</text>
+    <view class="addres-map">
+      <image class="more-img" src='{{imgUrl}}/imgs/index/right-arr.png'></image>
     </view>
   </view>
-  <view class='info-msg'>
-    <text class='msg-big'>大床房</text>
-    <text class='msg-smail'>大床2米,1.8米  部分内窗</text>
-    <text class='msg-smail'>20-25m²</text>
+  <view class='date' bindtap="showDates">
+    <image src='/imgs/index/rl.png'></image>
+    <text class='date-cent'>{{time}}</text>
+    <text class='date-right'>{{chooseDate.day?"入住"+chooseDate.day+"晚":"入住"}}</text>
+
+    <image class="date-right-icon" src='{{imgUrl}}/imgs/index/right-arr.png'></image>
+
   </view>
-  <view class='money-text'>
-    <text class='money-smail'>￥</text>
-    <text>299</text>
-    <text class='money-smail'>起</text>
+  <view class='info'>
+    <view class='info-box'>
+      <image class='info-box-icon' src='{{imgUrl}}/imgs/room1.jpg'></image>
+
+    </view>
+    <view class='info-msg'>
+      <text class='msg-big'>大床房</text>
+      <text class='msg-smail'>大床2米,1.8米  部分内窗</text>
+      <text class='msg-smail'>20-25m²</text>
+    </view>
+    <view class='money-text'>
+      <text class='money-smail'>￥</text>
+      <text>299</text>
+      <text class='money-smail'>起</text>
+    </view>
+    <image class='right-icon' src='{{imgUrl}}/imgs/index/top-arr.png'></image>
   </view>
-  <image class='right-icon' src='/imgs/index/top-arr.png'></image>
+</view> 
+
+<view class='evaluete {{tabArr.curHdIndex=="t2"?"":"none"}}'>
+    <view class='all-evaluete'>
+      <view class='score'>
+        <text class='score-num'>{{all_evaluete.score}}</text>
+        <text class='score-text'>{{all_evaluete.comCount}}条评价</text>
+      </view>
+      <view class='stars'>
+        <view class='stars-row'>
+          <text class='stars-text'>设施评分</text>
+          <view class='stars-star'>
+           
+              <block wx:for="{{all_evaluete.ss}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
+                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+              </block>
+          </view>
+          <text class='stars-num'>5.0</text> 
+        </view>
+         <view class='stars-row'>
+          <text class='stars-text'>卫生评分</text>
+          <view class='stars-star'>
+              <block wx:for="{{all_evaluete.ws}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
+                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+              </block>
+          </view>
+          <text class='stars-num'>5.0</text>
+        </view>
+        <view class='stars-row'>
+          <text class='stars-text'>舒适感</text>
+          <view class='stars-star'>
+              <block wx:for="{{all_evaluete.ssg}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
+                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+              </block>
+          </view>
+          <text class='stars-num'>5.0</text>
+        </view> 
+      </view>
+      
+    </view>
+
+    <view class='user-evaluete'>
+        <view class='topInfo'>
+          <image class='user-icon' src='{{imgUrl}}/imgs/index/tx.png'></image>
+          <view class='user-centent'>
+             <text class='user-phone'>139****1234</text>
+             <text class='user-room'>大牛坊</text>
+             <view class='stars-star user-star'>
+              <block wx:for="{{all_evaluete.ssg}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
+                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+              </block>
+           </view>
+          </view>
+          <text class='user-c-time'>2018-06-21</text>
+        </view>
+
+
+        <text class='uesr-comment'>弄死的念佛is的念佛isnoin哦i弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦</text>
+    </view>
+
 </view>

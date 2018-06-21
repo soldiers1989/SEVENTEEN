@@ -1,6 +1,7 @@
 //app.js
 const wxApiInterceptors = require('/utils/wxApiInterceptors');
 
+
 wxApiInterceptors({
   request: {
     response(res) {
@@ -16,6 +17,8 @@ wxApiInterceptors({
 
 App({
   globalData: {
-    baseUrl:"http://localhost:80"
+    baseUrl:"http://localhost:80",
+    ImgUrl:"https://www.17inn.com/img/wxApp"
   }
+  
 })

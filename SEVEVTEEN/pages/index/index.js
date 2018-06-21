@@ -10,38 +10,50 @@ Page({
       curHdIndex: "t1"
       //  curBdIndex: 0 
     },
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    all_evaluete: {
+      score:"5.0",
+      ss: [1, 1, 1, 0, 0],
+      ws: [1, 1, 1, 0, 0],
+      ssg: [1, 0, 0, 0, 0],
+      comCount:160
+    },
+    imgUrl: app.globalData.ImgUrl
+
   },
-  tabSel: function (e) {
+  //切换tab页
+  tabSel: function(e) {
 
     var _datasetId = e.target.dataset.id;
     console.log(e.currentTarget.dataset.id)
-    var sid=e.currentTarget.dataset.id;
+    var sid = e.currentTarget.dataset.id;
     var _obj = {};
     _obj.curHdIndex = _datasetId;
     // _obj.curBdIndex = _datasetId;
-    this.setData({ tabArr: _obj });
+    this.setData({
+      tabArr: _obj
+    });
 
   },
   //日历模态框
-  showDates: function () {
+  showDates: function() {
     var chooseDate = this.data.chooseDate;
     var time = "";
     var url
 
-    if (chooseDate &&chooseDate.end) {
-      url = '../dates/date?chooseDate=' + this.data.chooseDate.start + "-" + this.data.chooseDate.end+ "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
-    }else{
+    if (chooseDate && chooseDate.end) {
+      url = '../dates/date?chooseDate=' + this.data.chooseDate.start + "-" + this.data.chooseDate.end + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
+    } else {
       url = "../dates/date";
     }
     wx.navigateTo({
       url: url
     })
   },
-  showMap: function () {
+  showMap: function() {
     wx.getLocation({
       type: 'gcj02', // 默认为 wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标  
-      success: function (res) {
+      success: function(res) {
         // success  
         wx.openLocation({
           latitude: res.latitude, // 纬度，范围为-90~90，负数表示南纬  
@@ -56,10 +68,10 @@ Page({
     //   url: '../maps/map'
     // })
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
-  onShow: function () {
+  onShow: function() {
     var chooseDate = this.data.chooseDate;
     var time = "";
     if (chooseDate && chooseDate.end) {
