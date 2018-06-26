@@ -12,13 +12,20 @@ Page({
     },
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     all_evaluete: {
-      score:"5.0",
+      score: "5.0",
       ss: [1, 1, 1, 0, 0],
       ws: [1, 1, 1, 0, 0],
       ssg: [1, 0, 0, 0, 0],
-      comCount:160
+      comCount: 160
     },
-    imgUrl: app.globalData.ImgUrl
+    imgUrl: app.globalData.ImgUrl,
+    isShowPay: {
+      flag: false,
+      showId: ""
+      
+    }
+
+
 
   },
   //切换tab页
@@ -85,7 +92,25 @@ Page({
     this.setData({
       time
     });
+  },
+
+  showPay: function(e) {
+    var _datasetId = e.currentTarget.dataset.id;
+    var curObj = this.data.isShowPay;
+    if (curObj.showId ==""){//初始状态
+      curObj.showId = _datasetId;
+      curObj.flag = true;
+    } else if (curObj.showId == _datasetId){
+      if (curObj.flag == true) { //还原所有状态
+          curObj.flag= false;
+          curObj.showId= "";
+      } 
+    }else{
+      curObj.showId = _datasetId;
+      curObj.flag = true;
+    }
+    this.setData({
+      isShowPay: curObj
+    });
   }
-
-
 })

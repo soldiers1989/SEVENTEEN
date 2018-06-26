@@ -136,20 +136,26 @@
 
 .info {
   display: flex;
-  flex-direction: row;
-  width: 98%;
-  margin-left: 1%;
-  margin-top: 10px;
+  flex-direction: column;
+  width: 100%;
+  margin-top: -1px;
   border-bottom: 1px solid #bcbcbc;
+  border-top: 1px solid #bcbcbc;
+
 }
 
 .info-box {
+  
+  height: 100px;
   display: block;
+  
   position: relative;
   width: 23%;
+  
 }
 
 .info .info-box .info-box-icon {
+  margin-top:8px; 
   width: 165rpx;
   height: 165rpx;
   border-radius: 3%;
@@ -167,11 +173,21 @@
   margin-top: 38px;
 }
 
-.info .info-msg {
+.checkRoom{
+  width: 100%;
   display: flex;
-  width: 50%;
+  flex-direction: row;
+
+  height: 100px;
+}
+
+.info .info-msg {
+  
+  display: flex;
+  width: 60%;
   margin-left: 5px;
-  margin-top: 12px;
+  height: 70px;
+  margin-top: 15px;
   flex-direction: column;
   /* font-size: 14px; */
 }
@@ -199,6 +215,18 @@
 .money-smail {
   font-size: 18px;
   line-height: 20px;
+}
+
+.pay-list{
+  background: #f2f2f2;
+  border-top:1px solid #707070; 
+  border-bottom:1px solid #707070; 
+  width: 100%;
+}
+.info-centent{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
 /*评价*/
@@ -332,3 +360,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.rzxz{
+  margin-top: 10px;
+  width: 90%;
+  margin-left: 5%;
+  border: 1px dashed #999;
+}
+
+@import "commont-template/commont-template.wxss";
