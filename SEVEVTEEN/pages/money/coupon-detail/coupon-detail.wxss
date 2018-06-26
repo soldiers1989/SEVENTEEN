@@ -10,7 +10,7 @@
 }
 
 .coupon-background {
-  background-image: url(http://119.29.196.106:8080/seventeen/coupon.jpg);
+  background-image: url(https://www.17inn.com/img/wxApp/coupon.jpg);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 250rpx;

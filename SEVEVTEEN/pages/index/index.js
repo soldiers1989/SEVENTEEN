@@ -22,7 +22,7 @@ Page({
     isShowPay: {
       flag: false,
       showId: ""
-      
+
     }
 
 
@@ -104,7 +104,7 @@ Page({
       if (curObj.flag == true) { //还原所有状态
           curObj.flag= false;
           curObj.showId= "";
-      } 
+      }
     }else{
       curObj.showId = _datasetId;
       curObj.flag = true;

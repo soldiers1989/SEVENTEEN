@@ -1,5 +1,6 @@
 var amapFile = require('../../libs/amap-wx.js');
 var util = require('../../utils/util.js');
+var app = getApp();
 
 
 Page({
@@ -10,7 +11,9 @@ Page({
     selected: "0",
     startDate: null,
     endDate: null,
-    date: {}
+    date: {},
+    imgUrl: app.globalData.ImgUrl
+
   },
 
   swichNav: function (e) {
@@ -37,7 +40,7 @@ Page({
         wx.showToast({
           title: "请选择入住日期",
           duration: 2000,
-          image: "../../imgs/icon/fail05.png"
+          image: that.data.imgUrl +"/imgs/icon/fail05.png"
         })
         return;
       }
@@ -226,27 +229,27 @@ Page({
         var weather = data.weather.data;
         if (weather.indexOf("晴") != -1) {
           that.setData({
-            weatherImg: "../../imgs/weather/jingtian.png"
+            weatherImg: that.data.imgUrl+"/imgs/weather/jingtian.png"
           });
         } else if (weather.indexOf("云") != -1) {
           that.setData({
-            weatherImg: "../../imgs/weather/duoyun.png"
+            weatherImg: that.data.imgUrl+"/imgs/weather/duoyun.png"
           });
         } else if (weather.indexOf("雨") != -1) {
           that.setData({
-            weatherImg: "../../imgs/weather/xiayu.png"
+            weatherImg: that.data.imgUrl +"/imgs/weather/xiayu.png"
           });
         } else if (weather.indexOf("晚") != -1 || weather.indexOf("夜") != -1) {
           that.setData({
-            weatherImg: "../../imgs/weather/wan.png"
+            weatherImg: that.data.imgUrl +"/imgs/weather/wan.png"
           });
         } else if (weather.indexOf("阴") != -1 || weather.indexOf("雾") != -1 || weather.indexOf("霾") != -1) {
           that.setData({
-            weatherImg: "../../imgs/weather/yintian.png"
+            weatherImg: that.data.imgUrl +"/imgs/weather/yintian.png"
           });
         } else {
           that.setData({
-            weatherImg: "../../imgs/weather/duoyun.png"
+            weatherImg: that.data.imgUrl +"/imgs/weather/duoyun.png"
           });
         }
 

@@ -1,3 +1,4 @@
+
 <view class='charge-container'>
   <text class='balance-charge'>当前余额 :￥0.00 </text>
   <view class='charge-detail-container'>

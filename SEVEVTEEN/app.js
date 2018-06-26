@@ -6,9 +6,17 @@ wxApiInterceptors({
   request: {
     response(res) {
       const code= res.statusCode;
-      // 如果data里的code等于-1就响应为失败
+      // 如果data里的code等于401就响应为失败,失效token
       if (code === 401) {
-        return Promise.reject(res);
+         wx.showToast({
+            title: '身份失效',
+            icon: 'fail',
+            duration: 1500,
+            mask:true
+        })
+        wx.redirectTo({
+          url: '/pages/auth/auth'
+        })
       }
       return res;
     },

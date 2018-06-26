@@ -12,6 +12,9 @@
                     <el-option key="0" label="全部" value=""></el-option>
                     <el-option key="1" label="入住" value="1"></el-option>
                     <el-option key="2" label="空房" value="2"></el-option>
+                    <el-option key="3" label="清洁中" value="3"></el-option>
+                    <el-option key="4" label="待退房" value="4"></el-option>
+                    <el-option key="5" label="退房中" value="5"></el-option>
                 </el-select>
                 <el-select v-model="select_type" clearable placeholder="请选择房间类型">
                     <el-option

@@ -30,6 +30,15 @@ public class ApartmentController {
 	@Autowired
     private SeApartmentService seApartmentService;
 
+
+	/**
+	 *  漏做结束入住时间排序，房间状态修改没弄好
+	 * @param status
+	 * @param remark
+	 * @param roomType
+	 * @param pageInfo
+	 * @return
+	 */
 	@GetMapping
 	@ApiOperation(value = "获取房间列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

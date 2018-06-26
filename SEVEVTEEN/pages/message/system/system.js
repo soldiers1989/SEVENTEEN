@@ -7,7 +7,11 @@ Page({
   data: {
   
   },
-
+  getDetailTap: function (event) {
+    wx.navigateTo({    
+      url: './system-detail/system-detail',
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

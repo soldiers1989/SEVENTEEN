@@ -44,7 +44,7 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    @Cacheable
+//    @Cacheable
     public UserDetails loadUserByOpenId(String openid) throws UsernameNotFoundException {
         SysUser sysUser = sysUserService.findBy("openid", openid);
         if (sysUser == null) {

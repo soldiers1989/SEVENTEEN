@@ -6,9 +6,9 @@
     <text class='message'>订单金额: 249元</text>
     <text class='message'>入住时间: 2018-03-13至2018-03-14</text>
     <text class='message'>入住房型: 高级大床房(无窗)</text>
-    <view class='detail-container'>
+    <view class='detail-container' bindtap='getDetailTap'>
       <text class='detail'>查看详情</text>
-      <image></image>
+      <image class='detail-img' src='/imgs/index/right-arr.png'></image>
     </view>
   </view>
 
@@ -19,7 +19,7 @@
     <text class='message'>订单金额: 249元</text>
     <text class='message'>入住时间: 2018-03-13至2018-03-14</text>
     <text class='message'>入住房型: 高级大床房(无窗)</text>
-    <view class='detail-container'>
+    <view class='detail-container' bindtap='getDetailTap'>
       <text class='detail'>查看详情</text>
       <image></image>
     </view>
