@@ -48,7 +48,7 @@ Page({
 
   // 点击弹窗显示
   showPopup: function() {
-    
+    var that=this;
     var _Arr = this.data.popupIconList;
     wx.request({
       url: this.data.baseUrl + '/room/tags?type=intro',
@@ -57,21 +57,23 @@ Page({
         "Authorization": "Bearer " + this.data.token
       },
       success: function(res) {
-        console.log(res.data.data)
          for (var index in res.data.data){
           var _obj={};
-          _obj.icon = res.data.data[index].value;
+          _obj.icon = that.imgUrl+res.data.data[index].value;
           _obj.name = res.data.data[index].name;
           _Arr[index]=_obj;
         }
+         
+         that.setData({
+           popupIconList: _Arr
+         })
       }
     })
-    console.log(_Arr)
+    
     this.setData({
-      popupShow: true,
-      popupIconList: _Arr
+      popupShow: true
     })
-    console.log("是的非农十多年覅偶"+this.data.popupIconList)
+   
     
   },
   // 关闭弹窗
