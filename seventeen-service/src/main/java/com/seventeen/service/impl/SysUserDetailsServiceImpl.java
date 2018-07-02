@@ -2,6 +2,7 @@ package com.seventeen.service.impl;
 
 import com.seventeen.bean.core.MyGrantedAuthority;
 import com.seventeen.bean.core.SysAuthority;
+import com.seventeen.bean.core.SysRole;
 import com.seventeen.bean.core.SysUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ import java.util.stream.Collectors;
 public class SysUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysUserService sys;
     @Autowired
     private SysAuthorityService sysAuthorityService;
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(SysUserDetailsServiceImpl.class);
@@ -38,13 +45,16 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("用户【%s】不存在。", username));
         } else {
             List<SysAuthority> sysAuthorities = sysAuthorityService.findByUserId(sysUser.getId());
+            List<SysRole> sysRoles = sysRoleService.findByUserId(sysUser.getId());
+
             // 设置权限
+            sysUser.setRoleIds(mapToGrantedRoles(sysRoles));
             sysUser.setAuthorities(mapToGrantedAuthorities(sysAuthorities));
             return sysUser;
         }
     }
 
-//    @Cacheable
+    @Cacheable
     public UserDetails loadUserByOpenId(String openid) throws UsernameNotFoundException {
         SysUser sysUser = sysUserService.findBy("openid", openid);
         if (sysUser == null) {
@@ -52,7 +62,10 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
             return null;
         } else {
             List<SysAuthority> sysAuthorities = sysAuthorityService.findByUserId(sysUser.getId());
+            List<SysRole> sysRoles = sysRoleService.findByUserId(sysUser.getId());
+
             // 设置权限
+            sysUser.setRoleIds(mapToGrantedRoles(sysRoles));
             sysUser.setAuthorities(mapToGrantedAuthorities(sysAuthorities));
             return sysUser;
         }
@@ -67,6 +80,17 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<SysAuthority> authorities) {
         return authorities.stream().map(SysAuthority::getCode).map(MyGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * 角色集合转换成需要的集合对象
+     *
+     * @param sysRoles
+     * @return
+     */
+    private static List<String> mapToGrantedRoles(List<SysRole> sysRoles) {
+        return sysRoles.stream().map(SysRole::getCode).collect(Collectors.toList());
     }
 
 }

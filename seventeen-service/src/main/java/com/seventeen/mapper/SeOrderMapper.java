@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @Mapper
 public interface SeOrderMapper extends CoreMapper<SeOrder> {
 
-    ArrayList<OrderCenter> getSeOrders(@Param("status") String status,@Param("remark") String remark,@Param("startTime") String startTime,@Param("endTime") String endTime);
+    ArrayList<OrderCenter> getSeOrders(@Param("userId") String admin,@Param("status") String status,@Param("remark") String remark,@Param("startTime") String startTime,@Param("endTime") String endTime);
 
     OrderCenter getOrderDetail(@Param("orderId")String orderId);
 

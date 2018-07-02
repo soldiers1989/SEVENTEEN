@@ -57,21 +57,6 @@ public class SysUserService extends AbstractService<SysUser> {
 	@Override
 	@Transactional
 	public int update(SysUser model) {
-		String userId = model.getId();
-		List<String> roleIds = model.getRoleIds();
-		if (roleIds != null) {
-			Example condition = new Example(SysUserRole.class);
-			condition.createCriteria().andCondition("user_id=", userId);
-			// 删除用户角色信息
-			sysUserRoleMapper.deleteByExample(condition);
-			// 保存用户角色信息
-			for (String roleId : roleIds) {
-				SysUserRole sysUserRole = new SysUserRole();
-				sysUserRole.setUserId(userId);
-				sysUserRole.setRoleId(roleId);
-				sysUserRoleMapper.insert(sysUserRole);
-			}
-		}
 		// 修改用户信息
 		return super.update(model);
 	}

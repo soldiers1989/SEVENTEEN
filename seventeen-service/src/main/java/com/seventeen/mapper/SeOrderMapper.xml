@@ -51,6 +51,7 @@
     so.ap_id apId,
     sa.name apname,
     su.username userName,
+    st.name roomType,
     CASE so.`status`
     WHEN 1 THEN
     '已下订'
@@ -69,13 +70,18 @@
     se_order so,
     sys_user su,
     se_apartment sa,
-    se_coupon sc
+    se_coupon sc,
+    se_tag st
     WHERE
     so.ap_id = sa.id
     AND so.user_id = su.id
+    AND sa.room_type = st.id
     and so.coupon_id = sc.id
     <if test="status != null and status  != ''">
       AND so.status = #{status}
+    </if>
+    <if test="userId != null and userId  != ''">
+      AND so.user_id = #{userId}
     </if>
     <if test="remark != null and remark  != ''">
       AND ( su.username like CONCAT('%',#{remark},'%' ) or sa.`name` like CONCAT('%',#{remark},'%' ) or sc.`name` like

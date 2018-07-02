@@ -1,0 +1,21 @@
+  <image class='img' src='{{imgUrl}}/imgs/message/wechatLiver.jpg'></image>
+  <view class='wechat-container'>
+    <view class='address'>
+      <text class='address-title'>17NN北亭店</text>
+      <text class='address-detail'>详细地址：广州市番禺区大学城星光大道</text>
+      <text class='address-detail'>入离日期：2018/06/08 - 2018/06/09</text>
+    </view>
+    <text class='tips'>此链接30分钟内有效，请尽快提交入住人手机号</text>
+    <view class='input-container'>
+      <input class='phone-input' value='{{phone}}' placeholder="请填写手机号码" />
+      <input class='check-input' placeholder="验证码" />
+      <input disabled='true' class='num-input' placeholder="{{jsCheck}}" />
+      <text class='input-text' bindtap='getCodeTap'>换一张</text>
+      <input class='phone-check-input' placeholder="手机验证码" />
+            <text class='input-text' bindtap='getPhoneCheckTap'>获取验证码</text>
+    </view>
+    <view class='submit'>
+    <text class='submit-text'>提交</text>
+    
+    </view>
+  </view>

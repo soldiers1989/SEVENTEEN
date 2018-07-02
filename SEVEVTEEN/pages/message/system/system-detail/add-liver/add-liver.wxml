@@ -1,0 +1,21 @@
+<view>
+  <view class='row-container'>
+    <button class='button' open-type="share">
+      <image class='wechat-img' src='{{imgUrl}}/imgs/icon/wechat.png'></image>
+      <text class='button-text'>微信添加入住人</text>
+      </button>
+  </view>
+
+  <block wx:for="{{livers}}" wx:for-item="item" wx:for-index="idx">
+    <view class='view-container'>
+      <view class='input-container'>
+        <text class='liver-title'>入住人{{idx+1}}</text>
+        <input data-id='{{idx}}' class='liver-name' value='{{item.name}}' placeholder="填写入住人{{idx+1}}的真实姓名" bindinput='inputTap' />
+        <image data-id='{{idx}}' bindtap='contolTap' class='add-img' src="{{idx===0?imgUrl+'/imgs/icon/add.png':imgUrl+'/imgs/icon/cancel.png'}}"></image>
+      </view>
+    </view>
+  </block>
+</view>
+<view class="nav-tabs" bindtap='addLiverTap'>
+  <text>保存</text>
+</view>
