@@ -3,6 +3,7 @@ package com.seventeen.controller;
 
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeOrderService;
 import com.seventeen.util.PageInfo;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +36,8 @@ public class OrderController {
 	@GetMapping
 	@ApiOperation(value = "获取订单列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity OrderList(String status,String remark,String startTime,String endTime,PageInfo pageInfo) {
-        Result<List<OrderCenter>> seOrders = seOrderService.getOrderList(status,remark,pageInfo,startTime,endTime);
+	public ResponseEntity OrderList(String status,String remark,String startTime,String endTime,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
+        Result<List<OrderCenter>> seOrders = seOrderService.getOrderList(sysUser,status,remark,pageInfo,startTime,endTime);
         return ResponseEntity.ok(seOrders);
 	}
 

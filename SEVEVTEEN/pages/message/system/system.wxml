@@ -1,27 +1,17 @@
-<view class='system-container'>
-  <text class='time'>2018-03-13 19:38</text>
+<view>
+  <view class='system-container' wx:for="{{systemOrder}}" wx:for-item="item" wx:for-index="index">
+  <text class='time'>{{item.orderTime}}</text>
   <view class='message-container'>
-    <text class='message-title'>支付成功</text>
+    <text class='message-title'>{{item.status}}</text>
     <text class='message'>恭喜支付成功，你的房间将为你保留整晚</text>
-    <text class='message'>订单金额: 249元</text>
-    <text class='message'>入住时间: 2018-03-13至2018-03-14</text>
-    <text class='message'>入住房型: 高级大床房(无窗)</text>
-    <view class='detail-container' bindtap='getDetailTap'>
+    <text class='message'>订单金额: {{item.price}}元</text>
+    <text class='message'>入住时间: {{item.liveTime}}</text>
+    <text class='message'>入住房型: {{item.roomType}}</text>
+    <view class='detail-container' data-orderId='{{item.id}}' catchtap='getDetailTap'>
       <text class='detail'>查看详情</text>
-      <image class='detail-img' src='/imgs/index/right-arr.png'></image>
+      <image class='detail-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
     </view>
+  </view>
   </view>
 
-  <text class='time'>2018-03-13 19:38</text>
-  <view class='message-container'>
-    <text class='message-title'>支付成功</text>
-    <text class='message'>恭喜支付成功，你的房间将为你保留整晚</text>
-    <text class='message'>订单金额: 249元</text>
-    <text class='message'>入住时间: 2018-03-13至2018-03-14</text>
-    <text class='message'>入住房型: 高级大床房(无窗)</text>
-    <view class='detail-container' bindtap='getDetailTap'>
-      <text class='detail'>查看详情</text>
-      <image></image>
-    </view>
-  </view>
 </view>

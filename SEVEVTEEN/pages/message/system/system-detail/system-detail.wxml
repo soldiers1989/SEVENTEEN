@@ -1,0 +1,114 @@
+<view class='system-container'>
+  <view>
+    <image class='img' src='https://www.17inn.com/img/wxApp/order-detail.jpg'>
+    </image>
+    <view class='title-container'>
+      <text class="title-text" wx:if="{{orderStatus==0}}">待入住</text>
+      <text class="title-text" wx:if="{{orderStatus==1}}">已入住</text>
+      <text class="title-text" wx:if="{{orderStatus==2}}">已离店</text>
+
+      <text class="title-detail" wx:if="{{orderStatus==0}}">到店后请在一楼刷身份证即可获得房间门锁密码</text>
+      <text class="title-detail" wx:if="{{orderStatus==1}}">开门密码</text>
+
+      <text class="text" wx:if="{{orderStatus==0}}">为了你和大家的入住安全，请每位入住的客人都务必进行身份证实名登记，我们诚心为大家提供一个安全舒适的入住环境。</text>
+      <text class="text" wx:if="{{orderStatus==1}}">请按密码键盘上任意键，灯亮起后输入开门密码，听到机械开门声后，尽快扭动把手，3-4秒后，门锁会自动锁上。</text>
+
+    </view>
+    <view class='real-money'>
+      <text class='real-money-content'>实际付款：</text>
+      <text class='real-money-money'>￥{{systemDetail.price}}</text>
+    </view>
+
+    <view class='detail-container'>
+      <view class='address-container'>
+        <view class='address-detail-container'>
+          <text class='address-name'>17Inn北亭店</text>
+          <text class='address'>星光大道</text>
+        </view>
+        <image class='detail-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
+      </view>
+
+      <view class='text'>
+        <view class='address-text'>
+          <text decode="{{true}}">订单号&nbsp;&nbsp;&nbsp;&nbsp;：</text>
+          <text>{{systemDetail.id}}</text>
+        </view>
+        <view class='address-text'>
+          <text>下单时间：</text>
+          <text>{{systemDetail.orderTime}}</text>
+        </view>
+        <view class='address-text'>
+          <text>房型信息：</text>
+          <text>{{systemDetail.roomType}}</text>
+        </view>
+        <view class='address-text'>
+          <text>房间号码：</text>
+          <text>null</text>
+        </view>
+        <view class='address-text'>
+          <text>入住时间：</text>
+          <text>{{systemDetail.liveTime}}</text>
+        </view>
+        <view class='address-text'>
+          <text decode="{{true}}">入住人&nbsp;&nbsp;&nbsp;&nbsp;：</text>
+          <text>{{systemDetail.userName}}</text>
+        </view>
+        <view class='address-text'>
+          <text>联系电话：</text>
+          <text>null</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='img-container'>
+    <view class='img-detail-container'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/countineLive.png'> </image>
+      <text class='img-text'>办理续住</text>
+    </view>
+    <view class='img-detail-container'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/tuiding.png'> </image>
+      <text class='img-text'>房间退订</text>
+    </view>
+    <view class='img-detail-container' bindtap='cleanTap'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/clean.png'> </image>
+      <text class='img-text'>申请清洁</text>
+    </view>
+    <view class='img-detail-container' bindtap='openDoorTap'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/openDoor.png'> </image>
+      <text class='img-text'>远程开门</text>
+    </view>
+    <view class='img-detail-container' bindtap='wifiTap'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/wifi.png'> </image>
+      <text class='img-text'>wifi密码</text>
+    </view>
+    <view class='img-detail-container' bindtap='replyToTap'>
+      <image class='img-detail' src='https://www.17inn.com/img/wxApp/assess.png'> </image>
+      <text class='img-text'>房间评价</text>
+    </view>
+  </view>
+  <view class='text-container'>
+    <view class='text-content'>
+      <text>
+      <text class='text-ties'>取消政策：</text>预付房费后，在<text style='color:red;'>2018年04月10日18点</text>前可取消订单/申请退款，之后不可取消/退款
+      </text>
+      <text>
+      <text class='text-ties'>温馨提示：</text>公寓于住店当天<text style='color:red;'>14:00后</text>办理入住，离店当天<text style='color:red;'>12:00前</text>办理退房，<text style='color:red;'>入离日期以当地时间为准</text>。如您在<text style='color:red;'>14:00前</text>到达，可能需要等待方能入住。若超过房间最多入住人数，则可能需要补差或拒绝入住，具体以拾柒Inn安排为准。
+      </text>
+    </view>
+  </view>
+</view>
+<view >
+  <view class='client-container'>
+    <view class='client-message-container' bindtap='callClientTap'>
+      <image class='img-client' src='https://www.17inn.com/img/wxApp/phone.png'> </image>
+      <text class='img-client-text'>致电客服</text>
+    </view>
+    <view  class='client-message-container'>
+      <image class='img-client' src='https://www.17inn.com/img/wxApp/client.png'> </image>
+      <text class='img-client-text'>在线客服</text>
+    </view>
+  </view>
+</view> 
+<view class="nav-tabs" bindtap='addLiverTap'>
+  <text>添加入住人</text>
+</view> 

@@ -1,0 +1,167 @@
+page {
+  background-color: #f0f0f0;
+}
+.row-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+
+.live-text-container{
+  display: flex;
+  flex-direction: column;
+  font-size: 25rpx;
+  width: 130rpx;
+  color: #cccccc;
+}
+
+.evaluate-container{
+  margin-top: 30rpx;
+  padding-left: 30rpx;
+  padding-top: 30rpx;
+  padding-bottom: 30rpx;
+  background-color: white;
+}
+.room-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30rpx;
+  padding-left: 30rpx;
+  padding-top: 30rpx;
+  padding-bottom: 30rpx;
+  background-color: white;
+}
+
+.live-pic-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.live-container {
+  margin-top: 30rpx;
+  padding-left: 30rpx;
+  padding-top: 30rpx;
+  padding-bottom: 30rpx;
+  background-color: white;
+}
+
+.address-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50rpx;
+  font-size: 30rpx;
+}
+
+.live-bro {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20rpx;
+  border: 5rpx solid #cccccc;
+  border-radius: 5px;
+  width: 210rpx;
+  height: 100rpx;
+  margin: 20rpx auto 0rpx;
+  margin-left: 0rpx;
+}
+.live-img{
+  width: 70rpx;
+  height: 70rpx;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+  margin-left: 10rpx;
+}
+.room-img {
+  width: 250rpx;
+  height: 170rpx;
+}
+
+.address-text {
+  color: #707070;
+  margin-top: 30rpx;
+}
+
+.title {
+  font-size: 30rpx;
+}
+
+.evaluate{
+  flex: 5.5;
+  font-size: 30rpx;
+}
+
+.remark{
+  font-size: 30rpx;
+  color: #999999;
+  flex: 2;
+}
+
+.point-text{
+  font-size: 30rpx;
+  width: 160rpx;
+  margin-top: 25rpx;
+}
+
+.point-img{
+  width: 50rpx;
+  height: 50rpx;
+  margin: 0 25rpx;
+  margin-top: 25rpx;
+}
+
+
+
+.target-text{
+  display: block;
+  text-align: center;
+  line-height: 80rpx;
+}
+
+.point-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.target{
+  margin-top: 20rpx;
+  border: 5rpx solid #999999;
+  border-radius: 5px;
+  color: #999999;
+  width: 150rpx;
+  height: 80rpx;
+  font-size: 30rpx;
+  margin:20rpx 8rpx;
+}
+.input{
+  width: 85%;
+  margin: 30rpx auto 100rpx;
+  font-size: 30rpx;
+  padding: 30rpx 30rpx;
+  padding-bottom: 30rpx;
+  background-color: white;
+  border: 1rpx black #696969;
+  border-radius: 5px;
+}
+
+.nav-tabs {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100rpx;
+  font-size: 30rpx;
+  color: white;
+  text-align: center;
+  line-height: 100rpx;
+  background-color: black;
+}
+
+.select-color{
+  color: #cc9966;
+  border-color: #cc9966;
+}

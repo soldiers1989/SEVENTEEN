@@ -1,12 +1,14 @@
 {
   "pages": [
-        "pages/auth/auth",
+        "pages/message/system/system",
+        
+    "pages/auth/auth",  
+    "pages/message/system/system-detail/system-detail",
+    "pages/message/reply/evaluate/evaluate",        
+    "pages/message/reply/reply", 
     "pages/message/system/system-detail/add-wechatLiver/add-wechatLiver",
     "pages/message/system/system-detail/add-liver/add-liver", 
-    "pages/message/system/system-detail/system-detail",
-    "pages/message/system/system",
     "pages/index/index",
-    "pages/message/reply/reply",
     "pages/message/message",
     "pages/money/vip-card/vip-card",
     "pages/money/coupon-detail/coupon-detail",

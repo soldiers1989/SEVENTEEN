@@ -3,6 +3,7 @@ package com.seventeen.service;
 
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
@@ -20,7 +21,7 @@ public interface SeOrderService {
      * @param pageInfo
      * @return
      */
-    Result<List<OrderCenter>> getOrderList(String status, String remark, PageInfo pageInfo, String startTime, String endTime);
+    Result<List<OrderCenter>> getOrderList(SysUser sysUser,String status, String remark, PageInfo pageInfo, String startTime, String endTime);
 
     /**
      *

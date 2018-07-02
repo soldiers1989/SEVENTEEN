@@ -1,3 +1,5 @@
+var app = getApp();
+
 // pages/message/message.js
 Page({
 
@@ -5,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    imgUrl: app.globalData.ImgUrl
   },
   systemMessageTap:function(event){
     wx.navigateTo({

@@ -11,6 +11,7 @@ public class OrderCenter {
     private String userName;
     private String apId;
     private String apName;
+    private String roomType;
     private String status;
     private String couponName;
     private String liveTime;
@@ -18,6 +19,14 @@ public class OrderCenter {
     private String price;
 
     private List<OrderLiver> livers;
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
 
     public String getPrice() {
         return price;

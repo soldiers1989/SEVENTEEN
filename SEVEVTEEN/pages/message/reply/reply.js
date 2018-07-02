@@ -1,3 +1,5 @@
+const app = getApp()
+
 // pages/message/reply/reply.js
 Page({
 
@@ -6,7 +8,9 @@ Page({
    */
   data: {
     tabArray: ["已点评","待点评"],
-    currentTab: 0
+    currentTab: 0,
+    imgUrl: app.globalData.ImgUrl
+
   },
   swichNav: function (e) {
     var currentTab = e.currentTarget.dataset.current
@@ -14,6 +18,12 @@ Page({
       currentTab
     })
   },
+  replyToTap: function (e) {
+    wx.navigateTo({
+      url: './evaluate/evaluate',
+    })
+  },
+
 
   /**
    * 生命周期函数--监听页面加载

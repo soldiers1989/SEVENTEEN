@@ -101,3 +101,43 @@
   width: 90%;
   border-bottom: 2rpx solid #f0f0f0;
 }
+
+.wait-reply-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1rpx solid #f0f0f0;
+  height: 200rpx;
+  width: 90%;
+
+
+}
+
+.wait-img{
+  height: 150rpx;
+  width: 200rpx;
+}
+
+.wait-reply-text{
+    display: flex;
+  flex-direction: column;
+  }
+
+.wait-reply-text text{
+  font-size: 30rpx;
+  margin-left: 10rpx;
+}
+
+.replyTo{
+  border: 1rpx solid black;
+  border-radius: 5px;
+  height: 65rpx;
+  width: 130rpx;
+  text-align: center;
+  margin-left: 80rpx;
+}
+.replyToText{
+  font-size: 30rpx;
+  line-height: 65rpx;
+}
+

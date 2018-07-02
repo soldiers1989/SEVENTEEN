@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
@@ -38,13 +39,22 @@ public class SeOrderServiceImpl  implements SeOrderService  {
      * @return
      */
     @Override
-    public Result<List<OrderCenter>> getOrderList(String status, String remark, PageInfo pageInfo,String startTime,String endTime) {
+    public Result<List<OrderCenter>> getOrderList(SysUser sysUser,String status, String remark, PageInfo pageInfo, String startTime, String endTime) {
         Result<List<OrderCenter>> result = new Result<>();
 
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-            ArrayList<OrderCenter> orderCenters = seOrderMapper.getSeOrders(status, remark,startTime,endTime);
+
+            String admin = "";
+            /**
+             * 小程序用户
+             */
+            if(sysUser.getRoleIds().contains("admin")){
+                admin =  sysUser.getId();
+            }
+
+            ArrayList<OrderCenter> orderCenters = seOrderMapper.getSeOrders(admin,status, remark,startTime,endTime);
             pageInfo.setTotal(page.getTotal());
             result.setData(orderCenters, pageInfo);
         } catch (Exception e) {

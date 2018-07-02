@@ -1,0 +1,48 @@
+<view>
+  <view class='room-container'>
+    <image class='room-img' src='{{imgUrl}}/imgs/message/wechatLiver.jpg'></image>
+    <view class='address-container'>
+      <text>北亭店</text>
+      <text class='address-text'>2018-03-10至2018-03-11</text>
+      <text class='address-text'>大床房</text>
+    </view>
+  </view>
+
+  <view class='live-container' >
+    <text class='title'>您对这次入住是否满意？</text>
+    <view class='live-pic-container' >
+     <view class="live-bro {{liveSelected==index?'select-color':''}}" wx:for="{{live}}" data-live='{{index}}' wx:for-item="item" wx:for-index="index" bindtap='liveTap'>
+      <image class="live-img" src='{{liveSelected==index?item.selectedImg:item.img}}'></image>
+      <view class="live-text-container {{liveSelected==index?'select-color':''}}">
+        <text>{{item.title}}</text>
+        <text>{{item.name}}</text>
+      </view>
+     </view>
+    </view>
+  </view>
+  <view class='evaluate-container'>
+    <view class='row-container'>
+      <text class='evaluate'>评分</text>
+      <text class='remark'>满意请给5分</text>
+    </view>
+    <view class='row-container' wx:for="{{point}}" wx:for-item="item" wx:for-index="index">
+      <text class='point-text'>{{item.title}}</text>
+      <view wx:for="{{item.star}}" wx:for-item="star" wx:for-index="star_index">
+          <image class='point-img'  src="{{star==0?imgUrl+'/imgs/icon/star_nochose.png':imgUrl+'/imgs/icon/star_chose.png'}}" data-point='{{index}}' data-star='{{star_index}}' bindtap='starTap'></image>     
+      </view>
+    </view>
+  </view>
+  <view class='evaluate-container'>
+    <text style='font-size:30rpx;'>出行目的</text>
+    <view class='point-container'>
+      <view class="target {{targetSelected==index?'select-color':''}}" wx:for="{{targets}}" wx:for-item="item" wx:for-index="index" data-target='{{index}}' bindtap='targetTap'>
+        <text class='target-text'>{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+    <textarea class='input' placeholder="说说您对本店的评价或建议，您的意见将会对其他住客有很大帮助哦~~" placeholder-style="color:#999999;"  />
+    <view></view>
+    <view class="nav-tabs" bindtap='addLiverTap'>
+  <text>提交</text>
+</view>
+</view>

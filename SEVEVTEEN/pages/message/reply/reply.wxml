@@ -9,7 +9,7 @@
     </block>
   </view>
 </view>
-<view class='reply-container'>
+<view wx:if="{{currentTab==0}}" class='reply-container'>
   <view class='box'>
     <view class='head-container'>
       <view class='message-container'>
@@ -50,5 +50,27 @@
     <view></view>
     <text class='time'>2018-02-10 14:54</text>
   </view>
-  
+</view>
+
+<view wx:if="{{currentTab==1}}" class='reply-container'>
+  <view class='wait-reply-container'>
+    <image class='wait-img' src='{{imgUrl}}/imgs/message/wechatLiver.jpg'></image>
+    <view class='wait-reply-text'>
+      <text>北亭店</text>
+      <text>2018-03-13 入住</text>
+    </view>
+    <view class='replyTo'  bindtap='replyToTap'>
+      <text class='replyToText'>去点评</text>
+    </view>
+  </view>
+  <view class='wait-reply-container'>
+    <image class='wait-img' src='{{imgUrl}}/imgs/message/wechatLiver.jpg'></image>
+    <view class='wait-reply-text'>
+      <text>北亭店</text>
+      <text>2018-03-13 入住</text>
+    </view>
+    <view class='replyTo' bindtap='replyToTap'>
+      <text class='replyToText'>去点评</text>
+    </view>
+  </view>
 </view>
