@@ -88,7 +88,7 @@ public class ApartmentController {
 	}
 
 	@GetMapping("/tags")
-	@ApiOperation(value = "获取房间列表信息")
+	@ApiOperation(value = "获取tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getTags(String type, String name) {
 		Result<List<SeTag>> seApartments = seApartmentService.getTags(type,name);

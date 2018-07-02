@@ -11,12 +11,66 @@ public class OrderCenter {
     private String userName;
     private String apId;
     private String apName;
-    private String roomType;
     private String status;
     private String couponName;
     private String liveTime;
     private String orderTime;
     private String price;
+    private String shopName;
+    private String shopAddress;
+    private String apNum;
+    private String roomType;
+    private String phone;
+    private String type;
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getApNum() {
+        return apNum;
+    }
+
+    public void setApNum(String apNum) {
+        this.apNum = apNum;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopAddress() {
+        return shopAddress;
+    }
+
+    public void setShopAddress(String shopAddress) {
+        this.shopAddress = shopAddress;
+    }
 
     private List<OrderLiver> livers;
 

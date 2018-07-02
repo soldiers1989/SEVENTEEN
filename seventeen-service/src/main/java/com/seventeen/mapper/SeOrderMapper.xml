@@ -21,13 +21,20 @@
   <resultMap id="OrderCenter" type="com.seventeen.bean.OrderCenter">
     <result column="id" property="id" jdbcType="VARCHAR"/>
     <result column="userName" property="userName" jdbcType="VARCHAR"/>
+    <result column="shopName" property="shopName" jdbcType="VARCHAR"/>
+    <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
     <result column="apId" property="apId" jdbcType="VARCHAR"/>
+    <result column="apNum" property="apNum" jdbcType="VARCHAR"/>
+    <result column="roomType" property="roomType" jdbcType="VARCHAR"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
     <result column="apName" property="apName" jdbcType="VARCHAR"/>
     <result column="status" property="status" jdbcType="VARCHAR"/>
+    <result column="remark" property="remark" jdbcType="VARCHAR"/>
     <result column="couponName" property="couponName" jdbcType="VARCHAR"/>
     <result column="liveTime" property="liveTime" jdbcType="VARCHAR"/>
     <result column="orderTime" property="orderTime" jdbcType="VARCHAR"/>
     <result column="price" property="price" jdbcType="VARCHAR"/>
+    <result column="type" property="type" jdbcType="VARCHAR"/>
     <collection property="livers" ofType="com.seventeen.bean.OrderLiver"
                 resultMap="OrderLiver"/>
   </resultMap>
@@ -56,8 +63,10 @@
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
-    '退订中'
+    '已入住'
     WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
     '已退订'
     ELSE
     '订单完成'
@@ -102,6 +111,13 @@
     su.username userName,
     so.ap_id apId,
     sa.`name` apName,
+    sa.type type,
+    ss.name shopName,
+    ss.address shopAddress,
+    sa.ap_num apNum,
+    st.`name` roomType,
+    so.creator_phone phone,
+    st1.remark,
     CASE so.`status`
     WHEN 1 THEN
     '已下订'
@@ -123,12 +139,19 @@
     sys_user su,
     se_apartment sa,
     se_coupon sc,
-    se_order_liver sol
+    se_order_liver sol,
+    se_shop ss,
+    se_tag st,
+    se_tag st1
+
     WHERE
     so.ap_id = sa.id
+    and sa.shop_id = ss.id
     AND so.user_id = su.id
     and so.coupon_id = sc.id
     AND sol.order_id = so.id
+    and sa.room_type = st.id
+    and so.price_tag_id = st1.id
     <if test="orderId != null and orderId  != ''">
       AND  so.id = #{orderId}
     </if>

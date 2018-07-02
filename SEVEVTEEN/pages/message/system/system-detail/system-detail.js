@@ -29,6 +29,27 @@ Page({
       content: 'wifi密码：1123546X23'
     })
   },
+  cancelTap: function (event) {
+    if (this.data.systemDetail.remark ==='不支持退订' ) {
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '该房间类型不支持退订'
+      })
+      return;
+    }
+    wx.showModal({
+      title: '提示',
+      content: '是否申请房间退订',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  },
   callClientTap: function (event) {
 
     wx.makePhoneCall({
@@ -86,8 +107,18 @@ Page({
       // data: { pageInfo: pageInfo  },
       success: function (data) {
         if (data.data.resultCode === 200) {
+          let status = data.data.data.status;
+          let orderStatus;
+          if (status === '已下订' || status === '退订中' ){
+            orderStatus = 0;
+          } else if (status === '已入住'){
+            orderStatus = 1;
+          } else if (status === '已退订' || status === '订单完成'){
+            orderStatus = 2;
+          }
           that.setData({
-            systemDetail: data.data.data
+            systemDetail: data.data.data,
+            orderStatus
           })
         } else {
           wx.showToast({

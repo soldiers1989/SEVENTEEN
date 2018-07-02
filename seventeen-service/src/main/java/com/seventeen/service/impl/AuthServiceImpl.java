@@ -46,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
 			sysUserService.update(userDetail);
 			return jwtTokenConfig.generateToken(userDetail);
 		}
+
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		final String rawPassword = userToAdd.getPassword();
 		userToAdd.setPassword(encoder.encode(rawPassword));

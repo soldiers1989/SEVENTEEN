@@ -22,8 +22,8 @@
     <view class='detail-container'>
       <view class='address-container'>
         <view class='address-detail-container'>
-          <text class='address-name'>17Inn北亭店</text>
-          <text class='address'>星光大道</text>
+          <text class='address-name'>{{systemDetail.shopName}}</text>
+          <text class='address'>{{systemDetail.shopAddress}}</text>
         </view>
         <image class='detail-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
       </view>
@@ -43,7 +43,7 @@
         </view>
         <view class='address-text'>
           <text>房间号码：</text>
-          <text>null</text>
+          <text>{{systemDetail.apNum}}</text>
         </view>
         <view class='address-text'>
           <text>入住时间：</text>
@@ -55,7 +55,7 @@
         </view>
         <view class='address-text'>
           <text>联系电话：</text>
-          <text>null</text>
+          <text>{{systemDetail.phone}}</text>
         </view>
       </view>
     </view>
@@ -65,7 +65,7 @@
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/countineLive.png'> </image>
       <text class='img-text'>办理续住</text>
     </view>
-    <view class='img-detail-container'>
+    <view class='img-detail-container'  bindtap='cancelTap'>
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/tuiding.png'> </image>
       <text class='img-text'>房间退订</text>
     </view>
