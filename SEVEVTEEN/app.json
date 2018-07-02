@@ -2,8 +2,11 @@
   "pages": [
         "pages/auth/auth",
     "pages/message/system/system-detail/add-wechatLiver/add-wechatLiver",
-    "pages/message/system/system-detail/add-liver/add-liver", 
+    "pages/message/system/system-detail/add-liver/add-liver",
     "pages/message/system/system-detail/system-detail",
+    "pages/order/order",
+    "pages/index/index","pages/auth/auth",
+    "pages/message/reply/reply",
     "pages/message/system/system",
     "pages/index/index",
     "pages/message/reply/reply",
@@ -29,8 +32,8 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "/imgs/tabBar/shouye.png",
-        "selectedIconPath": "/imgs/tabBar/shouye_se.png"
+        "iconPath": "imgs/icon/shouye.png",
+        "selectedIconPath": "imgs/icon/shouye_se.png"
       },
       {
         "pagePath": "pages/message/message",

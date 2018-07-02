@@ -369,3 +369,4 @@
 }
 
 @import "commont-template/commont-template.wxss";
+@import "popup-template/popup-template.wxss";

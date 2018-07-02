@@ -1,6 +1,8 @@
-<import src="commont-template/commont-template.wxml"/>
-
+<import src="commont-template/commont-template.wxml" />
+<import src="popup-template/popup-template.wxml" />
+<view style="{{popupShow ? 'height:100vh;overflow:hidden;' : ''}}">
 <image class='nav-baner' src='{{imgUrl}}/imgs/index/brand.jpg'>
+
 
 </image>
 <view class='tab-info'>
@@ -13,6 +15,8 @@
 
 </view>
 
+<!-- 弹框 -->
+<template is="popup" data="{{popupShow,popupIconList}}" />
 
 <view class='{{tabArr.curHdIndex=="t1"?"":"none"}}'>
 
@@ -50,10 +54,8 @@
         <image class='right-icon' src='{{imgUrl}}/imgs/index/top-arr.png'></image>
       </view>
     </view>
-    <view class='{{isShowPay.showId=="room1"?isShowPay.flag==true?"pay-list":"none":"none"}}'
-      style='height:{{isShowPay.showId=="room1"?"300px":""}}'
-    >
-       <template  is="roomPay" data="{{imgUrl: imgUrl}}"/>
+    <view class='{{isShowPay.showId=="room1"?isShowPay.flag==true?"pay-list":"none":"none"}}' style='height:{{isShowPay.showId=="room1"?"300px":""}}'>
+      <template is="roomPay" data="{{imgUrl: imgUrl}}" />
     </view>
 
 
@@ -79,72 +81,81 @@
         <image class='right-icon' src='{{imgUrl}}/imgs/index/top-arr.png'></image>
       </view>
     </view>
-    <view class='{{isShowPay.showId=="room2"?isShowPay.flag==true?"pay-list":"none":"none"}} '
-      style='height:{{isShowPay.showId=="room2"?"100px":""}}'
-    >
+    <view class='{{isShowPay.showId=="room2"?isShowPay.flag==true?"pay-list":"none":"none"}} ' style='height:{{isShowPay.showId=="room2"?"100px":""}}'>
 
 
 
     </view>
   </view>
-</view> 
+
+
+
+
+</view>
+
+
 
 <view class='evaluete {{tabArr.curHdIndex=="t2"?"":"none"}}'>
-    <view class='all-evaluete'>
-      <view class='score'>
-        <text class='score-num'>{{all_evaluete.score}}</text>
-        <text class='score-text'>{{all_evaluete.comCount}}条评价</text>
-      </view>
-      <view class='stars'>
-        <view class='stars-row'>
-          <text class='stars-text'>设施评分</text>
-          <view class='stars-star'>
-           
-              <block wx:for="{{all_evaluete.ss}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
-                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-              </block>
-          </view>
-          <text class='stars-num'>5.0</text> 
+  <view class='all-evaluete'>
+    <view class='score'>
+      <text class='score-num'>{{all_evaluete.score}}</text>
+      <text class='score-text'>{{all_evaluete.comCount}}条评价</text>
+    </view>
+    <view class='stars'>
+      <view class='stars-row'>
+        <text class='stars-text'>设施评分</text>
+        <view class='stars-star'>
+
+          <block wx:for="{{all_evaluete.ss}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
+            <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+          </block>
         </view>
-         <view class='stars-row'>
-          <text class='stars-text'>卫生评分</text>
-          <view class='stars-star'>
-              <block wx:for="{{all_evaluete.ws}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
-                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-              </block>
-          </view>
-          <text class='stars-num'>5.0</text>
-        </view>
-        <view class='stars-row'>
-          <text class='stars-text'>舒适感</text>
-          <view class='stars-star'>
-              <block wx:for="{{all_evaluete.ssg}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
-                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-              </block>
-          </view>
-          <text class='stars-num'>5.0</text>
-        </view> 
+        <text class='stars-num'>5.0</text>
       </view>
-      
+      <view class='stars-row'>
+        <text class='stars-text'>卫生评分</text>
+        <view class='stars-star'>
+          <block wx:for="{{all_evaluete.ws}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
+            <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+          </block>
+        </view>
+        <text class='stars-num'>5.0</text>
+      </view>
+      <view class='stars-row'>
+        <text class='stars-text'>舒适感</text>
+        <view class='stars-star'>
+          <block wx:for="{{all_evaluete.ssg}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
+            <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+          </block>
+        </view>
+        <text class='stars-num'>5.0</text>
+      </view>
     </view>
 
-    <view class='user-evaluete'>
-        <view class='topInfo'>
-          <image class='user-icon' src='{{imgUrl}}/imgs/index/tx.png'></image>
-          <view class='user-centent'>
-             <text class='user-phone'>139****1234</text>
-             <text class='user-room'>大牛坊</text>
-             <view class='stars-star user-star'>
-              <block wx:for="{{all_evaluete.ssg}}" wx:key="key"  wx:for-item="item" wx:for-index="idx">
-                <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-              </block>
-           </view>
-          </view>
-          <text class='user-c-time'>2018-06-21</text>
+  </view>
+
+  <view class='user-evaluete'>
+    <view class='topInfo'>
+      <image class='user-icon' src='{{imgUrl}}/imgs/index/tx.png'></image>
+      <view class='user-centent'>
+        <text class='user-phone'>139****1234</text>
+        <text class='user-room'>大牛坊</text>
+        <view class='stars-star user-star'>
+          <block wx:for="{{all_evaluete.ssg}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
+            <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+          </block>
         </view>
-
-
-        <text class='uesr-comment'>弄死的念佛is的念佛isnoin哦i弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦</text>
+      </view>
+      <text class='user-c-time'>2018-06-21</text>
     </view>
 
+
+    <text class='uesr-comment'>弄死的念佛is的念佛isnoin哦i弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦</text>
+  </view>
+
+</view>
+
+<view class='rzxz'>
+  入住须知
+</view>
 </view>

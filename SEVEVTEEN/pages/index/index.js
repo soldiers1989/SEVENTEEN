@@ -3,7 +3,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+const commont = require("commont-template/commont-template.js");
 Page({
   data: {
     tabArr: {
@@ -22,12 +22,35 @@ Page({
     isShowPay: {
       flag: false,
       showId: ""
-
+      
     }
 
 
 
   },
+
+  // 点击弹窗显示
+  showPopup: function(){
+    this.setData({
+      popupShow: true
+    })
+  },
+  // 关闭弹窗
+  closePopup: function(){
+    this.setData({
+      popupShow: false
+    })
+  },
+
+  //
+  setOrder:function (e){
+    var _datasetId = e.target.dataset.id;
+
+    wx.navigateTo({
+      url: '/pages/order/order?roomId='+_datasetId,
+    })
+  },
+
   //切换tab页
   tabSel: function(e) {
 
