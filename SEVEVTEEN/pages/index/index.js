@@ -6,6 +6,8 @@ const app = getApp()
 const commont = require("commont-template/commont-template.js");
 Page({
   data: {
+    token: "21",
+
     tabArr: {
       curHdIndex: "t1"
       //  curBdIndex: 0 
@@ -18,36 +20,73 @@ Page({
       ssg: [1, 0, 0, 0, 0],
       comCount: 160
     },
-    imgUrl: app.globalData.ImgUrl,
+
     isShowPay: {
       flag: false,
       showId: ""
-      
-    }
 
+    },
 
+    popupShow: false, //弹窗是否显示
 
+    popupIconList: [{
+        icon: '/imgs/timg.jpg',
+        name: '无线WIFI覆盖'
+      },
+      {
+        icon: '/imgs/timg.jpg',
+        name: '书桌'
+      },
+      {
+        icon: '/imgs/timg.jpg',
+        name: '电脑'
+      }
+    ],
+    imgUrl: app.globalData.ImgUrl,
+    baseUrl: app.globalData.baseUrl
   },
 
   // 点击弹窗显示
-  showPopup: function(){
+  showPopup: function() {
+    
+    var _Arr = [];
+    wx.request({
+      url: this.data.baseUrl + '/room/tags?type=intro',
+      method:"get",
+      header: {
+        "Authorization": "Bearer " + this.data.token
+      },
+      success: function(res) {
+        console.log(res.data.data)
+        // for (var index in res.data.data){
+         for (var i = 0; i < res.data.data;i++){
+           console.log(res.data.data[i])
+          _obj={};
+          _obj.icon = res.data[i].value;
+          _obj.name = res.data[i].name;
+          _Arr[index]=_obj;
+        }
+      }
+    })
+
     this.setData({
-      popupShow: true
+      popupShow: true,
+      popupIconList: _Arr
     })
   },
   // 关闭弹窗
-  closePopup: function(){
+  closePopup: function() {
     this.setData({
       popupShow: false
     })
   },
 
   //
-  setOrder:function (e){
+  setOrder: function(e) {
     var _datasetId = e.target.dataset.id;
 
     wx.navigateTo({
-      url: '/pages/order/order?roomId='+_datasetId,
+      url: '/pages/order/order?roomId=' + _datasetId,
     })
   },
 
@@ -100,6 +139,12 @@ Page({
   },
   onLoad: function(options) {
 
+    var token = wx.getStorageSync('token');
+
+    this.setData({
+      token: token
+    });
+
   },
   onShow: function() {
     var chooseDate = this.data.chooseDate;
@@ -120,15 +165,15 @@ Page({
   showPay: function(e) {
     var _datasetId = e.currentTarget.dataset.id;
     var curObj = this.data.isShowPay;
-    if (curObj.showId ==""){//初始状态
+    if (curObj.showId == "") { //初始状态
       curObj.showId = _datasetId;
       curObj.flag = true;
-    } else if (curObj.showId == _datasetId){
+    } else if (curObj.showId == _datasetId) {
       if (curObj.flag == true) { //还原所有状态
-          curObj.flag= false;
-          curObj.showId= "";
+        curObj.flag = false;
+        curObj.showId = "";
       }
-    }else{
+    } else {
       curObj.showId = _datasetId;
       curObj.flag = true;
     }
