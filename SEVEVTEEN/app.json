@@ -1,14 +1,21 @@
 {
   "pages": [
+    "pages/my/rlsb/rlsb",
+    "pages/my/my",
+    
+    
+    "pages/my/toushu/toushu",
+    
+    "pages/my/integral/integral",
+    "pages/my/myOrder/myOrder",
     "pages/auth/auth",
     "pages/index/index",
     "pages/message/system/system",
-        
     "pages/message/system/system-detail/system-detail",
-    "pages/message/reply/evaluate/evaluate",        
-    "pages/message/reply/reply", 
+    "pages/message/reply/evaluate/evaluate",
+    "pages/message/reply/reply",
     "pages/message/system/system-detail/add-wechatLiver/add-wechatLiver",
-    "pages/message/system/system-detail/add-liver/add-liver", 
+    "pages/message/system/system-detail/add-liver/add-liver",
     "pages/message/message",
     "pages/money/vip-card/vip-card",
     "pages/money/coupon-detail/coupon-detail",
@@ -17,9 +24,7 @@
     "pages/money/point-detail/point-detail",
     "pages/money/recharge/recharge",
     "pages/dates/date",
-    "pages/order/order",
-    "pages/my/my"
-
+    "pages/order/order"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -50,5 +55,5 @@
         "selectedIconPath": "/imgs/tabBar/user_se.png"
       }
     ]
-   }
- }
+  }
+}

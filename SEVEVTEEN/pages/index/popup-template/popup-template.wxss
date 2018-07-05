@@ -83,6 +83,7 @@
 .icon-name{
   font-size: 26rpx;
   color: #333;
+  white-space:nowrap;
 }
 .pl18{
   padding-left: 18rpx;

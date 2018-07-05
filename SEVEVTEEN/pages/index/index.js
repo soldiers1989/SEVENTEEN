@@ -59,7 +59,7 @@ Page({
       success: function(res) {
          for (var index in res.data.data){
           var _obj={};
-          _obj.icon = that.imgUrl+res.data.data[index].value;
+          _obj.icon = that.data.imgUrl+res.data.data[index].value;
           _obj.name = res.data.data[index].name;
           _Arr[index]=_obj;
         }

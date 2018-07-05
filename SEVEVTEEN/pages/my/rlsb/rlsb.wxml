@@ -1,0 +1,23 @@
+<view class='tips'>
+  <text>
+       1.目前仅支持大陆居民第二代身份证\n
+       2.请务必上传真实、有效、清晰的身份证实物照片\n
+       3.身份证、人脸照片仅用于公安部审核，17INN绝不会泄露您的信息\n
+       4.客服电话：020-82566710\n
+      </text>
+</view>
+<view class='id-box border'>
+  <view class='operTitle'>
+    <text style='width:75%;margin-left:20px'>步骤一</text>
+    <text class='operType'>待验证</text>
+  </view>
+</view>
+
+<view class='rlsb border'>
+  <view class='operTitle'>
+    <text style='width:75%;margin-left:20px'>步骤二</text>
+    <text class='operType'>待验证</text>
+  </view>
+</view>
+
+<view class='subRZ'>提交认证</view>

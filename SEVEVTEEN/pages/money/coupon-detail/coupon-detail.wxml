@@ -24,7 +24,7 @@
         <text class='remark'>会员生日(通用劵)</text>
       </view>
       <text class='use'>立即使用</text>
-      <image src='/imgs/index/right-arr.png' class='use-img'></image>
+      <image src='/imgs/common/arr-right.png' class='use-img'></image>
     </view>
     <text class='date'>2018-01-11至2018-04-11</text>
   </view>
@@ -36,7 +36,7 @@
         <text class='remark'>会员生日(通用劵)</text>
       </view>
       <text class='use'>立即使用</text>
-      <image src='/imgs/index/right-arr.png' class='use-img'></image>
+      <image src='/imgs/common/arr-right.png' class='use-img'></image>
     </view>
     <text class='date'>2018-01-11至2018-04-11</text>
   </view>

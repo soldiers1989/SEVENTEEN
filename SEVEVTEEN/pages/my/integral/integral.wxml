@@ -1,0 +1,13 @@
+<view class='title'>
+  <text class='jifen'>当前积分:\t3030分</text>
+  <text class='mingxi' bindtap="toJFMX">积分明细</text>
+</view>
+
+<view class='info-box'>
+  <image src='/imgs/order/orderBanner.jpg'></image>
+  <view class='info'>
+    <view class='info-title'>免费大床房券</view>
+    <view class='info-desc'>3000积分</view>
+    <view class='info-btn'>兑换</view>
+  </view>
+</view>
