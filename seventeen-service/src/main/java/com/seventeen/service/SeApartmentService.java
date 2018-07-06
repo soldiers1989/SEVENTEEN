@@ -1,8 +1,6 @@
 package com.seventeen.service;
 
-import com.seventeen.bean.SeApartment;
-import com.seventeen.bean.SeApartmentDetail;
-import com.seventeen.bean.SeTag;
+import com.seventeen.bean.*;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
@@ -55,8 +53,12 @@ public interface SeApartmentService{
      */
     Result<SeApartment> updateApartment(SeApartment seApartment);
 
-    Result addTags(String type, String name);
+    Result addTags(SeTag seTag);
 
     Result<String> deleteTag(String ids);
+
+    Result addPriceType(ApartmentPriceRoom seApartmentPriceType);
+
+    Result getPriceType();
 
 }

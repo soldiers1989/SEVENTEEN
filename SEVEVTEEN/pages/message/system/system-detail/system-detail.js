@@ -6,18 +6,27 @@ Page({
    * 页面的初始数据
    */
   data: {
-    orderStatus: 1,
     imgUrl: app.globalData.ImgUrl,
     systemUrl: app.globalData.baseUrl + '/order'
 
   },
   addLiverTap: function (event) {
+    var orderid = event.currentTarget.dataset.orderid;
+
     if (this.data.orderStatus === 2 || this.data.orderStatus === 1) {
       return;
     }
     wx.navigateTo({
-      url: './add-liver/add-liver',
+      url: './add-liver/add-liver?orderid=' + orderid,
     })
+  },
+  liverTap: function (event) {
+    if (this.data.orderStatus === 1) {
+      wx.navigateTo({
+        url: '/pages/order/order',
+      })
+    }
+
   },
   wifiTap: function (event) {
     if (this.data.orderStatus === 2) {
@@ -30,7 +39,7 @@ Page({
     })
   },
   cancelTap: function (event) {
-    if (this.data.systemDetail.remark ==='不支持退订' ) {
+    if (this.data.systemDetail.remark === '不支持退订') {
       wx.showModal({
         title: '提示',
         showCancel: false,
@@ -109,11 +118,11 @@ Page({
         if (data.data.resultCode === 200) {
           let status = data.data.data.status;
           let orderStatus;
-          if (status === '已下订' || status === '退订中' ){
+          if (status === '已下订' || status === '退订中') {
             orderStatus = 0;
-          } else if (status === '已入住'){
+          } else if (status === '已入住') {
             orderStatus = 1;
-          } else if (status === '已退订' || status === '订单完成'){
+          } else if (status === '已退订' || status === '订单完成') {
             orderStatus = 2;
           }
           that.setData({

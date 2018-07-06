@@ -9,7 +9,7 @@ import java.util.List;
 public class SeCoupon {
     @Id
     private String id;
-
+@Id
     private String name;
 
     private String status;

@@ -61,7 +61,7 @@
     </view>
   </view>
   <view class='img-container'>
-    <view class='img-detail-container'>
+    <view class='img-detail-container' bindtap='liverTap'>
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/countineLive.png'> </image>
       <text class='img-text'>办理续住</text>
     </view>
@@ -109,6 +109,6 @@
     </view>
   </view>
 </view> 
-<view class="nav-tabs" bindtap='addLiverTap'>
+<view class="nav-tabs" bindtap='addLiverTap' data-orderid='{{systemDetail.id}}'>
   <text>添加入住人</text>
 </view> 

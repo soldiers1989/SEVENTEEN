@@ -40,6 +40,9 @@ public class SeApartment {
 
     private String roomType;
 
+    @Transient
+    private ArrayList<String> good;
+
     public String getShopId() {
         return shopId;
     }
@@ -47,9 +50,6 @@ public class SeApartment {
     public void setShopId(String shopId) {
         this.shopId = shopId;
     }
-
-    @Transient
-    private ArrayList<String> good;
 
     public String getBed() {
         return bed;

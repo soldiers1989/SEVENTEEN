@@ -1,6 +1,7 @@
 package com.seventeen.controller;
 
 
+import com.seventeen.bean.ApartmentPriceRoom;
 import com.seventeen.bean.SeApartment;
 import com.seventeen.bean.SeApartmentDetail;
 import com.seventeen.bean.SeTag;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -100,8 +100,7 @@ public class ApartmentController {
 	@ApiOperation(value = "插入tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity addTags(@RequestBody SeTag seTag) {
-		Result seApartments = seApartmentService.addTags(seTag.getType(),seTag.getName());
-		seApartments.setMessage(IDGenerator.getId());
+		Result seApartments = seApartmentService.addTags(seTag);
 		return ResponseEntity.ok(seApartments);
 	}
 	@DeleteMapping("/tags")
@@ -110,5 +109,23 @@ public class ApartmentController {
 	public ResponseEntity deleteTag(@RequestParam String ids) {
 		Result<String> seApartments = seApartmentService.deleteTag(ids);
 		return ResponseEntity.ok(seApartments);
+	}
+
+
+
+	@PostMapping("/priceType")
+	@ApiOperation(value = "插入房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addPriceType(@RequestBody ApartmentPriceRoom ruleRoomForm) {
+		Result result = seApartmentService.addPriceType(ruleRoomForm);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/priceType")
+	@ApiOperation(value = "获取房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getPriceType() {
+		Result result = seApartmentService.getPriceType();
+		return ResponseEntity.ok(result);
 	}
 }

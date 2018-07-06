@@ -15,9 +15,19 @@ public class SeTag {
 
     private String remark;
 
+    private String status;
+
     private String createTime;
 
     private String createBy;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getId() {
         return id;

@@ -122,8 +122,10 @@
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
-    '退订中'
+    '已入住'
     WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
     '已退订'
     ELSE
     '订单完成'

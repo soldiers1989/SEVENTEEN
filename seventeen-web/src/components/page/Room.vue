@@ -31,9 +31,10 @@
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新建</el-button>
+                <el-button type="primary" icon="el-icon-edit-outline" @click="handlePriceType">价格类型</el-button>
                 <el-button type="primary" icon="el-icon-edit-outline" @click="handleRoomType">房间类型管理</el-button>
-
             </div>
+
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable"
                       @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"></el-table-column>
@@ -90,7 +91,8 @@
                 </el-form-item>
                 <el-form-item label="房间分类" prop="roomType">
                     <el-radio-group v-model="ruleForm.roomType">
-                        <el-radio-button v-for="roomType in roomTypes" :label="roomType.id" :key="roomType.id">{{roomType.name}}
+                        <el-radio-button v-for="roomType in roomTypes" :label="roomType.id" :key="roomType.id">
+                            {{roomType.name}}
                         </el-radio-button>
                     </el-radio-group>
                 </el-form-item>
@@ -141,8 +143,53 @@
             </el-form>
         </el-dialog>
 
+        <!-- 价格类型管理 -->
+        <el-dialog title="价格类型管理" :visible.sync="priceTypeFlag" width="30%" :before-close="handleClose">
+            <el-button type="primary" icon="el-icon-plus" @click="handlePriceTypeAdd">新建</el-button>
+
+            <div class="container">
+                <el-table
+                    :data="typePriceData"
+                    stripe
+                    style="width: 100%">
+                    <el-table-column prop="name" label="类型" sortable width="150">
+                    </el-table-column>
+                    <el-table-column prop="remark" label="订金" width="150">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="small" type="danger" @click="handlePriceDelete(scope.id, scope.row)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-dialog>
+
+        <!-- 新增房间价格类型 -->
+        <el-dialog title="新增房间价格类型" :visible.sync="priceVisible" width="55%" :before-close="handleClose">
+            <el-form :model="rulePriceForm" :rules="rulesPrice" ref="rulePriceForm" label-width="100px"
+                     class="demo-ruleForm">
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="rulePriceForm.name" class="handle-input"></el-input>
+                </el-form-item>
+                <el-form-item label="订金" prop="type">
+                    <el-radio-group v-model="rulePriceForm.type">
+                        <el-radio label="支持退订">支持退订</el-radio>
+                        <el-radio label="不支持退订">不支持退订</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="handleAddPriceTag('rulePriceForm')">保存</el-button>
+                    <el-button @click="resetForm('rulePriceForm');priceVisible=false">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
         <!-- 房间类型管理 -->
-        <el-dialog title="房间类型管理" :visible.sync="roomTypeFlag" width="30%" :before-close="handleClose">
+        <el-dialog title="房间类型管理" :visible.sync="roomTypeFlag" width="40%" :before-close="handleClose">
+            <el-button type="primary" icon="el-icon-plus" @click="handleRoomTypeAdd">新建</el-button>
+
             <div style="color: red">
                 删除类型后，请给之前的房间重新关联，否则小程序查询不到
             </div>
@@ -150,8 +197,15 @@
                 <el-table
                     :data="typeData"
                     stripe
-                    style="width: 100%">
-                    <el-table-column prop="name" label="类型" sortable width="300">
+                    style="width: 100%"
+                    :span-method="objectSpanMethod">
+                    <el-table-column prop="name" label="类型" sortable width="100">
+                    </el-table-column>
+                    <el-table-column prop="type" label="价格类型" >
+                    </el-table-column>
+                    <el-table-column prop="price" label="价格" >
+                    </el-table-column>
+                    <el-table-column prop="time" label="有效时间" width="180">
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -160,10 +214,56 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-input placeholder="添加房间类型" v-model='inputTag' class="input-with-select">
-                    <el-button slot="append" @click="handleAddTag()" icon="el-icon-plus"></el-button>
-                </el-input>
             </div>
+        </el-dialog>
+
+        <!-- 新增房间类型 -->
+        <el-dialog title="新增房间类型" :visible.sync="roomVisible" width="55%" :before-close="handleClose">
+            <div style="color: red">
+                如果不添加价格策略，房间类型价格默认房间原价。
+            </div>
+            <el-form :model="ruleRoomForm" :rules="rulesRoom" ref="ruleRoomForm" label-width="100px"
+                     class="demo-ruleForm">
+
+                <el-form-item label="名称" prop="name" style="margin-top: 30px;">
+                    <el-input v-model="ruleRoomForm.name" class="handle-input"></el-input>
+                </el-form-item>
+                <el-form-item v-for="(domain, index) in ruleRoomForm.domains" :label="'价格策略' + index"
+                              :key="domain.key">
+                    <el-col :span="4">
+                        <el-form-item >
+                            <el-select v-model="domain.type"  placeholder="价格类型" style="width: 110px;">
+                                <el-option :label="priceRoomType.name" v-for="priceRoomType in priceRoomTypes" :key="priceRoomType.id" :value="priceRoomType.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-form-item >
+                            <el-input v-model="domain.price" placeholder="价格" style="width: 90px;"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item >
+                            <el-date-picker
+                                v-model="domain.time"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                value-format="yyyy-MM-dd"
+                                end-placeholder="结束日期"
+                                style="width: 240px;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
+                    <el-button type="primary" @click="addDomain">新增</el-button>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="submitRoomForm('ruleRoomForm')">保存</el-button>
+                    <el-button @click="resetForm('ruleRoomForm');roomVisible=false">取消</el-button>
+                </el-form-item>
+            </el-form>
         </el-dialog>
 
         <!-- 删除提示框 -->
@@ -179,18 +279,31 @@
 
 <script>
     var qs = require('qs');
-
+    let rowNum = 0;
+    let lastRowNum = 0;
     export default {
         data() {
             return {
+                ruleRoomForm: {
+                    name: '',
+                    domains: [{
+                        price: '',
+                        type: '',
+                        time:'',
+                    }]
+                },
                 RoomUrl: this.$global.baseUrl + "/room",
                 uploadUrl: this.$global.baseUrl + "/file",
                 tableData: [],
                 typeData: [],
+                typePriceData: [],
                 fileList: [],
+                select: '不支持',
                 roomTypeFlag: false,
+                priceTypeFlag: false,
+                roomVisible: false,
                 removeFileList: '',
-                select_type:'',
+                select_type: '',
                 inputTag: '',
                 headers: {
                     Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -207,11 +320,17 @@
                 is_search: false,
                 visible: false,
                 delVisible: false,
+                priceVisible: false,
                 add: false,
                 edit: false,
                 ids: '',
                 typeIds: '',
                 roomFlag: false,
+                rulePriceForm: {
+                    name: '',
+                    type: ''
+                },
+                priceRoomTypes:[],
                 ruleForm: {
                     apNum: '',
                     name: '',
@@ -221,7 +340,7 @@
                     structure: '',
                     type: '',
                     roomType: '',
-                    bed:0,
+                    bed: 0,
                     good: [],
                     id: ''
                 },
@@ -266,6 +385,30 @@
                         {type: 'array', required: true, message: '请至少选择一个房间物品', trigger: 'change'}
                     ]
                 },
+                rulesPrice: {
+                    name: [
+                        {required: true, message: '请输入名称', trigger: 'blur'},
+                        {min: 1, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur'}
+                    ],
+                    price: [
+                        {required: true, message: '请输入价格', trigger: 'blur'},
+                        {min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'}
+                    ], startTime: [
+                        {required: true, message: '请选择开始日期', trigger: 'blur'},
+                    ],
+                    endTime: [
+                        {required: true, message: '请选择结束时间', trigger: 'blur'},
+                    ],
+                    type: [
+                        {required: true, message: '请选择租凭类型', trigger: 'change'}
+                    ],
+                },
+                rulesRoom: {
+                    name: [
+                        {required: true, message: '请输入名称', trigger: 'blur'},
+                        {min: 1, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur'}
+                    ]
+                },
                 idx: -1
             }
         },
@@ -273,6 +416,22 @@
             this.getData();
         },
         methods: {
+            removeDomain(item) {
+                let length = this.ruleRoomForm.domains.length;
+                var index = this.ruleRoomForm.domains.indexOf(item)
+                if(length === 1){
+                    return;
+                }
+                if (index !== -1) {
+                    this.ruleRoomForm.domains.splice(index, 1)
+                }
+            },
+            addDomain() {
+                this.ruleRoomForm.domains.push({
+                    value: '',
+                    key: Date.now()
+                });
+            },
             handleClose(done) {
                 const that = this;
                 that.resetForm('ruleForm');
@@ -382,10 +541,15 @@
             },
             resetForm(formName) {
                 this.ruleForm.good = [];
+               this.ruleRoomForm.domains=[{
+                    price: '',
+                    type: '',
+                    time:'',
+                }];
                 this.fileList = [];
                 this.master = '0';
                 this.removeFileList = '';
-                if(this.$refs[formName]){
+                if (this.$refs[formName]) {
                     this.$refs[formName].resetFields();
                 }
                 this.getData();
@@ -431,42 +595,109 @@
                 this.roomFlag = false;
 
 
-                this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 'g'}}).then((res) => {
+                this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 'intro'}}).then((res) => {
                     if (res.data.resultCode == 200) {
                         this.goods = res.data.data;
                     }
                 })
 
 
-
             },
-            handleAddTag() {
-                if (this.inputTag === '') {
-                    return;
-                }
-                const param = {
-                    "type": 'r',
-                    "name": this.inputTag
-                }
-                this.$axios.post(this.RoomUrl + '/tags', param).then((res) => {
+            handlePriceTypeAdd() {
+                this.priceVisible = true;
+            },
+            handleRoomTypeAdd() {
+                this.roomVisible = true;
+                this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 't'}}).then((res) => {
                     if (res.data.resultCode == 200) {
-                        this.typeData = res.data.data;
-                        this.handleRoomType();
-                        this.inputTag = '';
+                        this.priceRoomTypes = res.data.data;
                     }
                 })
             },
+            handleAddPriceTag(formName) {
+                let that = this;
+                const param = {
+                    "type": 't',
+                    "name": this.rulePriceForm.name,
+                    "remark": this.rulePriceForm.type
+                }
+
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$axios.post(this.RoomUrl + '/tags', param).then((res) => {
+                            if (res.data.resultCode == 200) {
+                                this.typeData = res.data.data;
+                                this.$message.success(`新建成功`);
+
+                            }else{
+                                this.$message.error(res.data.message);
+                                return false;
+                            }
+                        });
+                        that.resetForm('rulePriceForm');
+                        this.priceVisible = false;
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            submitRoomForm(formName) {
+                let that = this;
+                let domains = this.ruleRoomForm.domains;
+
+                for (let i = 0; i < domains.length; i++) {
+                    let time = domains[i].time
+                    if(time===null || time===''){
+                        this.ruleRoomForm.domains[i].time = [];
+                    }
+                }
+
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$axios.post(this.RoomUrl + '/priceType', this.ruleRoomForm).then((res) => {
+                            if (res.data.resultCode == 200) {
+                                this.typeData = res.data.data;
+                                that.resetForm('ruleRoomForm');
+                                that.handleRoomType();
+                                this.roomVisible = false;
+                            }else{
+                                this.$message.error(res.data.message);
+                                return false;
+                            }
+                        });
+
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+
+
             handleRoomType() {
                 this.roomTypeFlag = true;
                 this.add = false;
                 this.edit = false;
 
+
+                this.$axios.get(this.RoomUrl + '/priceType').then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.typeData = res.data.data;
+                    }
+                })
+            },
+            handlePriceType() {
+                this.priceTypeFlag = true;
+                this.add = false;
+                this.edit = false;
+
                 const param = {
-                    "type": 'r'
+                    "type": 't'
                 }
                 this.$axios.get(this.RoomUrl + '/tags', {params: param}).then((res) => {
                     if (res.data.resultCode == 200) {
-                        this.typeData = res.data.data;
+                        this.typePriceData = res.data.data;
                     }
                 })
             },
@@ -475,7 +706,7 @@
                 this.idx = index;
                 let that = this;
                 const param = {
-                    "type": 'g'
+                    "type": 'intro'
                 }
                 this.$axios.get(this.RoomUrl + '/tags', {params: param}).then((res) => {
                     if (res.data.resultCode == 200) {
@@ -512,6 +743,12 @@
                     this.typeIds = row.id
                 }
                 this.deleteRoomType()
+            },
+            handlePriceDelete(index, row) {
+                if (!this.typeIds) {
+                    this.typeIds = row.id
+                }
+                this.deletePriceType()
             },
             delAll() {
                 const length = this.multipleSelection.length;
@@ -557,7 +794,7 @@
                 this.$axios.delete(url, {params: param}).then((res) => {
                     if (res.data.resultCode == 200) {
                         this.handleRoomType()
-                        this.typeIds='';
+                        this.typeIds = '';
                         this.$message.success('删除成功');
                     } else {
                         this.$message.error('删除失败');
@@ -565,7 +802,54 @@
                 })
                 this.ids = '';
                 this.delVisible = false;
+            },
+
+            // 确定删除
+            deletePriceType() {
+                let url = this.RoomUrl + "/tags";
+                let param = {"ids": this.typeIds};
+                this.$axios.delete(url, {params: param}).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.handlePriceType()
+                        this.typeIds = '';
+                        this.$message.success('删除成功');
+                    } else {
+                        this.$message.error('删除失败');
+                    }
+                })
+                this.ids = '';
+                this.delVisible = false;
+            }, objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+
+                if (columnIndex === 0) {
+                    if(row.name!=lastRowNum ){
+                        rowNum=1;
+                    }
+                    lastRowNum = row.name;
+
+                    if (row.size===1) {
+                        rowNum=1;
+                        return {
+                            rowspan: 1,
+                            colspan: 1
+                        };
+                    } else {
+                        if(rowNum===1){
+                            rowNum+=1;
+                            return {
+                                rowspan: row.size,
+                                colspan: 1
+                            };
+                        }else{
+                            return {
+                                rowspan: 0,
+                                colspan: 0
+                            };
+                        }
+                    }
+                }
             }
+
         }
     }
 

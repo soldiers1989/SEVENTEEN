@@ -60,8 +60,11 @@
         <if test="status != null and status  != ''">
             AND sa.status = #{status}
         </if>
-        <if test="roomType != null and roomType  != ''">
+        <if test="roomType != null and roomType  != '' and roomType  != 0">
             AND st.id = #{roomType}
+        </if>
+        <if test="roomType != null and roomType  != '' and roomType  == 0">
+            AND sa.room_type is null
         </if>
         <if test="remark != null and remark  != ''">
             AND (sa.ap_num like CONCAT('%',#{remark},'%' ) or sa.name like CONCAT('%',#{remark},'%' ) or sa.status like

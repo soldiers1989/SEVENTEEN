@@ -2,9 +2,10 @@ const app = getApp()
 Page({
   data: {
     livers: [{
-      name: ''
+      liver: ''
     }
     ],
+    systemUrl: app.globalData.baseUrl + '/order',
 
     imgUrl: app.globalData.ImgUrl
   },
@@ -24,7 +25,7 @@ Page({
     for (var index in this.data.livers) {
       if (index == id){
         let liver = {
-          name: val
+          liver: val
         }
         this.data.livers[index] = liver;
       }
@@ -36,7 +37,7 @@ Page({
   contolTap: function (event) {
     let id = event.currentTarget.dataset.id;
     let liver = {
-      name: ''
+      liver: ''
     }
     if (id === 0) {
       this.data.livers.push(liver);
@@ -49,6 +50,45 @@ Page({
         livers: this.data.livers
       });
     }
-  }
+  },
+  getData: function (id) {
+    let that = this;
+    wx.request({
+      url: this.data.systemUrl + '/' + id + "/detail",
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      // data: { pageInfo: pageInfo  },
+      success: function (data) {
+        if (data.data.resultCode === 200) {
+          
+          that.setData({
+            livers: data.data.data.livers,
+          })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function () {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+  /**
+ * 生命周期函数--监听页面加载
+ */
+  onLoad: function (options) {
+    let orderid = options.orderid;
+    this.getData(orderid);
+  },
 
 })
