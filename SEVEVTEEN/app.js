@@ -28,5 +28,4 @@ App({
     baseUrl:"http://localhost:80",
     ImgUrl:"https://www.17inn.com/img/wxApp"
   }
-  
 })
