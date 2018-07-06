@@ -1,5 +1,6 @@
 {
   "pages": [
+      "pages/auth/auth",
     "pages/my/rlsb/rlsb",
     "pages/my/my",
     
@@ -8,7 +9,7 @@
     
     "pages/my/integral/integral",
     "pages/my/myOrder/myOrder",
-    "pages/auth/auth",
+  
     "pages/index/index",
     "pages/message/system/system",
     "pages/message/system/system-detail/system-detail",
