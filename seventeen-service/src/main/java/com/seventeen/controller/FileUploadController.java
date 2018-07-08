@@ -66,6 +66,8 @@ public class FileUploadController {
         }
     }
 
+
+
     @PostMapping
     @Transactional
     public ResponseEntity<Result> handleFileUpload(@RequestParam("file") MultipartFile[] files, @RequestHeader(name = "Room", required = false) String Room, @AuthenticationPrincipal UserDetails userDetails) {
@@ -130,6 +132,44 @@ public class FileUploadController {
             } else {
                 result.setResultCode(ResultCode.FAIL.getCode());
             }
+        }
+        return ResponseEntity.ok(result);
+    }
+
+
+
+    @PostMapping("/wxApp")
+    @Transactional
+    public ResponseEntity<Result> wxAppFile(@RequestParam("file") MultipartFile file,@RequestParam("file") int type,  @AuthenticationPrincipal UserDetails userDetails) {
+        Result result = new Result();
+        File rootDir = new File(FileUploadUtil.roomImg);
+        if (!file.isEmpty()) {
+            try {
+                    String imgId = IDGenerator.getId();
+
+                String originalFilename = file.getOriginalFilename();
+                String fileSuffix = originalFilename.substring(originalFilename.lastIndexOf("."), originalFilename.length());
+                Path path = Paths.get(FileUploadUtil.roomImg, imgId+fileSuffix);
+                String fileName = imgId;
+
+
+
+                if (Files.exists(path)) {
+                    Files.delete(path);
+                }
+
+
+                Thumbnails.of(file.getInputStream()).scale(1.0).toFile(path.toString());
+//                Thumbnails.of(file.getInputStream()).
+//                        scale(0.7).outputQuality(0.9).
+////                        watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File("file/logo.png")), 0.6f). //水印位于右下角,半透明
+//                        toFile(path.toString());
+            } catch (Exception e) {
+                log.error("ERROR", e);
+                result.setResultCode(ResultCode.FAIL.getCode()).setMessage(e.toString());
+            }
+        } else {
+            result.setResultCode(ResultCode.FAIL.getCode());
         }
         return ResponseEntity.ok(result);
     }

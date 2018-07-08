@@ -24,6 +24,7 @@ Page({
           that.setData({
             idcrad0: tempFilePaths
           })
+          
         } else if (_datasetId == 2) {
           that.setData({
             userPhoto: tempFilePaths
@@ -50,7 +51,7 @@ Page({
         duration: 2000,
       })
 
-      return;
+      //return;
     }
     var token = wx.getStorageSync('token');
 
@@ -58,7 +59,7 @@ Page({
 
     
     wx.uploadFile({
-      url: this.data.baseUrl +'/file', //仅为示例，非真实的接口地址
+      url: this.data.baseUrl +'/file/wxApp', //仅为示例，非真实的接口地址
       filePath: idc0[0],
       name: 'file', 
       header: {

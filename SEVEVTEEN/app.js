@@ -25,7 +25,7 @@ wxApiInterceptors({
 
 App({
   globalData: {
-    baseUrl:"http://localhost:80",
+    baseUrl:"http://localhost",
     ImgUrl:"https://www.17inn.com/img/wxApp"
   }
 })
