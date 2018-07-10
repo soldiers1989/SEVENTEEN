@@ -8,4 +8,5 @@ import java.io.File;
  */
 public class FileUploadUtil {
     public static final String roomImg = "file" + File.separator + "room" + File.separator;
+    public static final String rlsbImg = "file" + File.separator + "rlsb" + File.separator;
 }
