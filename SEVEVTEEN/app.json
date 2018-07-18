@@ -3,10 +3,10 @@
       "pages/auth/auth",
     "pages/my/rlsb/rlsb",
     "pages/my/my",
-    
-    
+
+
     "pages/my/toushu/toushu",
-    
+
     "pages/my/integral/integral",
     "pages/my/myOrder/myOrder",
   
@@ -56,5 +56,5 @@
         "selectedIconPath": "/imgs/tabBar/user_se.png"
       }
     ]
-  }
-}
+   }
+ }

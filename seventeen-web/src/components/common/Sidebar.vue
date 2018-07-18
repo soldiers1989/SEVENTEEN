@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-            text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+                 text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
@@ -35,24 +35,9 @@
                         title: '系统首页'
                     },
                     {
-                        icon: 'el-icon-view',
-                        index: '3',
-                        title: '用户中心',
-                        subs: [
-                            {
-                                index: 'user',
-                                title: '用户管理'
-                            },
-                            {
-                                index: 'point',
-                                title: '积分管理'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-tickets',
-                        index: 'order',
-                        title: '订单中心'
+                        icon: 'el-icon-location',
+                        index: 'shop',
+                        title: '门店管理'
                     },
                     {
                         icon: 'el-icon-star-off',
@@ -60,9 +45,35 @@
                         title: '房间列表'
                     },
                     {
+                        icon: 'el-icon-goods',
+                        index: 'user',
+                        title: '用户管理'
+                    },
+                    {
                         icon: 'el-icon-star-on',
                         index: 'coupon',
                         title: '优惠券管理'
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: 'point',
+                        title: '积分管理'
+                    }
+                    ,
+                    {
+                        icon: 'el-icon-tickets',
+                        index: 'order',
+                        title: '订单中心'
+                    },
+                    {
+                        icon: 'el-icon-message',
+                        index: 'assess',
+                        title: '评价中心'
+                    },
+                    {
+                        icon: 'el-icon-service',
+                        index: 'advise',
+                        title: '意见反馈'
                     },
                     {
                         icon: 'el-icon-error',
@@ -72,26 +83,28 @@
                 ]
             }
         },
-        computed:{
-            onRoutes(){
-                return this.$route.path.replace('/','');
+        computed: {
+            onRoutes() {
+                return this.$route.path.replace('/', '');
             }
         }
     }
 </script>
 
 <style scoped>
-    .sidebar{
+    .sidebar {
         display: block;
         position: absolute;
         left: 0;
         top: 70px;
-        bottom:0;
+        bottom: 0;
     }
-    .sidebar-el-menu:not(.el-menu--collapse){
+
+    .sidebar-el-menu:not(.el-menu--collapse) {
         width: 250px;
     }
+
     .sidebar > ul {
-        height:100%;
+        height: 100%;
     }
 </style>

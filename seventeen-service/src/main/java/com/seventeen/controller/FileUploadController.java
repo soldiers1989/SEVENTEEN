@@ -42,9 +42,6 @@ import java.util.List;
 public class FileUploadController {
     private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
 
-    @Value("${file.upload.url}")
-    private String fileUrl;
-
     private final ResourceLoader resourceLoader;
 
     @Autowired
@@ -114,19 +111,18 @@ public class FileUploadController {
                     Thumbnails.of(file.getInputStream()).
                             scale(0.7).
                             outputQuality(0.9).
-                            watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File("file/logo.png")), 0.6f). //水印位于右下角,半透明
+                            watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File("file"+File.separator+"logo.png")), 0.6f). //水印位于右下角,半透明
                             toFile(path.toString());
-                    seApartmentImg.setUrl(fileUrl + "/" + path.toString());
+                    seApartmentImg.setUrl(path.toString().replace("\\","/"));
 
-
-                    /***
-                     * 缩放大小
-                     */
+                            /***
+                             * 缩放大小
+                             */
                     Thumbnails.of(path.toString()).
                             size(160, 160). // 缩放大小
                             outputQuality(0.9). // 图片压缩90%质量
                             toFile(FileUploadUtil.roomImg + fileName + "_mix" + fileSuffix);
-                    seApartmentImg.setMixUrl(fileUrl + "/" + FileUploadUtil.roomImg + fileName + "_mix" + fileSuffix);
+                    seApartmentImg.setMixUrl(FileUploadUtil.roomImg + fileName + "_mix" + fileSuffix);
 
                     seApartmentImgMapper.insert(seApartmentImg);
                 } catch (Exception e) {

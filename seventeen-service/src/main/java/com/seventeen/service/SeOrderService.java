@@ -30,4 +30,20 @@ public interface SeOrderService {
      */
     Result<OrderCenter> getOrderDetail(String orderId);
 
+    /**
+     *
+     * @param sysUser
+     * @param pageInfo
+     * @return
+     */
+    Result<List<OrderCenter>> noReplyOrderList(String reply,SysUser sysUser, PageInfo pageInfo);
+
+    /**
+     *
+     * @param orderId
+     * @param sysUser
+     * @return
+     */
+    Result<OrderCenter> noReplyOrder(String orderId, SysUser sysUser);
+
 }

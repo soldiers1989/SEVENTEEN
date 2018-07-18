@@ -36,11 +36,13 @@
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable"
                       @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="40"></el-table-column>
-                <el-table-column prop="id" label="订单号" sortable width="100">
+                <el-table-column prop="id" label="订单号" sortable width="90">
                 </el-table-column>
-                <el-table-column prop="userName" label="用户" width="150">
+                <el-table-column prop="userName" label="用户" width="100">
                 </el-table-column>
-                <el-table-column prop="apId" label="房间ID">
+                <el-table-column prop="shopName" label="门店名">
+                </el-table-column>
+                <el-table-column prop="apNum" label="房号">
                 </el-table-column>
                 <el-table-column prop="apName" label="房间名">
                 </el-table-column>
@@ -77,8 +79,8 @@
                 <el-form-item label="订单号">
                     <el-input :disabled="orderDetail" v-model="ruleForm.id" class="handle-input"></el-input>
                 </el-form-item>
-                <el-form-item label="房间ID" >
-                    <el-input v-model="ruleForm.apid"></el-input>
+                <el-form-item label="门店" >
+                    <el-input v-model="ruleForm.shopName"></el-input>
                 </el-form-item>
                 <el-form-item label="房号" >
                     <el-input v-model="ruleForm.apNum"></el-input>
@@ -100,7 +102,7 @@
                     :data="userData"
                     style="width: 100%">
                     <el-table-column
-                        prop="name"
+                        prop="liver"
                         label="姓名"
                         width="180">
                     </el-table-column>
@@ -223,7 +225,6 @@
                 this.$axios.get(this.OrderUrl + '/' + row.id + '/detail').then((res) => {
                     if (res.data.resultCode === 200) {
                         that.ruleForm = res.data.data.seApartment;
-                        that.fileList = res.data.data.seApartmentImg;
                     } else {
                         this.$message.error('编辑失败');
                         return false;
@@ -240,6 +241,8 @@
                 this.$axios.get(this.OrderUrl + '/' + row.id + '/detail').then((res) => {
                     if (res.data.resultCode === 200) {
                         that.ruleForm = res.data.data;
+                        this.userData = res.data.data.livers;
+
                     } else {
                         this.$message.error('查看失败');
                         return false;

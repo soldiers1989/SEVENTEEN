@@ -1,7 +1,7 @@
-<textarea placeholder='hey~您觉得我们有哪里还需要改善呢~~'></textarea>
+<textarea  bindinput="bindTextAreaBlur" value='{{content}}' placeholder='hey~您觉得我们有哪里还需要改善呢~~'></textarea>
 <text class='phone'>联系电话</text>
-<input placeholder='123123123'></input>
-<button>提交</button>
+<input   bindinput="bindPhoneAreaBlur"  value='{{phone}}' placeholder='178XXXXXX'></input>
+<button bindtap='addAdviseTap'>提交</button>
 <view class='info-text'>
   <text>您也可以关注17inn公众号</text>
   <text>17inn</text>

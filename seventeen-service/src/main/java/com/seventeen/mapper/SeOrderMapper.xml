@@ -9,6 +9,7 @@
     <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="in_time" property="inTime" jdbcType="VARCHAR" />
+    <result column="is_reply" property="isReply" jdbcType="VARCHAR" />
     <result column="out_time" property="outTime" jdbcType="VARCHAR" />
     <result column="arrive_time" property="arriveTime" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="VARCHAR" />
@@ -56,9 +57,11 @@
     SELECT
     so.id ,
     so.ap_id apId,
+    sa.ap_num apNum,
     sa.name apname,
     su.username userName,
-    st.name roomType,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
     CASE so.`status`
     WHEN 1 THEN
     '已下订'
@@ -78,13 +81,13 @@
     FROM
     se_order so,
     sys_user su,
-    se_apartment sa,
     se_coupon sc,
-    se_tag st
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
     WHERE
     so.ap_id = sa.id
     AND so.user_id = su.id
-    AND sa.room_type = st.id
     and so.coupon_id = sc.id
     <if test="status != null and status  != ''">
       AND so.status = #{status}
@@ -93,7 +96,7 @@
       AND so.user_id = #{userId}
     </if>
     <if test="remark != null and remark  != ''">
-      AND ( su.username like CONCAT('%',#{remark},'%' ) or sa.`name` like CONCAT('%',#{remark},'%' ) or sc.`name` like
+      AND ( sa.id like CONCAT('%',#{remark},'%' )  or su.username like CONCAT('%',#{remark},'%' ) or sa.`name` like CONCAT('%',#{remark},'%' ) or sc.`name` like
       CONCAT('%',#{remark},'%' ) or so.price like CONCAT('%',#{remark},'%' ) )
     </if>
     <if test="startTime != null and startTime  != ''">
@@ -105,6 +108,99 @@
     ORDER BY so.create_time desc
   </select>
 
+
+  <select id="getNoReplyOrderList" resultType="com.seventeen.bean.OrderCenter">
+    SELECT
+    so.id ,
+    so.ap_id apId,
+    sa.ap_num apNum,
+    sa.name apname,
+    su.username userName,
+    sai.mix_url mixRoomImg,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    if(so.coupon_id is null,'无',sc.`name`) couponName,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime
+    FROM
+    se_order so,
+    sys_user su,
+    se_coupon sc,
+    se_apartment_img sai,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    AND sa.id = sai.ap_id
+    and sai.master='1'
+    and so.coupon_id = sc.id
+    AND so.status ='5'
+    AND so.user_id = #{id}
+    AND so.is_reply=#{reply}
+    ORDER BY so.create_time desc
+  </select>
+
+  <select id="noReplyOrder" resultType="com.seventeen.bean.OrderCenter">
+    SELECT
+    so.id ,
+    so.ap_id apId,
+    sa.ap_num apNum,
+    sa.name apname,
+    su.username userName,
+    sai.mix_url mixRoomImg,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    if(so.coupon_id is null,'无',sc.`name`) couponName,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime
+    FROM
+    se_order so,
+    sys_user su,
+    se_coupon sc,
+    se_apartment_img sai,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    AND sa.id = sai.ap_id
+    and sai.master='1'
+    and so.coupon_id = sc.id
+    AND so.status ='5'
+    AND so.id = #{id}
+    AND so.is_reply=#{reply}
+    ORDER BY so.create_time desc
+  </select>
+
   <select id="getOrderDetail"  resultMap="OrderCenter">
     SELECT
     so.id id,
@@ -112,12 +208,11 @@
     so.ap_id apId,
     sa.`name` apName,
     sa.type type,
-    ss.name shopName,
-    ss.address shopAddress,
+    if(sso.address is null,'无门店管理',sso.address) shopAddress,
     sa.ap_num apNum,
-    st.`name` roomType,
-    so.creator_phone phone,
-    st1.remark,
+    if(st.name is null ,'无房间类型',st.name) roomType,
+    if(sso.name is null,'无门店管理',sso.name) shopName,
+    if(st1.remark is null or st1.remark='','无',st1.remark) remark,
     CASE so.`status`
     WHEN 1 THEN
     '已下订'
@@ -137,23 +232,19 @@
     sol.phone,
     sol.id_card idCard
     FROM
-    se_order so,
     sys_user su,
-    se_apartment sa,
     se_coupon sc,
-    se_order_liver sol,
-    se_shop ss,
-    se_tag st,
-    se_tag st1
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop sso on sa.shop_id = sso.id,
+    se_order so
+    left JOIN se_tag st1 on so.price_tag_id = st1.id
+    left JOIN se_order_liver sol on sol.order_id = so.id
 
     WHERE
     so.ap_id = sa.id
-    and sa.shop_id = ss.id
     AND so.user_id = su.id
     and so.coupon_id = sc.id
-    AND sol.order_id = so.id
-    and sa.room_type = st.id
-    and so.price_tag_id = st1.id
     <if test="orderId != null and orderId  != ''">
       AND  so.id = #{orderId}
     </if>

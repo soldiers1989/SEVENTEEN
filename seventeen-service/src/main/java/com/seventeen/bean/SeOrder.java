@@ -1,6 +1,9 @@
 package com.seventeen.bean;
 
+import javax.persistence.Id;
+
 public class SeOrder {
+    @Id
     private String id;
 
     private String userId;
@@ -12,6 +15,8 @@ public class SeOrder {
     private String orderTime;
 
     private String status;
+
+    private String isReply;
 
     private String inTime;
 
@@ -31,6 +36,14 @@ public class SeOrder {
 
     public String getId() {
         return id;
+    }
+
+    public String getIsReply() {
+        return isReply;
+    }
+
+    public void setIsReply(String isReply) {
+        this.isReply = isReply;
     }
 
     public void setId(String id) {

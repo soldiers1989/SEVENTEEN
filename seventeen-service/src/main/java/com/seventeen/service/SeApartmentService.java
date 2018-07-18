@@ -1,6 +1,7 @@
 package com.seventeen.service;
 
 import com.seventeen.bean.*;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
@@ -60,5 +61,19 @@ public interface SeApartmentService{
     Result addPriceType(ApartmentPriceRoom seApartmentPriceType);
 
     Result getPriceType();
+
+    Result getPriceTypeDetail(String roomTypeId);
+
+    Result updatePriceType(ApartmentPriceRoom ruleRoomForm);
+
+    Result<List<SeAdvise>> getAdviseList(String startTime, String endTime, PageInfo pageInfo);
+
+    /**
+     *
+     * @param seAdvise
+     * @param sysUser
+     * @return
+     */
+    Result addAdvise(SeAdvise seAdvise, SysUser sysUser);
 
 }

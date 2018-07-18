@@ -1,7 +1,5 @@
 server:
   tomcat:
-
-
     remote-ip-header: x-forwarded-for
     accept-count: 1000
     max-threads: 1000

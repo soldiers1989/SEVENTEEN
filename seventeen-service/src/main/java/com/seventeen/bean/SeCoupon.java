@@ -9,7 +9,7 @@ import java.util.List;
 public class SeCoupon {
     @Id
     private String id;
-@Id
+
     private String name;
 
     private String status;
@@ -28,10 +28,32 @@ public class SeCoupon {
 
     private String createTime;
 
+    private String useType;
+
     private String createBy;
 
     @Transient
     private List<String> sendTypeArr;
+
+    @Transient
+    private List<String> priceTypes;
+
+    public List<String> getPriceTypes() {
+        return priceTypes;
+    }
+
+    public void setPriceTypes(List<String> priceTypes) {
+        this.priceTypes = priceTypes;
+    }
+
+    public String getUseType() {
+        return useType;
+    }
+
+    public void setUseType(String useType) {
+        this.useType = useType;
+    }
+
 
     public List<String> getSendTypeArr() {
         return sendTypeArr;
