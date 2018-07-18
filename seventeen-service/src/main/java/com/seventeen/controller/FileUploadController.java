@@ -144,7 +144,7 @@ public class FileUploadController {
     /**
      * @param file
      * @param type
-     * @param userDetails
+     * @param sysUser
      * @return
      */
     @PostMapping("/wxApp")

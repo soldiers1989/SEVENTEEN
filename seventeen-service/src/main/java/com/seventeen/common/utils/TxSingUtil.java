@@ -1,7 +1,6 @@
 package com.seventeen.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
