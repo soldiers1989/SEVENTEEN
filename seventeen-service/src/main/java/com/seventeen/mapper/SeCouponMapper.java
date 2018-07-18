@@ -33,4 +33,5 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     ArrayList<CouponLog> getCouponLog(@Param("status")String status, @Param("remark")String remark,@Param("startTime") String startTime, @Param("endTime")String endTime);
 
+    ArrayList<SeCoupon> couponListWx(@Param("status") String status);
 }

@@ -11,6 +11,7 @@ import com.seventeen.util.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 @Api(tags = "订单")
+@Slf4j
 public class OrderController {
 
-	private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
 	@Autowired
     private SeOrderService seOrderService;
