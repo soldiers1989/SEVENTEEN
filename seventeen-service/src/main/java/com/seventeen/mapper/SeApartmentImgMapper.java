@@ -39,7 +39,7 @@ public interface SeApartmentImgMapper extends CoreMapper<SeApartmentImg>{
      * @param id
      * @return
      */
-    @Select("select * from se_apartment_img where ap_id = #{id}")
+    @Select("select * from se_apartment_img where ap_id = #{id} order by master desc")
     List<SeApartmentImg> selectByApids(@Param("id") String id);
 
     @Update("<script> update se_apartment_img se set se.master='1' where se.id =#{id} </script>")

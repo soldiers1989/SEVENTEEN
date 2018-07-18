@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seventeen.mapper.SeAssessMapper">
+    <resultMap id="BaseResultMap" type="com.seventeen.bean.SeAssess">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="ap_id" property="apId" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="is_check" property="status" jdbcType="VARCHAR"/>
+        <result column="target_tag_id" property="targetTagId" jdbcType="VARCHAR"/>
+        <result column="base_tag_id" property="baseTagId" jdbcType="VARCHAR"/>
+        <result column="assess_point_id" property="assessPointId" jdbcType="VARCHAR"/>
+        <result column="content_id" property="contentId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, ap_id, status, target_tag_id, assess_point_id, content_id, create_time, 
+    create_by
+  </sql>
+    <select id="getAssessList" resultType="com.seventeen.bean.AssessPoint">
+        SELECT
+        sa.id assessId,
+        sa.order_id orderId,
+        su.username userName,
+        ss.`name` shopName,
+        sap.ap_num apNum,
+        if(sa.`is_check`='1','已回复','未回复') isCheck,
+        if(st.name is null ,'无房间类型',st.name) roomType,
+        ROUND(AVG(sao.point)) totalPoint,
+        so.order_time orderTime,
+        sa.create_time assessTime
+        FROM
+        se_assess sa,
+        se_assess_point sao,
+        sys_user su,
+        se_shop ss,
+        se_order so,
+        se_apartment sap
+        left JOIN se_tag st on sap.room_type = st.id
+        where
+        sa.user_id = su.id
+        and sa.ap_id = sap.id
+        and sa.order_id = so.id
+        and sa.assess_point_id = sao.id
+        and sa.status!=0
+        and sap.shop_id =ss.id
+
+        <if test="isCheck != null and isCheck  != ''">
+            AND sa.is_check = #{isCheck}
+        </if>
+        <if test="remark != null and remark  != ''">
+            AND (su.username like CONCAT('%',#{remark},'%' ) or ss.`name` like CONCAT('%',#{remark},'%' ) or sap.ap_num
+            like
+            CONCAT('%',#{remark},'%' ) )
+        </if>
+        <if test="startTime != null and startTime  != ''">
+            AND so.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime  != ''">
+            AND so.create_time &lt;= #{endTime}
+        </if>
+        group by sa.order_id ,
+        su.username ,
+        ss.`name` ,
+        sap.ap_num,
+        st.name,
+        so.order_time,
+        sa.create_time,
+        sa.`status`,
+        sa.id
+        order by sa.create_time desc
+    </select>
+
+    <select id="getAssessDetail" resultType="com.seventeen.bean.AssessPoint">
+		SELECT
+		sa.id assessId,
+		sa.order_id orderId,
+		su.username userName,
+		ss.`name` shopName,
+		sap.ap_num apNum,
+		ROUND(AVG(sao.point)) totalPoint,
+		so.order_time orderTime,
+		sa.content_id contentId
+		FROM
+		se_assess sa,
+		se_assess_point sao1,
+		se_assess_point sao,
+		sys_user su,
+		se_shop ss,
+		se_order so,
+		se_apartment sap
+		where
+		sa.user_id = su.id
+		and sa.ap_id = sap.id
+		and sa.order_id = so.id
+		and sa.assess_point_id = sao.id
+		and sap.shop_id =ss.id
+        and sa.id =#{assessId}
+		group by sa.order_id ,
+		su.username ,
+		ss.`name` ,
+		sap.ap_num,
+		so.order_time,
+		sa.create_time,
+		sa.`status`
+	</select>
+
+    <select id="getAssessByUser" resultType="com.seventeen.bean.AssessPoint">
+        SELECT
+        sa.id assessId,
+        sa.order_id orderId,
+        sap.name apName,
+        su.username userName,
+        ss.`name` shopName,
+        sap.ap_num apNum,
+        ROUND(AVG(sao.point)) totalPoint,
+        so.order_time orderTime,
+        sa.content_id contentId
+
+        FROM
+        se_assess sa,
+        se_assess_point sao1,
+        se_assess_point sao,
+        sys_user su,
+        se_shop ss,
+        se_order so,
+        se_apartment sap
+        where
+        sa.user_id = su.id
+        and sa.ap_id = sap.id
+        and sa.order_id = so.id
+        and sa.assess_point_id = sao.id
+        and sap.shop_id =ss.id
+        and sa.user_id =#{userId}
+        group by sa.order_id ,
+        su.username ,
+        ss.`name` ,
+        sap.ap_num,
+        so.order_time,
+        sa.create_time,
+        sa.`status`,
+        sa.id
+    </select>
+
+
+
+</mapper>

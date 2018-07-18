@@ -2,18 +2,18 @@
   <view class='room-container'>
     <image class='room-img' src='{{imgUrl}}/imgs/message/wechatLiver.jpg'></image>
     <view class='address-container'>
-      <text>北亭店</text>
-      <text class='address-text'>2018-03-10至2018-03-11</text>
-      <text class='address-text'>大床房</text>
+      <text>{{reply.shopName}}</text>
+      <text class='address-text'>{{reply.liveTime}}</text>
+      <text class='address-text'>{{reply.roomType}}</text>
     </view>
   </view>
 
   <view class='live-container' >
     <text class='title'>您对这次入住是否满意？</text>
     <view class='live-pic-container' >
-     <view class="live-bro {{liveSelected==index?'select-color':''}}" wx:for="{{live}}" data-live='{{index}}' wx:for-item="item" wx:for-index="index" bindtap='liveTap'>
-      <image class="live-img" src='{{liveSelected==index?item.selectedImg:item.img}}'></image>
-      <view class="live-text-container {{liveSelected==index?'select-color':''}}">
+     <view class="live-bro {{liveSelected==item.id?'select-color':''}}" wx:for="{{live}}" data-live='{{item.id}}' wx:for-item="item" wx:for-index="index" bindtap='liveTap'>
+      <image class="live-img" src='{{liveSelected==item.id?item.selectedImg:item.img}}'></image>
+      <view class="live-text-container {{liveSelected==item.id?'select-color':''}}">
         <text>{{item.title}}</text>
         <text>{{item.name}}</text>
       </view>
@@ -35,14 +35,14 @@
   <view class='evaluate-container'>
     <text style='font-size:30rpx;'>出行目的</text>
     <view class='point-container'>
-      <view class="target {{targetSelected==index?'select-color':''}}" wx:for="{{targets}}" wx:for-item="item" wx:for-index="index" data-target='{{index}}' bindtap='targetTap'>
+      <view class="target {{targetSelected==item.id?'select-color':''}}" wx:for="{{targets}}" wx:for-item="item" wx:for-index="index" data-target='{{item.id}}' bindtap='targetTap'>
         <text class='target-text'>{{item.name}}</text>
       </view>
     </view>
   </view>
-    <textarea class='input' placeholder="说说您对本店的评价或建议，您的意见将会对其他住客有很大帮助哦~~" placeholder-style="color:#999999;"  />
+    <textarea bindinput="bindTextAreaBlur" class='input' value='{{content}}' placeholder="说说您对本店的评价或建议，您的意见将会对其他住客有很大帮助哦~~" placeholder-style="color:#999999;"  />
     <view></view>
-    <view class="nav-tabs" bindtap='addLiverTap'>
+    <view class="nav-tabs" bindtap='addEvaluateTap'>
   <text>提交</text>
 </view>
 </view>

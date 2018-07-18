@@ -39,7 +39,7 @@ Page({
     })
   },
   cancelTap: function (event) {
-    if (this.data.systemDetail.remark === '不支持退订') {
+    if (this.data.systemDetail.remark === '不支持退订' || this.data.orderStatus!= 0) {
       wx.showModal({
         title: '提示',
         showCancel: false,

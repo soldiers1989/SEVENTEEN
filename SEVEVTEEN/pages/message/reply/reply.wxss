@@ -68,21 +68,20 @@
   font-size: 30rpx;
 }
 
-.time{
+.time {
   display: inline-block;
-  margin: 35rpx auto ;
+  margin: 35rpx auto;
   font-size: 25rpx;
   color: #a0a0a0;
 }
 
-.reply-title{
+.reply-title {
   color: red;
 }
 
-.reply{
+.reply {
   color: #a0a0a0;
 }
-
 
 .point {
   font-weight: bold;
@@ -102,42 +101,41 @@
   border-bottom: 2rpx solid #f0f0f0;
 }
 
-.wait-reply-container{
+.wait-reply-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   border-bottom: 1rpx solid #f0f0f0;
   height: 200rpx;
   width: 90%;
-
-
 }
 
-.wait-img{
+.wait-img {
   height: 150rpx;
   width: 200rpx;
 }
 
-.wait-reply-text{
-    display: flex;
+.wait-reply-text {
+  display: flex;
   flex-direction: column;
-  }
+  width: 400rpx;
+}
 
-.wait-reply-text text{
+.wait-reply-text text {
   font-size: 30rpx;
   margin-left: 10rpx;
 }
 
-.replyTo{
+.replyTo {
   border: 1rpx solid black;
   border-radius: 5px;
   height: 65rpx;
   width: 130rpx;
   text-align: center;
-  margin-left: 80rpx;
+  /* margin-left: 80rpx; */
 }
-.replyToText{
+
+.replyToText {
   font-size: 30rpx;
   line-height: 65rpx;
 }
-

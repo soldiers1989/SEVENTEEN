@@ -1,6 +1,10 @@
 package com.seventeen.bean;
 
+import com.seventeen.util.FileUploadUtil;
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.Id;
+
 /**
  * @Author: csk
  * @Date: 2018/5/28 16:20
@@ -42,15 +46,28 @@ public class SeApartmentImg {
     }
 
     public String getUrl() {
-        return url;
-    }
+
+        if(StringUtils.isBlank(url)){
+            return "";
+        }
+        if(url.contains(FileUploadUtil.FILE_URL)){
+            return url;
+        }
+        return FileUploadUtil.FILE_URL + "/" + url;    }
 
     public void setUrl(String url) {
         this.url = url;
     }
 
     public String getMixUrl() {
-        return mixUrl;
+
+        if(StringUtils.isBlank(mixUrl)){
+            return "";
+        }
+        if(mixUrl.contains(FileUploadUtil.FILE_URL)){
+            return mixUrl;
+        }
+        return FileUploadUtil.FILE_URL + "/" + mixUrl;
     }
 
     public void setMixUrl(String mixUrl) {

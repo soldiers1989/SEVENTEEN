@@ -77,4 +77,37 @@ public class SeOrderServiceImpl  implements SeOrderService  {
         }
         return result;
     }
+
+    @Override
+    public Result<List<OrderCenter>> noReplyOrderList(String reply,SysUser sysUser, PageInfo pageInfo) {
+
+        Result<List<OrderCenter>> result = new Result<>();
+        try {
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            String id = sysUser.getId();
+            ArrayList<OrderCenter> orderCenters = seOrderMapper.getNoReplyOrderList(id,reply);
+            pageInfo.setTotal(page.getTotal());
+            result.setData(orderCenters, pageInfo);
+        } catch (Exception e) {
+            logger.error("e",e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<OrderCenter> noReplyOrder(String orderId, SysUser sysUser) {
+        Result<OrderCenter> result = new Result<>();
+        try {
+
+            OrderCenter orderCenter = seOrderMapper.noReplyOrder(orderId,"0");
+            result.setData(orderCenter);
+        } catch (Exception e) {
+            logger.error("e",e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
 }

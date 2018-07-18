@@ -52,7 +52,7 @@
                 </el-table-column>
                 <el-table-column prop="type" label="租凭类型">
                 </el-table-column>
-                <el-table-column prop="price" label="价格">
+                <el-table-column prop="price" label="标准价格">
                 </el-table-column>
                 <el-table-column prop="structure" label="户型">
                 </el-table-column>
@@ -87,6 +87,11 @@
                     <el-radio-group v-model="ruleForm.type">
                         <el-radio label="1">短租</el-radio>
                         <el-radio label="2">长租</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="门店" prop="shopId">
+                    <el-radio-group v-model="ruleForm.shopId">
+                        <el-radio v-for="shop in shopData" :label="shop.id" :key="shop.id">{{shop.name}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="房间分类" prop="roomType">
@@ -136,7 +141,8 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+                    <el-button type="primary" :loading="loading" @click="submitForm('ruleForm')">保存
+                    </el-button>
                     <el-button v-if="add" @click="resetForm('ruleForm')">重置</el-button>
                     <el-button v-if="edit" @click="resetForm('ruleForm');visible=false">取消</el-button>
                 </el-form-item>
@@ -201,15 +207,18 @@
                     :span-method="objectSpanMethod">
                     <el-table-column prop="name" label="类型" sortable width="100">
                     </el-table-column>
-                    <el-table-column prop="type" label="价格类型" >
+                    <el-table-column prop="type" label="价格类型">
                     </el-table-column>
-                    <el-table-column prop="price" label="价格" >
+                    <el-table-column prop="price" label="价格">
                     </el-table-column>
                     <el-table-column prop="time" label="有效时间" width="180">
                     </el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column label="操作" width="150">
                         <template slot-scope="scope">
-                            <el-button size="small" type="danger" @click="handleTypeDelete(scope.id, scope.row)">删除
+                            <el-button size="small" @click="handleTypeEdit(scope.id, scope.row)">编辑</el-button>
+
+                            <el-button size="small" type="danger"
+                                       @click="handleTypeDelete(scope.roomTypeId, scope.row)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -218,7 +227,7 @@
         </el-dialog>
 
         <!-- 新增房间类型 -->
-        <el-dialog title="新增房间类型" :visible.sync="roomVisible" width="55%" :before-close="handleClose">
+        <el-dialog :title="roomTypeTitle" :visible.sync="roomVisible" width="55%" :before-close="handleClose">
             <div style="color: red">
                 如果不添加价格策略，房间类型价格默认房间原价。
             </div>
@@ -231,19 +240,20 @@
                 <el-form-item v-for="(domain, index) in ruleRoomForm.domains" :label="'价格策略' + index"
                               :key="domain.key">
                     <el-col :span="4">
-                        <el-form-item >
-                            <el-select v-model="domain.type"  placeholder="价格类型" style="width: 110px;">
-                                <el-option :label="priceRoomType.name" v-for="priceRoomType in priceRoomTypes" :key="priceRoomType.id" :value="priceRoomType.id"></el-option>
+                        <el-form-item>
+                            <el-select v-model="domain.priceTypeId" placeholder="价格类型" style="width: 110px;">
+                                <el-option :label="priceRoomType.name" v-for="priceRoomType in priceRoomTypes"
+                                           :key="priceRoomType.id" :value="priceRoomType.id"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="3">
-                        <el-form-item >
+                        <el-form-item>
                             <el-input v-model="domain.price" placeholder="价格" style="width: 90px;"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item >
+                        <el-form-item>
                             <el-date-picker
                                 v-model="domain.time"
                                 type="daterange"
@@ -258,6 +268,9 @@
                     <el-button type="danger" @click.prevent="removeDomain(domain)">删除</el-button>
                     <el-button type="primary" @click="addDomain">新增</el-button>
                 </el-form-item>
+                <div style="color: red;margin-left: 20px;">
+                    重复策略将覆盖原来的
+                </div>
 
                 <el-form-item>
                     <el-button type="primary" @click="submitRoomForm('ruleRoomForm')">保存</el-button>
@@ -286,14 +299,18 @@
             return {
                 ruleRoomForm: {
                     name: '',
+                    roomTypeId: '',
                     domains: [{
+                        priceTypeId: '',
                         price: '',
                         type: '',
-                        time:'',
+                        time: '',
                     }]
                 },
                 RoomUrl: this.$global.baseUrl + "/room",
                 uploadUrl: this.$global.baseUrl + "/file",
+                ShopUrl: this.$global.baseUrl + "/shop",
+                roomTypeTitle: "",
                 tableData: [],
                 typeData: [],
                 typePriceData: [],
@@ -326,11 +343,13 @@
                 ids: '',
                 typeIds: '',
                 roomFlag: false,
+                loading: false,
+                shopData: [],
                 rulePriceForm: {
                     name: '',
                     type: ''
                 },
-                priceRoomTypes:[],
+                priceRoomTypes: [],
                 ruleForm: {
                     apNum: '',
                     name: '',
@@ -342,7 +361,8 @@
                     roomType: '',
                     bed: 0,
                     good: [],
-                    id: ''
+                    id: '',
+                    shopId: ''
                 },
                 goods: [],
                 roomTypes: [],
@@ -350,6 +370,9 @@
                     apNum: [
                         {required: true, message: '请输入房号，如1001', trigger: 'blur'},
                         {min: 1, max: 7, message: '长度在 1 到 7 个字符', trigger: 'blur'},
+                    ],
+                    shopId: [
+                        {required: true, message: '请选择门店', trigger: 'change'}
                     ],
                     name: [
                         {required: true, message: '请输入房名', trigger: 'blur'},
@@ -419,7 +442,7 @@
             removeDomain(item) {
                 let length = this.ruleRoomForm.domains.length;
                 var index = this.ruleRoomForm.domains.indexOf(item)
-                if(length === 1){
+                if (length === 1) {
                     return;
                 }
                 if (index !== -1) {
@@ -428,7 +451,7 @@
             },
             addDomain() {
                 this.ruleRoomForm.domains.push({
-                    value: '',
+                    priceTypeId: '',
                     key: Date.now()
                 });
             },
@@ -458,93 +481,106 @@
             },
 
             handlePreview(file) {
-                let id = file.id;
-
                 this.$notify({
                     title: '成功',
                     message: '该图片成功设置成主图',
                     type: 'success'
                 });
 
-                if (this.edit) {
-                    this.master = file.id;
-                }
+                this.master = file.name;
+
             },
             submitUpload() {
-                this.$refs.upload.headers.Room = this.ruleForm.id + "_" + this.master;
+                if (this.master === '0' || this.master === undefined) {
+                    this.$refs.upload.headers.Room = this.ruleForm.id + "_" + this.$refs.upload.uploadFiles[0].name;
+                } else {
+                    this.$refs.upload.headers.Room = this.ruleForm.id + "_" + this.master;
+                }
                 this.$refs.upload.submit();
             },
             submitForm(formName) {
                 let that = this;
+                this.loading = true;
                 this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        if (that.$refs.upload.uploadFiles.length == 0) {
-                            this.$message.error('请选择至少一张图片上传');
-                            return false
-                        }
-                        if (that.add) {
-                            this.$axios.get(this.RoomUrl + '/' + this.ruleForm.apNum).then((res) => {
-                                if (res.data.resultCode === 200) {
-                                    if (!res.data.data) {
-                                        this.$axios.post(this.RoomUrl, this.ruleForm).then((res) => {
-                                            if (res.data.resultCode === 200) {
-                                                this.$message.success('创建成功');
-                                                that.ruleForm.id = res.data.data.id;
-                                                that.submitUpload();
-                                                that.resetForm('ruleForm');
-                                                this.visible = false;
+                        if (valid) {
+                            if (that.$refs.upload.uploadFiles.length == 0) {
+                                this.$message.error('请选择至少一张图片上传');
+                                that.loading = false;
+                                return false
+                            }
+                            if (that.add) {
+                                this.$axios.get(this.RoomUrl + '/' + this.ruleForm.apNum).then((res) => {
+                                    if (res.data.resultCode === 200) {
+                                        if (!res.data.data) {
+                                            this.$axios.post(this.RoomUrl, this.ruleForm).then((res) => {
+                                                if (res.data.resultCode === 200) {
+                                                    this.$message.success('创建成功');
+                                                    that.ruleForm.id = res.data.data.id;
+                                                    that.submitUpload();
+                                                    that.resetForm('ruleForm');
+                                                    this.visible = false;
+                                                    that.loading = false;
 
-                                            } else {
-                                                this.$message.error('创建失败');
-                                                return false;
-                                            }
-                                        })
+                                                } else {
+                                                    this.$message.error('创建失败');
+                                                    that.loading = false;
+                                                    return false;
+                                                }
+                                            })
+                                        } else {
+                                            this.$message.error('房号已存在，请更改或者删除已经存在房号！');
+                                            that.loading = false;
+                                            return false;
+                                        }
+
                                     } else {
-                                        this.$message.error('房号已存在，请更改或者删除已经存在房号！');
+                                        this.$message.error('创建失败');
+                                        that.loading = false;
                                         return false;
                                     }
+                                })
+                            } else {
 
-                                } else {
-                                    this.$message.error('创建失败');
-                                    return false;
-                                }
-                            })
+                                this.$axios.post(this.RoomUrl + "/update", this.ruleForm).then((res) => {
+                                    if (res.data.resultCode === 200) {
+                                        this.$message.success('更新成功');
+                                        that.ruleForm.id = res.data.data.id;
+                                        that.removeFile();
+                                        that.submitUpload();
+                                        that.resetForm('ruleForm');
+                                        this.visible = false;
+                                        that.loading = false;
+                                    } else {
+                                        this.$message.error('更新失败');
+                                        that.loading = false;
+                                        return false;
+                                    }
+                                })
+
+                                this.$axios.post(this.uploadUrl + "/updateMaster", qs.stringify({id: this.master})).then((res) => {
+                                    if (res.data.resultCode === 200) {
+                                        that.loading = false;
+                                    } else {
+                                        that.loading = false;
+                                        return false;
+                                    }
+                                })
+                            }
                         } else {
-
-                            this.$axios.post(this.RoomUrl + "/update", this.ruleForm).then((res) => {
-                                if (res.data.resultCode === 200) {
-                                    this.$message.success('更新成功');
-                                    that.ruleForm.id = res.data.data.id;
-                                    that.removeFile();
-                                    that.submitUpload();
-                                    that.resetForm('ruleForm');
-                                    this.visible = false;
-
-                                } else {
-                                    this.$message.error('更新失败');
-                                    return false;
-                                }
-                            })
-
-                            this.$axios.post(this.uploadUrl + "/updateMaster", qs.stringify({id: this.master})).then((res) => {
-                                if (res.data.resultCode === 200) {
-                                } else {
-                                    return false;
-                                }
-                            })
+                            console.log('error submit!!');
+                            that.loading = false;
+                            return false;
                         }
-                    } else {
-                        console.log('error submit!!');
-                        return false;
                     }
-                });
+                );
             },
             resetForm(formName) {
                 this.ruleForm.good = [];
-               this.ruleRoomForm.domains=[{
+                this.ruleRoomForm.domains = [{
+                    priceTypeId: '',
                     price: '',
                     type: '',
-                    time:'',
+                    time: '',
                 }];
                 this.fileList = [];
                 this.master = '0';
@@ -593,20 +629,24 @@
                 this.add = true;
                 this.edit = false;
                 this.roomFlag = false;
-
-
                 this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 'intro'}}).then((res) => {
                     if (res.data.resultCode == 200) {
                         this.goods = res.data.data;
                     }
                 })
-
-
+                this.$axios.get(this.ShopUrl).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.shopData = res.data.data;
+                    }
+                })
             },
             handlePriceTypeAdd() {
                 this.priceVisible = true;
             },
             handleRoomTypeAdd() {
+                this.roomTypeEdit = false;
+                this.roomTypeAdd = true;
+                this.roomTypeTitle = "新建房间类型"
                 this.roomVisible = true;
                 this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 't'}}).then((res) => {
                     if (res.data.resultCode == 200) {
@@ -629,7 +669,7 @@
                                 this.typeData = res.data.data;
                                 this.$message.success(`新建成功`);
 
-                            }else{
+                            } else {
                                 this.$message.error(res.data.message);
                                 return false;
                             }
@@ -643,29 +683,51 @@
                 });
             },
             submitRoomForm(formName) {
+                if (this.ruleRoomForm.name.trim() === '') {
+                    return;
+                }
+
                 let that = this;
                 let domains = this.ruleRoomForm.domains;
 
                 for (let i = 0; i < domains.length; i++) {
                     let time = domains[i].time
-                    if(time===null || time===''){
+                    if (time === null || time === '') {
                         this.ruleRoomForm.domains[i].time = [];
                     }
                 }
 
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$axios.post(this.RoomUrl + '/priceType', this.ruleRoomForm).then((res) => {
-                            if (res.data.resultCode == 200) {
-                                this.typeData = res.data.data;
-                                that.resetForm('ruleRoomForm');
-                                that.handleRoomType();
-                                this.roomVisible = false;
-                            }else{
-                                this.$message.error(res.data.message);
-                                return false;
-                            }
-                        });
+                        if (this.roomTypeAdd) {
+                            this.$axios.post(this.RoomUrl + '/priceType', that.ruleRoomForm).then((res) => {
+                                if (res.data.resultCode == 200) {
+                                    this.typeData = res.data.data;
+                                    that.resetForm('ruleRoomForm');
+                                    that.handleRoomType();
+                                    this.roomVisible = false;
+                                    lastRowNum = '';
+
+                                } else {
+                                    this.$message.error(res.data.message);
+                                    return false;
+                                }
+                            });
+                        } else {
+                            this.$axios.post(this.RoomUrl + '/priceType/update', that.ruleRoomForm).then((res) => {
+                                if (res.data.resultCode == 200) {
+                                    this.typeData = res.data.data;
+                                    that.resetForm('ruleRoomForm');
+                                    that.handleRoomType();
+                                    this.roomVisible = false;
+                                    lastRowNum = '';
+                                } else {
+                                    this.$message.error(res.data.message);
+                                    return false;
+                                }
+                            });
+                        }
+
 
                     } else {
                         console.log('error submit!!');
@@ -679,8 +741,7 @@
                 this.roomTypeFlag = true;
                 this.add = false;
                 this.edit = false;
-
-
+                lastRowNum = '';
                 this.$axios.get(this.RoomUrl + '/priceType').then((res) => {
                     if (res.data.resultCode == 200) {
                         this.typeData = res.data.data;
@@ -713,6 +774,11 @@
                         that.goods = res.data.data;
                     }
                 })
+                this.$axios.get(this.ShopUrl).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.shopData = res.data.data;
+                    }
+                })
 
                 this.$axios.get(this.RoomUrl + '/' + row.id + '/detail').then((res) => {
                     if (res.data.resultCode === 200) {
@@ -740,10 +806,49 @@
             },
             handleTypeDelete(index, row) {
                 if (!this.typeIds) {
-                    this.typeIds = row.id
+                    this.typeIds = row.roomTypeId
                 }
-                this.deleteRoomType()
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteRoomType()
+
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             },
+            handleTypeEdit(index, row) {
+                this.roomTypeTitle = "编辑房间类型"
+                this.roomTypeEdit = true;
+                this.roomTypeAdd = false;
+                let that = this;
+                this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 't'}}).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.priceRoomTypes = res.data.data;
+                    }
+                });
+                this.$axios.get(this.RoomUrl + '/priceType/' + row.roomTypeId + '/detail').then((res) => {
+                    if (res.data.resultCode === 200) {
+                        that.ruleRoomForm = res.data.data;
+                    } else {
+                        this.$message.error('编辑失败');
+                        return false;
+                    }
+                });
+
+                this.roomVisible = true;
+            },
+
             handlePriceDelete(index, row) {
                 if (!this.typeIds) {
                     this.typeIds = row.id
@@ -801,7 +906,8 @@
                     }
                 })
                 this.ids = '';
-                this.delVisible = false;
+                lastRowNum = '';
+
             },
 
             // 确定删除
@@ -819,28 +925,28 @@
                 })
                 this.ids = '';
                 this.delVisible = false;
-            }, objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+            }, objectSpanMethod({row, column, rowIndex, columnIndex}) {
 
                 if (columnIndex === 0) {
-                    if(row.name!=lastRowNum ){
-                        rowNum=1;
+                    if (row.name != lastRowNum) {
+                        rowNum = 1;
                     }
                     lastRowNum = row.name;
 
-                    if (row.size===1) {
-                        rowNum=1;
+                    if (row.size === 1) {
+                        rowNum = 1;
                         return {
                             rowspan: 1,
                             colspan: 1
                         };
                     } else {
-                        if(rowNum===1){
-                            rowNum+=1;
+                        if (rowNum === 1) {
+                            rowNum += 1;
                             return {
                                 rowspan: row.size,
                                 colspan: 1
                             };
-                        }else{
+                        } else {
                             return {
                                 rowspan: 0,
                                 colspan: 0

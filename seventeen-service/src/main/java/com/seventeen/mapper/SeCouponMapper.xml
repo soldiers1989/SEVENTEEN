@@ -11,12 +11,13 @@
         <result column="price" property="price" jdbcType="VARCHAR"/>
         <result column="max_price" property="maxPrice" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="use_type" property="useType" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, name, status, start_time, end_time, send_type, price, max_price, remark, create_time, 
-    create_by
+    create_by,use_type
   </sql>
     <select id="getSeCoupons" resultMap="BaseResultMap">
         select

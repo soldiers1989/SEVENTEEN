@@ -3,13 +3,13 @@ package com.seventeen.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seventeen.bean.*;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.*;
 import com.seventeen.service.SeApartmentService;
 import com.seventeen.util.DateUtil;
-import com.seventeen.util.FileUploadUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
 import org.slf4j.Logger;
@@ -21,10 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Array;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +39,9 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
     @Autowired
     private SeTagMapper seTagMapper;
+
+    @Autowired
+    private SeAdviseMapper seAdviseMapper;
 
     @Autowired
     private SeApartmentGoodMapper seApartmentGoodMapper;
@@ -77,7 +76,8 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         try {
             String[] split = ids.split(",");
             seApartmentMapper.deleteApartment(split);
-            for (String id : split) {
+          /** 不物理删除图片
+           * for (String id : split) {
                 List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(id);
                 for (SeApartmentImg seApartmentImg : seApartmentImgs) {
                     Path path = Paths.get(FileUploadUtil.roomImg, seApartmentImg.getApId());
@@ -92,7 +92,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
                     }
                 }
             }
-            seApartmentImgMapper.deleteByApId(split);
+            seApartmentImgMapper.deleteByApId(split);*/
         } catch (Exception e) {
             logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -232,8 +232,8 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             seTag1.setStatus("1");
             seTag1.setName(seTag.getName());
             List<SeTag> seTags = seTagMapper.select(seTag1);
-            if(seTags.size()>0){
-                return new Result(500,"该类型数据重复");
+            if (seTags.size() > 0) {
+                return new Result(500, "该类型数据重复");
             }
             seTag.setStatus("1");
             seTag.setId(IDGenerator.getId());
@@ -255,17 +255,21 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             SeApartment seApartment = new SeApartment();
             seApartment.setRoomType(ids);
             List<SeApartment> seApartments = seApartmentMapper.select(seApartment);
-            if(seApartments.size()>0){
+            if (seApartments.size() > 0) {
                 for (SeApartment apartment : seApartments) {
                     apartment.setRoomType(null);
                     seApartmentMapper.updateByPrimaryKey(apartment);
                 }
             }
+            seApartmentPriceTypeMapper.updateSeApartmentPriceTypeStatus("0", ids);
+
             SeTag seTag = new SeTag();
             seTag.setId(ids);
-            seTagMapper.delete(seTag);
+            seTag.setStatus("0");
+            seTagMapper.updateByPrimaryKeySelective(seTag);
+
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("error",e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -287,7 +291,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
             List<SeTag> seTags = seTagMapper.select(seTag);
             if (seTags.size() > 0) {
-                return new Result(500,"该房间类型已存在");
+                return new Result(500, "该房间类型已存在");
             }
 
             seTag.setId(IDGenerator.getId());
@@ -300,9 +304,9 @@ public class SeApartmentServiceImpl implements SeApartmentService {
                 SeApartmentPriceType seApartmentPriceType = new SeApartmentPriceType();
                 String price = domain.getPrice();
                 List<String> time = domain.getTime();
-                String type = domain.getType();
-                if(!StringUtils.isEmpty(price)&&!StringUtils.isEmpty(type)&&time.size()!=0){
-                    seApartmentPriceType.setTagId(type);
+                String priceTypeId = domain.getPriceTypeId();
+                if (!StringUtils.isEmpty(price) && !StringUtils.isEmpty(priceTypeId) && time.size() != 0) {
+                    seApartmentPriceType.setTagId(priceTypeId);
                     seApartmentPriceType.setApTypeId(seTag.getId());
                     seApartmentPriceType.setPrice(price);
                     seApartmentPriceType.setStartTime(time.get(0));
@@ -336,21 +340,147 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             for (SeTag set : seTags) {
                 SeApartmentPriceType seApartmentPriceType = new SeApartmentPriceType();
                 seApartmentPriceType.setApTypeId(set.getId());
+                seApartmentPriceType.setStatus("1");
                 List<SeApartmentPriceType> seApartmentPriceTypes = seApartmentPriceTypeMapper.select(seApartmentPriceType);
+
                 for (SeApartmentPriceType apartmentPriceType : seApartmentPriceTypes) {
                     ResultApartmentPriceRoom resultApartmentPriceRoom = new ResultApartmentPriceRoom();
                     SeTag seTag1 = seTagMapper.selectByPrimaryKey(apartmentPriceType.getTagId());
                     resultApartmentPriceRoom.setName(set.getName());
+                    resultApartmentPriceRoom.setRoomTypeId(set.getId());
                     resultApartmentPriceRoom.setPrice(apartmentPriceType.getPrice());
                     resultApartmentPriceRoom.setType(seTag1.getName());
-                    resultApartmentPriceRoom.setTime(apartmentPriceType.getStartTime() +"-"+apartmentPriceType.getEndTime());
+                    resultApartmentPriceRoom.setTime(apartmentPriceType.getStartTime() + "至" + apartmentPriceType.getEndTime());
                     resultApartmentPriceRoom.setSize(seApartmentPriceTypes.size());
+                    resultApartmentPriceRoom.setPriceTypeId(seTag1.getId());
+                    resultApartmentPriceRooms.add(resultApartmentPriceRoom);
+                }
+                if (seApartmentPriceTypes.size() == 0) {
+                    ResultApartmentPriceRoom resultApartmentPriceRoom = new ResultApartmentPriceRoom();
+                    resultApartmentPriceRoom.setName(set.getName());
+                    resultApartmentPriceRoom.setRoomTypeId(set.getId());
+                    resultApartmentPriceRoom.setPrice("房间原价");
+                    resultApartmentPriceRoom.setType("无房间价格类型");
+                    resultApartmentPriceRoom.setSize(1);
                     resultApartmentPriceRooms.add(resultApartmentPriceRoom);
                 }
             }
             result.setData(resultApartmentPriceRooms);
         } catch (Exception e) {
             logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result getPriceTypeDetail(String roomTypeId) {
+        Result<ApartmentPriceRoom> result = new Result<>();
+        try {
+            ApartmentPriceRoom apartmentPriceRoom = new ApartmentPriceRoom();
+            ArrayList<ApartmentPriceRoom.Domain> domains = new ArrayList();
+
+            SeTag seTag = new SeTag();
+            seTag.setId(roomTypeId);
+            seTag.setStatus("1");
+            seTag.setType("r");
+            List<SeTag> seTags = seTagMapper.select(seTag);
+            for (SeTag set : seTags) {
+                apartmentPriceRoom.setName(set.getName());
+                apartmentPriceRoom.setRoomTypeId(set.getId());
+                SeApartmentPriceType seApartmentPriceType = new SeApartmentPriceType();
+                seApartmentPriceType.setApTypeId(set.getId());
+                seApartmentPriceType.setStatus("1");
+                List<SeApartmentPriceType> seApartmentPriceTypes = seApartmentPriceTypeMapper.select(seApartmentPriceType);
+                for (SeApartmentPriceType apartmentPriceType : seApartmentPriceTypes) {
+                    ApartmentPriceRoom.Domain domain = new ApartmentPriceRoom.Domain();
+                    SeTag seTag1 = seTagMapper.selectByPrimaryKey(apartmentPriceType.getTagId());
+                    domain.setPriceTypeId(seTag1.getId());
+                    domain.setType(seTag1.getName());
+                    domain.setPrice(apartmentPriceType.getPrice());
+                    domain.setTime(Arrays.asList(apartmentPriceType.getStartTime(), apartmentPriceType.getEndTime()));
+                    domains.add(domain);
+                }
+                if (seApartmentPriceTypes.size() == 0) {
+                    ApartmentPriceRoom.Domain domain = new ApartmentPriceRoom.Domain();
+                    domains.add(domain);
+                }
+            }
+            apartmentPriceRoom.setDomains(domains);
+            result.setData(apartmentPriceRoom);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result updatePriceType(ApartmentPriceRoom apartmentPriceRoom) {
+        Result result = new Result<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            List<ApartmentPriceRoom.Domain> domains = apartmentPriceRoom.getDomains();
+            for (ApartmentPriceRoom.Domain domain : domains) {
+                String price = domain.getPrice();
+                List<String> time = domain.getTime();
+                String priceTypeId = domain.getPriceTypeId();
+                if (!StringUtils.isEmpty(price) && !StringUtils.isEmpty(priceTypeId) && time.size() != 0) {
+                    SeApartmentPriceType seApartmentPriceType = new SeApartmentPriceType();
+                    seApartmentPriceType.setApTypeId(apartmentPriceRoom.getRoomTypeId());
+                    seApartmentPriceType.setTagId(domain.getPriceTypeId());
+                    List<SeApartmentPriceType> select = seApartmentPriceTypeMapper.select(seApartmentPriceType);
+                    if (select.size() > 0) {
+                        seApartmentPriceTypeMapper.updateSeApartmentPriceType(price,"1" ,time.get(0), time.get(1), apartmentPriceRoom.getRoomTypeId(), domain.getPriceTypeId());
+                    } else {
+                        seApartmentPriceType.setPrice(price);
+                        seApartmentPriceType.setStartTime(time.get(0));
+                        seApartmentPriceType.setEndTime(time.get(1));
+                        seApartmentPriceType.setStatus("1");
+                        seApartmentPriceType.setCreateTime(DateUtil.now());
+                        seApartmentPriceType.setCreateBy(authentication.getName());
+                        seApartmentPriceTypeMapper.insert(seApartmentPriceType);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("error",e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<SeAdvise>> getAdviseList(String startTime, String endTime, PageInfo pageInfo) {
+        Result result = new Result<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            List<SeAdvise> seAdviseList = seAdviseMapper.getSeAdviseList(startTime, endTime);
+            pageInfo.setTotal(page.getTotal());
+            result.setData(seAdviseList, pageInfo);
+        } catch (Exception e) {
+            logger.error("error",e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result addAdvise(SeAdvise seAdvise, SysUser sysUser) {
+        Result result = new Result<>();
+        try {
+            seAdvise.setId(IDGenerator.getId());
+            seAdvise.setCreateBy(sysUser.getUsername());
+            seAdvise.setCreateTime(DateUtil.now());
+            seAdvise.setUserId(sysUser.getId());
+            seAdviseMapper.insert(seAdvise);
+        } catch (Exception e) {
+            logger.error("error",e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

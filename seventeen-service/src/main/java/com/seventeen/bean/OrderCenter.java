@@ -22,7 +22,16 @@ public class OrderCenter {
     private String roomType;
     private String phone;
     private String type;
+    private String mixRoomImg;
     private String remark;
+
+    public String getMixRoomImg() {
+        return mixRoomImg;
+    }
+
+    public void setMixRoomImg(String mixRoomImg) {
+        this.mixRoomImg = mixRoomImg;
+    }
 
     public String getRemark() {
         return remark;

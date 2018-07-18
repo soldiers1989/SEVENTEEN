@@ -207,6 +207,22 @@ public final class DateUtil {
 		return before.plusDays(diff).isAfter(after);
 	}
 
+
+	/**
+	 * 判断是否在两个时间之中（包含当天）
+	 *
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public static boolean betweenDate(LocalDate startDate, LocalDate endDate) {
+		LocalDate now = LocalDate.now();
+		if(startDate.isBefore(now) && endDate.isAfter(now)){
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 当前月份的第一天日期
 	 * 

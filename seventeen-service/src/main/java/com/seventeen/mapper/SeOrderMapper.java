@@ -14,4 +14,7 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
 
     OrderCenter getOrderDetail(@Param("orderId")String orderId);
 
+    ArrayList<OrderCenter> getNoReplyOrderList(@Param("id") String id,@Param("reply") String reply);
+
+    OrderCenter noReplyOrder(@Param("id") String id,@Param("reply") String reply);
 }
