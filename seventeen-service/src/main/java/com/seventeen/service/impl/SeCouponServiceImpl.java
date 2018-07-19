@@ -213,6 +213,7 @@ public class SeCouponServiceImpl implements SeCouponService {
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
+
             ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status);
             pageInfo.setTotal(page.getTotal());
             result.setData(seCoupons, pageInfo);
@@ -222,6 +223,4 @@ public class SeCouponServiceImpl implements SeCouponService {
         }
         return result;
     }
-
-
 }
