@@ -1,7 +1,6 @@
 package com.seventeen.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPay;
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
@@ -16,7 +15,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,59 +30,57 @@ import java.util.Map;
 @RestController
 @RequestMapping("/order")
 @Api(tags = "订单")
+@Slf4j
 public class OrderController {
 
-    private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    @Autowired
+	@Autowired
     private SeOrderService seOrderService;
-//    @Autowired
-//    private WxPay wxPay;
+    @Autowired
+    private WxPay wxPay;
 
 
-    /**
-     * 下订和退订还没写接口
-     *
-     * @param status
-     * @param remark
-     * @param startTime
-     * @param endTime
-     * @param pageInfo
-     * @param sysUser
-     * @return
-     */
-    @GetMapping
-    @ApiOperation(value = "获取订单列表信息")
-    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity OrderList(String status, String remark, String startTime, String endTime, PageInfo pageInfo, @AuthenticationPrincipal SysUser sysUser) {
+	/**
+	 * 下订和退订还没写接口
+	 * @param status
+	 * @param remark
+	 * @param startTime
+	 * @param endTime
+	 * @param pageInfo
+	 * @param sysUser
+	 * @return
+	 */
+	@GetMapping
+	@ApiOperation(value = "获取订单列表信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity OrderList(String status,String remark,String startTime,String endTime,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
         Result<List<OrderCenter>> seOrders = seOrderService.getOrderList(sysUser, status, remark, pageInfo, startTime, endTime);
         return ResponseEntity.ok(seOrders);
     }
 
-    @GetMapping("/wx")
-    @ApiOperation(value = "获取未评价订单列表信息")
-    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity noReplyOrderList(String reply, PageInfo pageInfo, @AuthenticationPrincipal SysUser sysUser) {
-        Result<List<OrderCenter>> seOrders = seOrderService.noReplyOrderList(reply, sysUser, pageInfo);
-        return ResponseEntity.ok(seOrders);
-    }
+	@GetMapping("/wx")
+	@ApiOperation(value = "获取未评价订单列表信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity noReplyOrderList(String reply,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
+		Result<List<OrderCenter>> seOrders = seOrderService.noReplyOrderList(reply,sysUser,pageInfo);
+		return ResponseEntity.ok(seOrders);
+	}
 
-    @GetMapping("/wx/{orderId}/detail")
-    @ApiOperation(value = "获取未评价订单列表信息")
-    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity noReplyOrder(@PathVariable String orderId, @AuthenticationPrincipal SysUser sysUser) {
-        Result<OrderCenter> seOrder = seOrderService.noReplyOrder(orderId, sysUser);
-        return ResponseEntity.ok(seOrder);
-    }
+	@GetMapping("/wx/{orderId}/detail")
+	@ApiOperation(value = "获取未评价订单列表信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity noReplyOrder(@PathVariable String orderId,@AuthenticationPrincipal SysUser sysUser) {
+		Result<OrderCenter> seOrder = seOrderService.noReplyOrder(orderId,sysUser);
+		return ResponseEntity.ok(seOrder);
+	}
 
-    @GetMapping("/{orderId}/detail")
-    @ApiOperation(value = "获取订单详细信息")
-    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity getOrderDetail(@PathVariable String orderId) {
-        Result<OrderCenter> orderCenter = seOrderService.getOrderDetail(orderId);
-        return ResponseEntity.ok(orderCenter);
-    }
-
+	@GetMapping("/{orderId}/detail")
+	@ApiOperation(value = "获取订单详细信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getOrderDetail(@PathVariable String orderId) {
+		Result<OrderCenter> orderCenter = seOrderService.getOrderDetail(orderId);
+		return ResponseEntity.ok(orderCenter);
+	}
     @PostMapping("/wx/setOrder")
     @ApiOperation(value = "获取订单详细信息")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -97,7 +92,7 @@ public class OrderController {
         //本次订单随机串
         String nonceStr = RandomStringUtils.randomAlphanumeric(32);
         try {
-            MyConfig  config = new MyConfig();
+            MyConfig config = new MyConfig();
 
             WXPay wxpay = new WXPay(config);
 
@@ -119,7 +114,7 @@ public class OrderController {
             String timeStamp = String.valueOf(System.currentTimeMillis());
             String paySign="appId="+resp.get("appid")+"&nonceStr="+resp.get("nonce_str")+"&package=prepay_id="+resp.get("prepay_id")+"&signType=MD5&timeStamp="+timeStamp+"&key=1TZt37EvkxJW8ctbVT9IPZQnYpISsgLy";
             System.out.println(paySign);
-            paySign=MD5.MD5Encode(paySign,"UTF-8");
+            paySign= MD5.MD5Encode(paySign,"UTF-8");
 
             Map<String,String > resMap=new HashMap<>();
             resMap.put("appId",resp.get("appid"));
@@ -136,11 +131,7 @@ public class OrderController {
             e.printStackTrace();
         }
 
-       return ResponseEntity.ok(result);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(MD5.MD5Encode("appId=wxe6f9450a01336cb9&eIHFWApv9H0qo9d8&package=prepay_id=wx19094959173915fe07f004e13298463687&signType=MD5&timeStamp=1531964994149&key=1TZt37EvkxJW8ctbVT9IPZQnYpISsgLy","utf-8"));
+        return ResponseEntity.ok(result);
     }
 
 }

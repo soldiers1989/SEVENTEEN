@@ -205,7 +205,22 @@ public class SeCouponServiceImpl implements SeCouponService {
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
+    }
 
+    @Override
+    public Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo) {
+        Result<List<SeCoupon>> result = new Result<>();
+        try {
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status);
+            pageInfo.setTotal(page.getTotal());
+            result.setData(seCoupons, pageInfo);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
     }
 
 

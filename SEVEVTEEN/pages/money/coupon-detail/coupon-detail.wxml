@@ -18,7 +18,7 @@
 <view class='coupon-container'>
   <view class='coupon-background'>
     <view class='detail-container'>
-      <image class='coupon-img' src='/imgs/icon/coupon_icon.png'></image>
+      <image class='coupon-img' src='{{imgUrl}}/imgs/icon/coupon_icon.png'></image>
       <view class='money-container'>
         <text class='money'>20元</text>
         <text class='remark'>会员生日(通用劵)</text>
@@ -30,7 +30,7 @@
   </view>
   <view class='coupon-background'>
     <view class='detail-container'>
-      <image class='coupon-img' src='/imgs/icon/coupon_icon.png'></image>
+      <image class='coupon-img' src='{{imgUrl}}/imgs/icon/coupon_icon.png'></image>
       <view class='money-container'>
         <text class='money'>20元</text>
         <text class='remark'>会员生日(通用劵)</text>
