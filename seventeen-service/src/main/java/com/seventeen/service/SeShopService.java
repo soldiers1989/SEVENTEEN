@@ -50,4 +50,10 @@ public interface SeShopService {
      */
     Result deleteShop(String ids);
 
+    /**
+
+     * @return
+     */
+    Result<List<SeShop>> getAllList();
+
 }

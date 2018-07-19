@@ -34,6 +34,7 @@ import java.util.List;
 @Slf4j
 public class SeAssessServiceImpl implements SeAssessService {
 
+
     @Autowired
     private SeAssessMapper seAssessMapper;
 

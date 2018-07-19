@@ -108,4 +108,17 @@ public class SeShopServiceImpl implements SeShopService {
         }
         return result;
     }
+
+    /**
+     * @return
+     */
+    @Override
+    public Result<List<SeShop>> getAllList() {
+        SeShop seShop = new SeShop();
+        seShop.setStatus("1");
+        List<SeShop> select = seShopMapper.select(seShop);
+        Result<List<SeShop>> result = new Result<>();
+        result.setData(select);
+        return result;
+    }
 }
