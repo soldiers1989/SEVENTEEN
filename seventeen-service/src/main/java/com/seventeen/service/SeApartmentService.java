@@ -1,6 +1,7 @@
 package com.seventeen.service;
 
 import com.seventeen.bean.*;
+import com.seventeen.bean.WxAppIndex.TypeRoom;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
@@ -75,5 +76,13 @@ public interface SeApartmentService{
      * @return
      */
     Result addAdvise(SeAdvise seAdvise, SysUser sysUser);
+
+    /**
+     * 获取店下所有类型的房间
+     * @param shop
+     * @return
+     */
+    Result<List<TypeRoom>> getTypeRooms(String shop);
+
 
 }

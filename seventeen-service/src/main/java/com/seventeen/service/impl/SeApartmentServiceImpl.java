@@ -3,6 +3,7 @@ package com.seventeen.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seventeen.bean.*;
+import com.seventeen.bean.WxAppIndex.TypeRoom;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
@@ -484,6 +485,20 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             logger.error("error",e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+        return result;
+    }
+
+    /**
+     * 获取店下所有类型的房间
+     *
+     * @param shop
+     * @return
+     */
+    @Override
+    public Result<List<TypeRoom>> getTypeRooms(String shop) {
+        Result result = new Result<>();
+        List<TypeRoom> typeRooms = seAdviseMapper.getTypeRooms(shop);
+        result.setData(typeRooms);
         return result;
     }
 }

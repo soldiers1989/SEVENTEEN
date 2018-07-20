@@ -42,39 +42,64 @@ Page({
         name: '电脑'
       }
     ],
+
+    Shops: [{
+      address: "番禺区大学城北亭",
+      createBy: "seventeen",
+      createTime: "2018-07-12 17:36:07",
+      id: "20180712173607612892549",
+      latitude: "1",
+      leader: "狗蛋",
+      longitude: "1",
+      name: "17Inn北亭店",
+      phone: "178XXX",
+      remark: null,
+      status: "1",
+      wifi: "123!@#QWE"
+    }],
+
+    roomTypes: [{
+      area: "999",
+      createTime: null,
+      name: "大床房",
+      price: "9999",
+      remark: null,
+      roomType: "20180719101454135398418",
+      imgUrl:""
+    }],
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl
   },
 
   // 点击弹窗显示
   showPopup: function() {
-    var that=this;
+    var that = this;
     var _Arr = this.data.popupIconList;
     wx.request({
       url: this.data.baseUrl + '/room/tags?type=intro',
-      method:"get",
+      method: "get",
       header: {
         "Authorization": "Bearer " + this.data.token
       },
       success: function(res) {
-         for (var index in res.data.data){
-          var _obj={};
-          _obj.icon = that.data.imgUrl+res.data.data[index].value;
+        for (var index in res.data.data) {
+          var _obj = {};
+          _obj.icon = that.data.imgUrl + res.data.data[index].value;
           _obj.name = res.data.data[index].name;
-          _Arr[index]=_obj;
+          _Arr[index] = _obj;
         }
-         
-         that.setData({
-           popupIconList: _Arr
-         })
+
+        that.setData({
+          popupIconList: _Arr
+        })
       }
     })
-    
+
     this.setData({
       popupShow: true
     })
-   
-    
+
+
   },
   // 关闭弹窗
   closePopup: function() {
@@ -140,13 +165,29 @@ Page({
     // })
   },
   onLoad: function(options) {
-
+    var that = this;
     var token = wx.getStorageSync('token');
 
     this.setData({
       token: token
     });
 
+
+    //加载店铺数据-默认取第一条数据
+    wx.request({
+      url: this.data.baseUrl + "/app/index/getShops",
+      method: 'GET',
+      header: {
+        Authorization: 'Bearer ' + token
+      },
+      success: function(res) {
+        console.log(res.data.data)
+        that.setData({
+          Shops: res.data.data
+        })
+        getRoomTypes(that, that.data.Shops[0].id, token);
+      }
+    })
   },
   onShow: function() {
     var chooseDate = this.data.chooseDate;
@@ -184,3 +225,22 @@ Page({
     });
   }
 })
+
+function getRoomTypes(that, shopId, token) {
+  wx.request({
+    url: that.data.baseUrl + "/app/index/getTypeRooms",
+    method: 'GET',
+    data: {
+      shopId: shopId
+    },
+    header: {
+      Authorization: 'Bearer ' + token
+    },
+    success: function(res) {
+      // console.log(res.data.data)
+      that.setData({
+        roomTypes:res.data.data
+      })
+    }
+  })
+}

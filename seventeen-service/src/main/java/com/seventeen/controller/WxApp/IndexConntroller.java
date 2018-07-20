@@ -1,5 +1,6 @@
 package com.seventeen.controller.WxApp;
 
+import com.seventeen.service.SeApartmentService;
 import com.seventeen.service.SeShopService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,19 @@ public class IndexConntroller {
 
     @Autowired
     private SeShopService seShopService;
+    @Autowired
+    private SeApartmentService seApartmentService;
+
 
     @GetMapping("/getShops")
     public ResponseEntity getShops() {
          return ResponseEntity.ok(seShopService.getAllList());
     }
 
-    @PostMapping("/getShops")
+    @GetMapping("/getTypeRooms")
     @ResponseBody
-    public ResponseEntity gccfetShops(String encryptedData, String iv, String code, String phone) {
-        return null;
+    public ResponseEntity getTypeRooms(String shopId) {
+        return ResponseEntity.ok(seApartmentService.getTypeRooms(shopId));
     }
 
 

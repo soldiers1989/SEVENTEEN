@@ -99,6 +99,6 @@
     <text class='order-money-2'>已减:\t¥239</text>
   </view>
   <view class='order-pay'>
-    <text>去支付</text>
+    <text catchtap='toPay'>去支付</text>
   </view>
 </view>
