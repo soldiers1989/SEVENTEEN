@@ -52,13 +52,9 @@ spring:
 #      max-idle: 16
 #      min-idle: 0
 #    timeout: 1000
-security:
-  basic:
-    enabled: false
-
-management:
-  security:
-    enabled: false
+endpoints:
+  shutdown:
+    enabled: true
 mybatis:
   type-aliases-package: com.seventeen.mapper
   configuration:

@@ -38,7 +38,7 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(SysUserDetailsServiceImpl.class);
 
     @Override
-    @Cacheable
+//    @Cacheable
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserService.findBy("username", username);
         if (sysUser == null) {
