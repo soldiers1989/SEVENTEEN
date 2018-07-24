@@ -1,0 +1,37 @@
+<view class='tab_sel'>
+  <view class='tab_sel_all'>
+    <view class='text-box' style='border-bottom: 1px solid #bcbcbc;'>
+      <text>全部</text>
+    </view>
+  </view>
+  <view class='tab_sel_in'>
+    <view class='text-box'>
+      <text>待入住</text>
+    </view>
+  </view>
+</view>
+
+<view class='order_box'>
+  <view class='order_title'>
+    <text>北亭店</text>
+    <text style='color:red; text-align:right;'>已离店</text>
+  </view>
+  <view class='order_info'>
+    <view>
+      <text>订单号:\t 234829</text>
+    </view>
+    <view class='order_time'>
+      <text>订单号:\t234829</text>
+      <text style=' text-align:right;'>订单号:\t23482sdfsdf9</text>
+    </view>
+    <view>
+      <text>订单号:\t234829</text>
+    </view>
+  </view>
+  <view class='order_pay'>
+     <text>订单总价:\t¥249.00</text>
+     <view class='order_btn'>
+      <text>删除订单</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,104 @@
+<view class='iconAndInof'>
+  <image src='/imgs/order/orderBanner.jpg'></image>
+  <view class='iconAndInof-text'>
+    <text>广州大学城贝岗17号公寓</text>
+    <text>大床房</text>
+    <text>可住2人</text>
+  </view>
+</view>
+<view class='ioDate'>
+  <view class='ioDate-title'>
+    <text>入住日期</text>
+    <text>1晚</text>
+    <text>入住日期</text>
+  </view>
+  <view class='ioDate-date'>
+    <view class='ioDate-date-d'>
+      <text>星期四</text>
+      <text>03月19日</text>
+    </view>
+    <view class='ioDate-date-d'>
+      <view class='line-shu'></view>
+    </view>
+    <view class='ioDate-date-d'>
+      <text>星期四</text>
+      <text>03月19日</text>
+    </view>
+  </view>
+</view>
+<view class='sum-room'>
+  <text class='sum-room-title'>房间数量</text>
+
+
+  <view style='flex:1;' class='user-info-pick'>
+    <picker bindchange="bindPickerChange1" value="{{index1}}" range="{{array1}}">
+      <!-- <view class="picker">
+          
+        </view> -->
+      <text class='sum-room-num'>{{array1[index1]}}</text>
+    </picker>
+  </view>
+
+
+  <image src='/imgs/common/arr-dwom.png'></image>
+</view>
+<view class='tips-info'>
+  <text>您的账户还未认证,请先填写您的真实姓名,凭二代身份证到店入住</text>
+</view>
+<view class='user-info'>
+  <view class='user-info-floor'>
+    <text style='width:90px;'>真实姓名</text>
+    <input style='flex:1' placeholder="请填写身份证上的名字"></input>
+    <text style='width:37px;'></text>
+  </view>
+
+  <view class='user-info-floor'>
+    <text style='width:90px;'>联系手机</text>
+    <input style='flex:1' placeholder="133232323232"></input>
+    <!-- <view style='flex:1'> -->
+    <image src='/imgs/common/clear.png'></image>
+    <!-- </view> -->
+  </view>
+
+  <view class='user-info-floor'>
+    <text style='width:90px;'>预计到店时间</text>
+
+    <view style='flex:1;' class='user-info-pick'>
+      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+        <view class="picker">
+          {{array[index]}}
+        </view>
+      </picker>
+    </view>
+
+    <image src='/imgs/common/arr-right.png' style=' align-items: right;'></image>
+  </view>
+
+  <view class='user-info-floor'>
+    <text style='width:90px;'>优惠券</text>
+    <text style='flex:1'>20元优惠券</text>
+
+    <image src='/imgs/common/arr-dwom.png'></image>
+
+  </view>
+</view>
+
+<view class='warn-text'>
+  <view class='warn'>
+     <text>
+      预定须知:\n
+      >\t订单确认并支付成功后,不可取消及退款,房间降整晚保留,请及时入住。\n
+      >\t入住人姓名需填写真实姓名,到店需刷身份证验证入住
+    </text> 
+  </view>
+</view>
+
+<view class='addOrder'>
+  <view class='order-money'>
+    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t239</text>
+    <text class='order-money-2'>已减:\t¥239</text>
+  </view>
+  <view class='order-pay'>
+    <text catchtap='toPay'>去支付</text>
+  </view>
+</view>

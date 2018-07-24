@@ -1,0 +1,22 @@
+<view class='top-back'>
+  <image mode='aspectFill' class='img-background' src='/imgs/my/my-backgroud.png'></image>
+  <image class='touxiang' src='/imgs/tx.png'></image>
+  <view class='user-info'>
+    <text>哦</text>
+    <image src='/imgs/my/man.png'></image>
+  </view>
+  <view class='sudoku'>
+    <view class="weui-grid" wx:for="{{routers}}" wx:key="name">
+      <view bindtap='toPage' data-xxUrl="{{item.url}}" data-flag="{{item.flag}}">
+        <!-- <navigator url="{{item.url+'?name='+item.name+'&code='+item.code}}"> -->
+        <view class='weui-grid__bg'>
+          <view class="weui-grid__icon">
+            <image src=" {{item.icon}}" mode="scaleToFill" />
+          </view>
+          <text class="weui-grid__label">{{item.name}}</text>
+        </view>
+        <!-- </navigator> -->
+      </view>
+    </view>
+  </view>
+</view>

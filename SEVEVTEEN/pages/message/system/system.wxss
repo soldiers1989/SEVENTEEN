@@ -8,6 +8,12 @@ page {
   font-size: 30rpx;
 }
 
+.detail-img{
+  height: 30rpx;
+  width: 30rpx;
+  margin-left: 470rpx;
+}
+
 .message-container {
   display: flex;
   flex-direction: column;
@@ -35,7 +41,8 @@ page {
 }
 
 .detail-container {
-  margin-top: 110rpx;
+  margin-top: 90rpx;
+  height: 400rpx;
 }
 
 .message-container text {

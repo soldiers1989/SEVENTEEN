@@ -1,0 +1,103 @@
+page {
+  background-color: #f2f2f2;
+}
+
+.tab_sel {
+  width: 100%;
+  background: white;
+  height: 40px;
+  display: flex;
+  line-height: 40px;
+  border-left: 1px solid #bcbcbc;
+}
+
+.tab_sel_all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.tab_sel_in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.text-box {
+  display: flex;
+  text-align: center;
+  width: 80px;
+  height: 40px;
+}
+
+.text-box text {
+  text-align: center;
+  width: 80px;
+}
+
+.order_box {
+  width: 100%;
+  margin-top: 30px;
+  border-left: 1px solid #bcbcbc;
+  height: 180px;
+  background: white;
+}
+.order_title{
+  height: 40px;
+  font-size: 18px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  margin-left: 5%;
+}
+.order_title text{
+  flex: 1;
+  
+}
+.order_info{
+  margin-left: 5%;
+  font-size: 14px;
+  color: #797979;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  width: 90%;
+  
+}
+.order_info view{
+  margin-top: 20rpx;
+}
+.order_time{
+  display: flex;
+}
+.order_time text{
+   flex:1;
+}
+.order_pay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  width: 90%;
+  margin-left: 5%;
+  height: 40px;
+}
+.order_pay text{
+  font-size: 16px;
+  flex: 3;
+}
+.order_btn{
+  flex: 1;
+  height: 30px;
+  margin-top: 3px;
+  width: 60px;
+ border: 1px solid #797979;
+  display: flex;
+  border-radius: 5px;
+   justify-content: center;
+  align-items: center;
+  text-align: center;
+}

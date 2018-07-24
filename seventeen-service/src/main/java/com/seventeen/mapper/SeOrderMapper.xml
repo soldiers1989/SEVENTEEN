@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seventeen.mapper.SeOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.seventeen.bean.SeOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="ap_id" property="apId" jdbcType="VARCHAR" />
+    <result column="coupon_id" property="couponId" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="in_time" property="inTime" jdbcType="VARCHAR" />
+    <result column="is_reply" property="isReply" jdbcType="VARCHAR" />
+    <result column="out_time" property="outTime" jdbcType="VARCHAR" />
+    <result column="arrive_time" property="arriveTime" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="OrderCenter" type="com.seventeen.bean.OrderCenter">
+    <result column="id" property="id" jdbcType="VARCHAR"/>
+    <result column="userName" property="userName" jdbcType="VARCHAR"/>
+    <result column="shopName" property="shopName" jdbcType="VARCHAR"/>
+    <result column="shopAddress" property="shopAddress" jdbcType="VARCHAR"/>
+    <result column="apId" property="apId" jdbcType="VARCHAR"/>
+    <result column="apNum" property="apNum" jdbcType="VARCHAR"/>
+    <result column="roomType" property="roomType" jdbcType="VARCHAR"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="apName" property="apName" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="VARCHAR"/>
+    <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    <result column="couponName" property="couponName" jdbcType="VARCHAR"/>
+    <result column="liveTime" property="liveTime" jdbcType="VARCHAR"/>
+    <result column="orderTime" property="orderTime" jdbcType="VARCHAR"/>
+    <result column="price" property="price" jdbcType="VARCHAR"/>
+    <result column="type" property="type" jdbcType="VARCHAR"/>
+    <collection property="livers" ofType="com.seventeen.bean.OrderLiver"
+                resultMap="OrderLiver"/>
+  </resultMap>
+
+  <resultMap id="OrderLiver" type="com.seventeen.bean.OrderLiver">
+    <result column="liver" property="liver" jdbcType="VARCHAR"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    <result column="idCard" property="idCard" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, user_id, ap_id, coupon_id, order_time, status, in_time, out_time,
+    arrive_time, price, remark, create_time, create_by, update_time
+  </sql>
+
+
+
+  <select id="getSeOrders" resultType="com.seventeen.bean.OrderCenter">
+    SELECT
+    so.id ,
+    so.ap_id apId,
+    sa.ap_num apNum,
+    sa.name apname,
+    su.username userName,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    if(so.coupon_id is null,'无',sc.`name`) couponName,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime
+    FROM
+    se_order so,
+    sys_user su,
+    se_coupon sc,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    and so.coupon_id = sc.id
+    <if test="status != null and status  != ''">
+      AND so.status = #{status}
+    </if>
+    <if test="userId != null and userId  != ''">
+      AND so.user_id = #{userId}
+    </if>
+    <if test="remark != null and remark  != ''">
+      AND ( sa.id like CONCAT('%',#{remark},'%' )  or su.username like CONCAT('%',#{remark},'%' ) or sa.`name` like CONCAT('%',#{remark},'%' ) or sc.`name` like
+      CONCAT('%',#{remark},'%' ) or so.price like CONCAT('%',#{remark},'%' ) )
+    </if>
+    <if test="startTime != null and startTime  != ''">
+      AND so.create_time  &gt;= #{startTime}
+    </if>
+    <if test="endTime != null and endTime  != ''">
+      AND so.create_time  &lt;= #{endTime}
+    </if>
+    ORDER BY so.create_time desc
+  </select>
+
+
+  <select id="getNoReplyOrderList" resultType="com.seventeen.bean.OrderCenter">
+    SELECT
+    so.id ,
+    so.ap_id apId,
+    sa.ap_num apNum,
+    sa.name apname,
+    su.username userName,
+    sai.mix_url mixRoomImg,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    if(so.coupon_id is null,'无',sc.`name`) couponName,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime
+    FROM
+    se_order so,
+    sys_user su,
+    se_coupon sc,
+    se_apartment_img sai,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    AND sa.id = sai.ap_id
+    and sai.master='1'
+    and so.coupon_id = sc.id
+    AND so.status ='5'
+    AND so.user_id = #{id}
+    AND so.is_reply=#{reply}
+    ORDER BY so.create_time desc
+  </select>
+
+  <select id="noReplyOrder" resultType="com.seventeen.bean.OrderCenter">
+    SELECT
+    so.id ,
+    so.ap_id apId,
+    sa.ap_num apNum,
+    sa.name apname,
+    su.username userName,
+    sai.mix_url mixRoomImg,
+    if(st.name is null,'无房间类型',st.name) roomType,
+    if(ss.name is null,'无门店管理',ss.name) shopName,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    if(so.coupon_id is null,'无',sc.`name`) couponName,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime
+    FROM
+    se_order so,
+    sys_user su,
+    se_coupon sc,
+    se_apartment_img sai,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop ss on sa.shop_id = ss.id
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    AND sa.id = sai.ap_id
+    and sai.master='1'
+    and so.coupon_id = sc.id
+    AND so.status ='5'
+    AND so.id = #{id}
+    AND so.is_reply=#{reply}
+    ORDER BY so.create_time desc
+  </select>
+
+  <select id="getOrderDetail"  resultMap="OrderCenter">
+    SELECT
+    so.id id,
+    su.username userName,
+    so.ap_id apId,
+    sa.`name` apName,
+    sa.type type,
+    if(sso.address is null,'无门店管理',sso.address) shopAddress,
+    sa.ap_num apNum,
+    if(st.name is null ,'无房间类型',st.name) roomType,
+    if(sso.name is null,'无门店管理',sso.name) shopName,
+    if(st1.remark is null or st1.remark='','无',st1.remark) remark,
+    CASE so.`status`
+    WHEN 1 THEN
+    '已下订'
+    WHEN 2 THEN
+    '已入住'
+    WHEN 3 THEN
+    '退订中'
+    WHEN 4 THEN
+    '已退订'
+    ELSE
+    '订单完成'
+    END as `status` ,
+    so.price ,
+    CONCAT_WS('至',so.in_time,so.out_time) liveTime,
+    so.create_time orderTime,
+    sol.liver ,
+    sol.phone,
+    sol.id_card idCard
+    FROM
+    sys_user su,
+    se_coupon sc,
+    se_apartment sa
+    left JOIN se_tag st on sa.room_type = st.id
+    left JOIN se_shop sso on sa.shop_id = sso.id,
+    se_order so
+    left JOIN se_tag st1 on so.price_tag_id = st1.id
+    left JOIN se_order_liver sol on sol.order_id = so.id
+
+    WHERE
+    so.ap_id = sa.id
+    AND so.user_id = su.id
+    and so.coupon_id = sc.id
+    <if test="orderId != null and orderId  != ''">
+      AND  so.id = #{orderId}
+    </if>
+  </select>
+</mapper>

@@ -1,7 +1,6 @@
-
-
 /* 顶部图片 */
-.none{
+
+.none {
   display: none;
 }
 
@@ -15,8 +14,8 @@
   display: flex;
   flex-direction: row;
   height: 104rpx;
+  border-bottom: 1px solid #707070;
 }
-
 
 .tab-info text {
   line-height: 104rpx;
@@ -31,32 +30,28 @@
   color: white;
 }
 
-
-
-
-
-.bag1{
+.bag1 {
   position: absolute;
   width: 33%;
   height: 104rpx;
   z-index: -1;
 }
-.bag2{
+
+.bag2 {
   position: absolute;
   width: 33%;
   height: 104rpx;
   left: 29%;
   z-index: -1;
 }
-.bag3{
+
+.bag3 {
   position: absolute;
   width: 50%;
   height: 104rpx;
   left: 59%;
   z-index: -1;
 }
-
-
 
 /* 地理位置 */
 
@@ -68,53 +63,69 @@
   height: 32px;
   margin-top: 12px;
 }
-.addres .addres-text{
-  margin-left:14px; 
+
+.map-icon {
+  margin-top: 2px;
+  margin-left: 30px;
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.addres .addres-text {
+  margin-left: 14px;
   width: 86%;
   color: #434343;
 }
-.addres .addres-map{
-  width:14% ;
-  right:20px; 
-}
-.addres text{
-   color: #707070;
+
+.addres .addres-map {
+  width: 14%;
+  right: 20px;
 }
 
+.addres text {
+  color: #707070;
+}
+
+.more-img {
+  width: 50rpx;
+  height: 50rpx;
+  margin-left: 5px;
+}
 
 /* 日历 */
 
-
-
-
-.date{
+.date {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   margin-top: 10px;
   height: 32px;
-  border-bottom: 1px solid #bcbcbc;  
+  border-bottom: 1px solid #bcbcbc;
 }
-.date image{
-  margin-left: 18rpx; 
+
+.date image {
+  margin-left: 18rpx;
   top: 5rpx;
   left: 18rpx;
   width: 45rpx;
   height: 45rpx;
 }
-.date .date-cent{
+
+.date .date-cent {
   width: 65%;
   font-size: 16px;
   margin-left: 7rpx;
-  margin-top :2px; 
+  margin-top: 2px;
   color: #434343;
 }
-.date .date-right{
-  margin-top :2px; 
+
+.date .date-right {
+  margin-top: 2px;
   font-size: 16px;
-  margin-right: 7rpx; 
-   color: gray;
+  margin-right: 7rpx;
+  color: gray;
 }
-.date .date-right-icon{
+
+.date .date-right-icon {
   width: 30rpx;
   height: 30rpx;
   color: #e5e5e6;
@@ -122,102 +133,241 @@
 }
 
 /* 列表 */
-.info{
+
+.info {
   display: flex;
-  flex-direction: row;
-  width: 98%;
-  margin-left:1%;
-  margin-top:10px;  
+  flex-direction: column;
+  width: 100%;
+  margin-top: -1px;
   border-bottom: 1px solid #bcbcbc;
+  border-top: 1px solid #bcbcbc;
+
 }
-.info-box{
+
+.info-box {
+  
+  height: 100px;
   display: block;
+  
   position: relative;
   width: 23%;
+  
 }
-.info .info-box .info-box-icon{
+
+.info .info-box .info-box-icon {
+  margin-top:8px; 
   width: 165rpx;
   height: 165rpx;
- border-radius: 3%;
-}
-.info-box-text{
-   position: relative;
-   top: -27px;
-   left: 90rpx;
+  border-radius: 3%;
 }
 
-
-.info-icon-top{
- 
-  display: flex;
-  flex-direction: row;
-  width: 60rpx;
-  height: 20px;
-  font-size: 16px;
-  line-height: 18px;
-  color: #fff; 
-  background-color: rgba(0,0,0,0.2); 
-
-   
-}
-.info-icon-top-img{
-  width: 30rpx;
-  height: 30rpx;
-  margin-top: 2px;
-  margin-left: 4rpx;
- 
- 
+.info-box-text {
+  position: relative;
+  top: -27px;
+  left: 90rpx;
 }
 
-.info .info-box .info-icon-top text{
-  
-  margin-left: 8rpx;
-}
-
-
-
-.info .right-icon{
-  width: 30rpx;
-  height: 30rpx;
+.info .right-icon {
+  width: 40rpx;
+  height: 40rpx;
   margin-top: 38px;
 }
-.info .info-msg{
+
+.checkRoom{
+  width: 100%;
   display: flex;
-  width: 50%;
+  flex-direction: row;
+
+  height: 100px;
+}
+
+.info .info-msg {
+  
+  display: flex;
+  width: 60%;
   margin-left: 5px;
-  margin-top: 12px;
+  height: 70px;
+  margin-top: 15px;
   flex-direction: column;
   /* font-size: 14px; */
 }
-.msg-smail{
+
+.msg-smail {
   font-size: 20px;
   color: black;
   font-weight: 400;
   line-height: 20px;
-  
 }
-.msg-smail{
+
+.msg-smail {
   font-size: 14px;
   color: gray;
   line-height: 20px;
 }
 
-.money-text{
-  color: #cc6c32;
+.money-text {
+  color: #cda580;
   font-size: 32px;
-  margin-top:20px; 
-  margin-right:0px; 
+  margin-top: 20px;
+  margin-right: 0px;
 }
-.money-smail{
 
+.money-smail {
   font-size: 18px;
   line-height: 20px;
 }
 
-.more-img {
-  width: 9rpx;
-  height: 16rpx;
-  margin-top: 25rpx;
-  margin-left: 5px;
-   
+.pay-list{
+  background: #f2f2f2;
+  border-top:1px solid #707070; 
+  border-bottom:1px solid #707070; 
+  width: 100%;
 }
+.info-centent{
+  width: 96%;
+  margin-left:2%; 
+  display: flex;
+  flex-direction: row;
+}
+
+/*评价*/
+
+.all-evaluete {
+  width: 96%;
+  margin-left: 2%;
+  height: 90px;
+  /* background-color: #bcbcbc; */
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.all-evaluete .score {
+  line-height: 25px;
+  width: 30%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.all-evaluete .score .score-num {
+  font-size: 24px;
+  color: #cda427;
+}
+
+.all-evaluete .score .score-text {
+  font-size: 16px;
+  color: #707070;
+}
+
+.stars {
+  margin-top: 15px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stars-row {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  color: #707070;
+}
+
+.stars-star image {
+  margin-left: 15rpx;
+  width: 15px;
+  height: 15px;
+}
+
+.stars-text {
+  width: 25%;
+  text-align: left;
+}
+
+.stars-star {
+  width: 60%;
+}
+
+.stars-num {
+  color: #cda427;
+  width: 15%;
+}
+
+/*用户评价*/
+
+.user-evaluete {
+  display: flex;
+  flex-direction: column;
+  width: 96%;
+  margin: 2% 5px;
+  font-size: 25rpx;
+  border-bottom: 1px solid #ccc;
+  height: 110px;
+}
+
+.user-evaluete .topInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-evaluete .user-icon {
+  margin-left: 15px;
+  margin-top: 10px; 
+  display: block;
+  width: 100rpx;
+  height: 100rpx;
+  border: 1 solid #f00;
+  border-radius: 100%;
+}
+
+.user-phone {
+  
+  display: block;
+  margin-left: 15rpx;
+  color: #434343;
+}
+
+.user-room {
+  margin-top: 5px;
+  display: block;
+  margin-left: 15rpx;
+  color: #999;
+}
+
+.user-evaluete .user-centent {
+  margin-top: 10px;
+  margin-left: 20rpx;
+  width: 58%;
+}
+
+.user-star {
+  margin-top: 5px;
+}
+
+.user-evaluete .user-c-time {
+  margin-top: 10px;
+  width: 70px;
+  color: #797979;
+}
+
+.uesr-comment {
+  margin-top: 10px;
+  font-size: 27rpx;
+  color: #707070;
+  margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rzxz{
+  margin-top: 10px;
+  width: 90%;
+  margin-left: 5%;
+  border: 1px dashed #999;
+}
+
+@import "commont-template/commont-template.wxss";
+@import "popup-template/popup-template.wxss";

@@ -1,0 +1,125 @@
+/* pages/index/popup-template/popup-template.wxss */
+
+.popup-wall{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  padding: 54rpx 40rpx;
+  background: rgba(121, 121, 121, 0.8);
+  z-index: 100;
+  box-sizing: border-box;
+}
+.popup-box{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto; 
+}
+.close-box{
+  width: 100%;
+  height: 100rpx;
+  background: #ff0;
+}
+.close-icon{
+  width: 40rpx;
+  height: 40rpx;
+  padding: 29rpx;
+}
+
+ .popup-con{
+  flex: 1;
+  box-sizing: border-box;
+  overflow-y: auto;
+} 
+.popup-inlier{
+  margin: 0 28rpx;
+  padding: 20rpx 18rpx;
+  border-bottom: 1rpx solid #ccc;
+}
+.title-h3{
+  font-size: 36rpx;
+  color: #333;
+  line-height: 36rpx;
+  font-weight: bold;
+}
+.p28{
+  font-size: 28rpx;
+  color: #797979;
+  line-height: 38rpx;
+  margin-top: 10rpx;
+}
+.ptb40{
+  font-size: 0;
+  line-height: 0;
+}
+.popup-text{
+  display: inline-block;
+  width: 50%;
+  font-size: 25rpx;
+  color: #333;
+  line-height: 40rpx;
+}
+.popup-inlier2{
+  padding: 20rpx 0;
+}
+.title-h4{
+  font-size: 28rpx;
+  color: #333;
+}
+.icon-box{
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  margin-top: 40rpx;
+}
+.row-icon{
+  width: 50rpx;
+  height: 50rpx;
+}
+.icon-name{
+  font-size: 26rpx;
+  color: #333;
+  white-space:nowrap;
+}
+.pl18{
+  padding-left: 18rpx;
+}
+.content-row{
+  display: flex;
+}
+.row-left{
+  margin-right: 50rpx;
+}
+.row-right{
+  flex: 1;
+}
+.inte-tip{
+  display: inline-block;
+  font-size: 22rpx;
+  color: #fff;
+  background: #000;
+  line-height: 30rpx;
+  padding: 0 5rpx;
+  margin-top: 29rpx;
+}
+.quan-icon{
+  display: block;
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 63rpx;
+}
+.row-p:first-child{
+  margin-top: 30rpx;
+}
+.row-p{
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 36rpx;
+}
+.bdNone{
+  border: none;
+}

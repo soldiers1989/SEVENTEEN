@@ -26,4 +26,10 @@ public class CouponTest {
     public void test(){
         seCouponServiceImpl.updateCouponStatus();
     }
+
+    public class test1{
+        public void main(String[] args) {
+            System.out.println("hello");
+        }
+    }
 }

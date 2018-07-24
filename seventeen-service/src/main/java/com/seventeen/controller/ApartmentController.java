@@ -1,9 +1,8 @@
 package com.seventeen.controller;
 
 
-import com.seventeen.bean.SeApartment;
-import com.seventeen.bean.SeApartmentDetail;
-import com.seventeen.bean.SeTag;
+import com.seventeen.bean.*;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeApartmentService;
 import com.seventeen.util.IDGenerator;
@@ -15,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,6 +29,15 @@ public class ApartmentController {
 	@Autowired
     private SeApartmentService seApartmentService;
 
+
+	/**
+	 *  漏做结束入住时间排序，房间状态修改没弄好
+	 * @param status
+	 * @param remark
+	 * @param roomType
+	 * @param pageInfo
+	 * @return
+	 */
 	@GetMapping
 	@ApiOperation(value = "获取房间列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -79,7 +87,7 @@ public class ApartmentController {
 	}
 
 	@GetMapping("/tags")
-	@ApiOperation(value = "获取房间列表信息")
+	@ApiOperation(value = "获取tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getTags(String type, String name) {
 		Result<List<SeTag>> seApartments = seApartmentService.getTags(type,name);
@@ -91,8 +99,7 @@ public class ApartmentController {
 	@ApiOperation(value = "插入tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity addTags(@RequestBody SeTag seTag) {
-		Result seApartments = seApartmentService.addTags(seTag.getType(),seTag.getName());
-		seApartments.setMessage(IDGenerator.getId());
+		Result seApartments = seApartmentService.addTags(seTag);
 		return ResponseEntity.ok(seApartments);
 	}
 	@DeleteMapping("/tags")
@@ -101,5 +108,55 @@ public class ApartmentController {
 	public ResponseEntity deleteTag(@RequestParam String ids) {
 		Result<String> seApartments = seApartmentService.deleteTag(ids);
 		return ResponseEntity.ok(seApartments);
+	}
+
+
+
+	@PostMapping("/priceType")
+	@ApiOperation(value = "插入房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addPriceType(@RequestBody ApartmentPriceRoom ruleRoomForm) {
+		Result result = seApartmentService.addPriceType(ruleRoomForm);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/priceType")
+	@ApiOperation(value = "获取房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getPriceType() {
+		Result result = seApartmentService.getPriceType();
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/priceType/{roomTypeId}/detail")
+	@ApiOperation(value = "获取房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getPriceTypeDetail(@PathVariable String roomTypeId) {
+		Result result = seApartmentService.getPriceTypeDetail(roomTypeId);
+		return ResponseEntity.ok(result);
+	}
+
+	@PostMapping("/priceType/update")
+	@ApiOperation(value = "更新房间价格类型信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity updatePriceType(@RequestBody ApartmentPriceRoom ruleRoomForm) {
+		Result result = seApartmentService.updatePriceType(ruleRoomForm);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/advise")
+	@ApiOperation(value = "获取意见投诉列表")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getAdviseList(String startTime,String endTime,PageInfo pageInfo) {
+		Result<List<SeAdvise>> seApartments = seApartmentService.getAdviseList(startTime,endTime,pageInfo);
+		return ResponseEntity.ok(seApartments);
+	}
+
+	@PostMapping("/wx/advise")
+	@ApiOperation(value = "微信端添加意见投诉")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addAdvise(@RequestBody  SeAdvise seAdvise,@AuthenticationPrincipal SysUser sysUser) {
+		Result result = seApartmentService.addAdvise(seAdvise,sysUser);
+		return ResponseEntity.ok(result);
 	}
 }

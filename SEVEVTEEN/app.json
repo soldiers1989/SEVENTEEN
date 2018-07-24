@@ -1,9 +1,22 @@
 {
   "pages": [
-    "pages/auth/auth", 
+      "pages/auth/auth",
+    "pages/my/rlsb/rlsb",
+    "pages/my/my",
+
+
+    "pages/my/toushu/toushu",
+
+    "pages/my/integral/integral",
+    "pages/my/myOrder/myOrder",
+  
     "pages/index/index",
-    "pages/message/reply/reply",
     "pages/message/system/system",
+    "pages/message/system/system-detail/system-detail",
+    "pages/message/reply/evaluate/evaluate",
+    "pages/message/reply/reply",
+    "pages/message/system/system-detail/add-wechatLiver/add-wechatLiver",
+    "pages/message/system/system-detail/add-liver/add-liver",
     "pages/message/message",
     "pages/money/vip-card/vip-card",
     "pages/money/coupon-detail/coupon-detail",
@@ -11,12 +24,13 @@
     "pages/money/balance-charge/balance-charge",
     "pages/money/point-detail/point-detail",
     "pages/money/recharge/recharge",
-    "pages/dates/date"
+    "pages/dates/date",
+    "pages/order/order"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "SEVENTEEN",
+    "navigationBarTitleText": "17INN",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -26,27 +40,21 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "imgs/icon/shouye.png",
-        "selectedIconPath": "imgs/icon/shouye_se.png"
-      },
-      {
-        "pagePath": "pages/money/money",
-        "text": "钱包",
-        "iconPath": "imgs/icon/qianbao.png",
-        "selectedIconPath": "imgs/icon/qianbao_se.png"
+        "iconPath": "/imgs/tabBar/shouye.png",
+        "selectedIconPath": "/imgs/tabBar/shouye_se.png"
       },
       {
         "pagePath": "pages/message/message",
         "text": "消息",
-        "iconPath": "imgs/icon/xiaoxi.png",
-        "selectedIconPath": "imgs/icon/xiaoxi_se.png"
+        "iconPath": "/imgs/tabBar/xiaoxi.png",
+        "selectedIconPath": "/imgs/tabBar/xiaoxi_se.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/my/my",
         "text": "我的",
-        "iconPath": "imgs/icon/user.png",
-        "selectedIconPath": "imgs/icon/user_se.png"
+        "iconPath": "/imgs/tabBar/user.png",
+        "selectedIconPath": "/imgs/tabBar/user_se.png"
       }
     ]
-  }
-}
+   }
+ }

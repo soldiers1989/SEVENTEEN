@@ -7,25 +7,31 @@ server:
     uri-encoding: UTF-8
   use-forward-headers: true
 
+
 logging:
   level:
-    root: debug
+    com:
+      seventeen:
+        mapper: debug
+    root: info
   path: /root/logs/chrs
 
 spring:
+  resources:
+    static-locations: classpath:/resources/
   http:
     multipart:
-      max-file-size: 3000MB
-      max-request-size: 3000MB
+      max-file-size: 500MB
+      max-request-size: 500MB
   application:
     name: seveteen-service
   jpa:
     show-sql: true
     database: MYSQL
   datasource:
-    url: jdbc:mysql://119.29.196.106:3306/seventeen?useSSL=false&&characterEncoding=UTF-8
-    username: root
-    password: 'seventeen'
+   url: jdbc:mysql://39.107.111.100:3306/seventeen?useSSL=false&&characterEncoding=UTF-8
+      username: root
+      password: '!@#17inn'
     initialize: false
     driver-class-name: com.mysql.jdbc.Driver
     tomcat:
@@ -54,8 +60,7 @@ management:
   security:
     enabled: false
 mybatis:
-  type-aliases-package: com.seventeen
-  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.seventeen.mapper
   configuration:
     map-underscore-to-camel-case: true
 pagehelper:
@@ -68,3 +73,13 @@ info:
     name: seventeen
     description: seventeen服务
     version: v1.0.0
+
+file:
+  upload:
+    url: https://www.17inn.com/:80
+
+wx:
+  app:
+    Appid: wxe6f9450a01336cb9
+    Secret: 650b185beafa0fabb74c7cbc9b2ac338
+    grant_type: authorization_code

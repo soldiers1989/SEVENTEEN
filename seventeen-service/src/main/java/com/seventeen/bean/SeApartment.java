@@ -5,12 +5,14 @@ import javax.persistence.Transient;
 import java.util.ArrayList;
 
 
-public class SeApartment{
+public class SeApartment {
 
     @Id
     private String id;
 
     private String apNum;
+
+    private String shopId;
 
     private String name;
 
@@ -21,7 +23,6 @@ public class SeApartment{
     private String status;
 
     private String bed;
-
 
     private String floor;
 
@@ -36,12 +37,19 @@ public class SeApartment{
     private String createBy;
 
     private String remark;
+
     private String roomType;
-
-
 
     @Transient
     private ArrayList<String> good;
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     public String getBed() {
         return bed;

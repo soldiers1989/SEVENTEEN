@@ -6,7 +6,7 @@ Page({
     coupon: 100,
     point: 1,
     card: 1,
-    image: "http://119.29.196.106:8080/seventeen/qianbao_beijing.jpg",
+    image: "https://www.17inn.com/img/wxApp/qianbao_beijing.jpg",
     name: "飞科剃须刀超级无敌"
   },
   recharge: function (event) {

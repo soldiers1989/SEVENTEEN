@@ -69,8 +69,19 @@
                         <el-checkbox label="普通"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
+                <el-form-item label="使用时间" prop="useType">
+                    <el-radio-group v-model="ruleForm.useType">
+                        <el-radio label="1">工作日</el-radio>
+                        <el-radio label="2">周末</el-radio>
+                        <el-radio label="3">不限制</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="价格类型" prop="priceTypes">
+                    <el-checkbox-group v-model="ruleForm.priceTypes">
+                        <el-checkbox v-for="priceType in priceTypes" :label="priceType.id" :key="priceType.id">{{priceType.name}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item label="有效时间" required>
-
                     <el-col :span="7">
                         <el-form-item prop="startTime">
                             <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.startTime"
@@ -180,6 +191,7 @@
     export default {
         data() {
             return {
+                RoomUrl: this.$global.baseUrl + "/room",
                 CouponUrl: this.$global.baseUrl + "/coupon",
                 tableData: [],
                 logData: [],
@@ -203,6 +215,7 @@
                 ids: '',
                 logStartTime:'',
                 logEndTime:'',
+                priceTypes:[],
                 ruleForm: {
                     name: '',
                     price: '',
@@ -211,6 +224,8 @@
                     remark: '',
                     startTime: '',
                     endTime: '',
+                    useType:'',
+                    priceTypes:[]
                 },
                 rules: {
                     name: [
@@ -233,6 +248,12 @@
                     ],
                     endTime: [
                         {required: true, message: '请选择结束时间', trigger: 'blur'},
+                    ],
+                    useType: [
+                        {required: true, message: '请选择使用时间', trigger: 'change'}
+                    ],
+                    priceTypes: [
+                        {type: 'array', required: true, message: '请至少选择一个价格类型', trigger: 'change'}
                     ],
                 },
                 idx: -1
@@ -309,6 +330,13 @@
                     "remark": this.select_word == null ? "" : this.select_word.trim(),
                     "status": this.select_cate == null ? "" : this.select_cate.trim()
                 }
+
+                this.$axios.get(this.RoomUrl + '/tags', {params: {"type": 't'}}).then((res) => {
+                    if (res.data.resultCode == 200) {
+                        this.priceTypes = res.data.data;
+                    }
+                })
+
                 this.$axios.get(this.CouponUrl, {params: param}).then((res) => {
                     if (res.data.resultCode == 200) {
                         this.tableData = res.data.data;

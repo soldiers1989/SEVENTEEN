@@ -1,0 +1,80 @@
+.roomPay {
+  width: 98%;
+  margin-left: 1%;
+  height: 60px;
+  border-bottom: 1px solid #bcbcbc;
+  display: flex;
+  flex-direction: row;
+}
+
+.roomPay-text {
+  margin-top: 7px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.roomPay-text-t1 {
+   display: flex;
+  flex-direction: row;
+  color: #434343;
+}
+.roomPay-text-t1-img{
+  margin-top: 3px;
+  margin-left: 10px;
+  width: 35rpx;
+  height: 35rpx;
+}
+
+.roomPay-text-t2 {
+   display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  
+}
+.roomPay-text-t2 text{
+  height: 18px;
+  color: white;
+  width: 95px;
+  font-size: 16px;
+  background-color: black;
+}
+.roomPay-text-t2 image{
+  width: 22px;
+  height: 22px;
+  margin-top:-1px 
+}
+
+.roomPay-text-money {
+  width: 30%;
+  text-align: left;
+  margin-top: 7px;
+  display: flex;
+  flex-direction: column;
+}
+
+.roomPay-text-money-t1 {
+  font-weight: 700;
+  color: #cda580;
+}
+
+.roomPay-text-money-t2 {
+  margin-top: 5px;
+  font-weight: 600;
+  color: #707070;
+  font-size: 14px;
+}
+
+/* 按钮订 */
+
+.btn-ding {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 40px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left:-20px;   
+}

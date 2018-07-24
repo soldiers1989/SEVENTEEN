@@ -1,8 +1,8 @@
 package com.seventeen.service;
 
-import com.seventeen.bean.SeApartment;
-import com.seventeen.bean.SeApartmentDetail;
-import com.seventeen.bean.SeTag;
+import com.seventeen.bean.*;
+import com.seventeen.bean.WxAppIndex.TypeRoom;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
@@ -55,8 +55,34 @@ public interface SeApartmentService{
      */
     Result<SeApartment> updateApartment(SeApartment seApartment);
 
-    Result addTags(String type, String name);
+    Result addTags(SeTag seTag);
 
     Result<String> deleteTag(String ids);
+
+    Result addPriceType(ApartmentPriceRoom seApartmentPriceType);
+
+    Result getPriceType();
+
+    Result getPriceTypeDetail(String roomTypeId);
+
+    Result updatePriceType(ApartmentPriceRoom ruleRoomForm);
+
+    Result<List<SeAdvise>> getAdviseList(String startTime, String endTime, PageInfo pageInfo);
+
+    /**
+     *
+     * @param seAdvise
+     * @param sysUser
+     * @return
+     */
+    Result addAdvise(SeAdvise seAdvise, SysUser sysUser);
+
+    /**
+     * 获取店下所有类型的房间
+     * @param shop
+     * @return
+     */
+    Result<List<TypeRoom>> getTypeRooms(String shop);
+
 
 }

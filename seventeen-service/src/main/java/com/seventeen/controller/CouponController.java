@@ -36,6 +36,15 @@ public class CouponController {
         return ResponseEntity.ok(seCoupons);
 	}
 
+	@GetMapping("/wx")
+	@ApiOperation(value = "微信端获取优惠券列表信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity couponListWx(String status,String remark,PageInfo pageInfo) {
+		Result<List<SeCoupon>> seCoupons = seCouponService.couponListWx(status,pageInfo);
+		return ResponseEntity.ok(seCoupons);
+	}
+
+
 	@PostMapping
 	@ApiOperation(value = "创建优惠卷")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

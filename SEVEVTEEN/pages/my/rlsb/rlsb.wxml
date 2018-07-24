@@ -1,0 +1,71 @@
+<view class='tips'>
+  <text>
+       1.目前仅支持大陆居民第二代身份证\n
+       2.请务必上传真实、有效、清晰的身份证实物照片\n
+       3.身份证、人脸照片仅用于公安部审核，17INN绝不会泄露您的信息\n
+       4.客服电话：020-82566710\n
+      </text>
+</view>
+<view class='id-box border'>
+  <view class='operTitle'>
+    <text style='width:75%;margin-left:20px'>步骤一</text>
+    <text class='operType'>待验证</text>
+  </view>
+
+  <view class='descTitle'>
+    <view class='title'>
+      <text style='color:#434343; '>身份证验证</text>
+      <text style='color:#999; font-size: 12px;margin-left:10px;'>(上传身份证正反两面照片)</text>
+    </view>
+    <text>查看示例</text>
+  </view>
+  <view class='photo-id'>
+    <view class='photo-box' catchtap='idcardUpload' data-id='0' >
+
+      <view wx:if="{{idcrad0!=''}}">
+        <image src='{{idcrad0}}' style='width:150px;height: 130px;'></image>
+      </view>
+      <view wx:else style='width:100%' class='photo-box'>
+        <image src='/imgs/my/icon-add.png' ></image>
+        <text>身份证正面(号码面)</text>
+      </view>
+
+
+
+    </view>
+    <view class='photo-box' catchtap='idcardUpload' data-id='1'>
+      <view wx:if="{{idcrad1!=''}}">
+        <image src='{{idcrad1}}' style='width:150px;height: 130px;'></image>
+      </view>
+      <view wx:else style='width:100%' class='photo-box'>
+        <image src='/imgs/my/icon-add.png' ></image>
+        <text>身份证反面(国徽面)</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view class='rlsb border'>
+  <view class='operTitle'>
+    <text style='width:75%;margin-left:20px'>步骤二</text>
+    <text class='operType'>待验证</text>
+  </view>
+  <view class='descTitle'>
+    <view class='title'>
+      <text style='color:#434343; '>人脸识别验证</text>
+      <text style='color:#999; font-size: 12px;margin-left:10px;'>(拍照对比身份信息,保持光线充足)</text>
+    </view>
+  </view>
+  <view class='rlsb-box' catchtap='idcardUpload' data-id='2'>
+   
+
+     <view wx:if="{{userPhoto!=''}}">
+        <image src='{{userPhoto}}' style='width:200px;height: 160px;'></image>
+      </view>
+      <view wx:else style='width:100%' class='photo-box'>
+         <image src='/imgs/my/BFR.png'></image>
+      </view>
+
+  </view>
+</view>
+
+<view class='subRZ' catchtap='subimtREC'>提交认证</view>

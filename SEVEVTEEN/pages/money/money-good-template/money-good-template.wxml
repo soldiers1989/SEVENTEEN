@@ -4,7 +4,7 @@
       <text class='change-text'>积分兑换</text>
       <image class='change-img' src='/imgs/icon/round_right.png'></image>
     </view>
-    <image class='good-img' src='http://119.29.196.106:8080/seventeen/tixudao.jpg'></image>
+    <image class='good-img' src='https://www.17inn.com/img/wxApp/tixudao.jpg'></image>
     <text class='name'>飞科剃须刀超级无敌</text>
     <text class='good-point'>4300积分</text>
   </view>

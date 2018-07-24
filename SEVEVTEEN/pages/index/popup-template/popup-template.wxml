@@ -1,0 +1,54 @@
+<!--pages/index/popup-template/popup-template.wxml-->
+
+<template name="popup">
+  <view class='popup-wall' hidden="{{!popupShow}}">
+    <view class='popup-box'>
+      <image bindtap='closePopup' class='close-icon' src='/imgs/close.png'></image>
+
+      <view class='popup-con'>
+
+        <view class='popup-inlier'>
+          <view class='title-h3'>大床房</view>
+          <view class='p28'>大床两米</view>
+        </view>
+
+        <view class='popup-inlier ptb40'>
+          <view class='popup-text'>楼层：5-1</view>
+          <view class='popup-text'>可住人数：2</view>
+          <view class='popup-text'>加床：不可加床</view>
+        </view>
+
+        <view class='popup-inlier popup-inlier2'>
+          <view class='title-h4 pl18'>房间设施</view>
+          <block wx:for="{{popupIconList}}" wx:key="">
+            <view class='icon-box'>
+              <image class='row-icon' src='{{item.icon}}'></image>
+              <view class='icon-name'>{{item.name}}</view>
+            </view>
+          </block>
+        </view>
+
+        <view class='popup-inlier bdNone'>
+          <view class='title-h4'>权益与优惠</view>
+          <view class='content-row'>
+            <view class='row-left'>
+              <view class='inte-tip'>获393积分</view>
+              <image class='quan-icon' src='/imgs/index/quan.png'></image>
+            </view>
+            <view class='row-right'>
+              <view class='row-p'>会员本人预订且入住离店后，可获得392积分。</view>
+              <view class='row-p'>1.房价支持使用抵用券，一张订单限用一张券；</view>
+              <view class='row-p'>2.订单满足抵用券使用条件后，可减免对应抵用券的优惠金额；</view>
+
+            </view>
+
+          </view>
+        </view>
+
+
+      </view>
+
+
+    </view>
+  </view>
+</template>
