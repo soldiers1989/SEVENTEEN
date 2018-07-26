@@ -37,7 +37,7 @@ Page({
                     console.log({ encryptedData: res.encryptedData, iv: res.iv, code: code })
                     //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
                     wx.request({
-                      url: app.globalData.baseUrl+'/sys/decodeUserInfo',//自己的服务接口地址
+                      url: app.globalData.baseUrl+'/app/sys/decodeUserInfo',//自己的服务接口地址
                       method: 'post',
                       header: {
                         'content-type': 'application/x-www-form-urlencoded'
