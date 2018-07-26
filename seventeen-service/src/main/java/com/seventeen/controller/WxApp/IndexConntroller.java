@@ -1,5 +1,7 @@
 package com.seventeen.controller.WxApp;
 
+import com.seventeen.bean.RoomTypePirce;
+import com.seventeen.core.Result;
 import com.seventeen.service.SeApartmentService;
 import com.seventeen.service.SeShopService;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.util.List;
 
 /**
  * 小程序接口
@@ -40,5 +48,25 @@ public class IndexConntroller {
         return ResponseEntity.ok(seApartmentService.getTypeRooms(shopId));
     }
 
+    /**
+     * 获取类型价格
+     * @param typeCode
+     * @return
+     */
+    @GetMapping("/getRoomPirce")
+    @ResponseBody
+    public ResponseEntity getRoomPirce(String typeCode) {
+        Result<List<RoomTypePirce>> typePiece = seApartmentService.getTypePiece(typeCode);
+        return ResponseEntity.ok(typePiece);
+    }
+
+
+    public static void main(String[] args) {
+        long l = LocalDateTime.of(LocalDate.now().plusDays(3), LocalTime.now()).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+
+        System.out.println(l);
+
+        System.out.println(System.currentTimeMillis());
+    }
 
 }

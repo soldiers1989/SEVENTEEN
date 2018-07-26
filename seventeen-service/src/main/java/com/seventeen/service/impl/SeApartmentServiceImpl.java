@@ -501,4 +501,18 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         result.setData(typeRooms);
         return result;
     }
+
+    /**
+     * 获取类型价格
+     *
+     * @param typeCode
+     * @return
+     */
+    @Override
+    public Result<List<RoomTypePirce>> getTypePiece(String typeCode) {
+        Result result = new Result<>();
+        List<RoomTypePirce> typeRooms = seAdviseMapper.getTypePiece(typeCode);
+        result.setData(typeRooms);
+        return result;
+    }
 }

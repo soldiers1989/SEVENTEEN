@@ -1,23 +1,26 @@
 <template name="roomPay">
-  <view class='roomPay' bindtap='showPopup'>
-    <view class='roomPay-text'>
-      <view class='roomPay-text-t1'>
-        <text >时租房4小时</text>
-        <image class='roomPay-text-t1-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
+
+  <view wx:for="{{roomTypePrice}}" wx:for-item="items">
+    <view class='roomPay' bindtap='showPopup'>
+      <view class='roomPay-text'>
+        <view class='roomPay-text-t1'>
+          <text>{{items.name}}</text>
+          <image class='roomPay-text-t1-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
+        </view>
+        <view class='roomPay-text-t2'>
+          <text>获得{{items.price}}积分</text>
+          <image src='/imgs/index/quan.png'></image>
+        </view>
       </view>
-      <view class='roomPay-text-t2'>
-        <text >获得100积分</text>
-        <image  src='/imgs/index/quan.png'></image>
+      <view class='roomPay-text-money'>
+        <text class='roomPay-text-money-t1'>¥ {{items.price}}</text>
+        <!-- <text class='roomPay-text-money-t2'>¥100减20</text> -->
       </view>
+      <view class='btn-ding' data-id='{{roomTypeCode}}' data-money="{{items.price}}" catchtap='setOrder'>订</view>
     </view>
-    <view class='roomPay-text-money'>
-      <text class='roomPay-text-money-t1'>¥ 100</text>
-      <text class='roomPay-text-money-t2'>¥100减20</text>
-    </view>
-    <view class='btn-ding' data-id='ids1' catchtap='setOrder'>订</view>
   </view>
 
-  <view class='roomPay' bindtap='showPopup'>
+  <!-- <view class='roomPay' bindtap='showPopup'>
     <view class='roomPay-text'>
       <view class='roomPay-text-t1'>
         <text >会员价</text>
@@ -50,5 +53,5 @@
       <text class='roomPay-text-money-t2'>¥100减20</text>
     </view>
     <view class='btn-ding'>订</view>
-  </view>
+  </view> -->
 </template>

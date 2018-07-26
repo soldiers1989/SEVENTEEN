@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 /**
  * 用户实名验证类
@@ -124,13 +125,18 @@ public class UserVerifyImpl implements UserVerify {
     @Override
     public Result isVerify(SysUser sysUser) {
         Result result = new Result();
-        result.setData(false);
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("isVerify",false);
+        map.put("tName","");
         SeUserAttestation se = new SeUserAttestation();
         se.setUserId(sysUser.getId());
         SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(se);
-        if(seUserAttestation!=null&&seUserAttestation.getIsPass()==1){
-            result.setData(true);
+        if(seUserAttestation!=null){
+            map.put("tName",seUserAttestation.getTrueName());
+            if(seUserAttestation.getIsPass()==1)
+            map.put("isVerify",true);
         }
+        result.setData(map);
         return result;
     }
 }

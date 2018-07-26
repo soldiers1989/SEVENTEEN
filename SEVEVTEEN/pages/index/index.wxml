@@ -4,7 +4,7 @@
   <image class='nav-baner' src='{{imgUrl}}/imgs/index/brand.jpg'>
 
 
-  </image>
+  </image> 
   <view class='tab-info'>
     <text data-id="t1" bindtap="tabSel" class="{{tabArr.curHdIndex=='t1'?'is_checked s1': ''}}">我要入住</text>
     <image wx:if="{{tabArr.curHdIndex=='t1'}}" class="{{tabArr.curHdIndex=='t1'?'bag1': 'none'}}" src='{{imgUrl}}/imgs/index/wyrz.jpg'></image>
@@ -57,7 +57,7 @@
           </view>
         </view>
         <view class='{{isShowPay.showId==items.roomType?isShowPay.flag==true?"pay-list":"none":"none"}}' style='height:{{isShowPay.showId==items.roomType?"200px":""}}'>
-          <template is="roomPay" data="{{imgUrl: imgUrl}}" />
+          <template is="roomPay" data="{{imgUrl: imgUrl,roomTypePrice:roomTypePrice,roomTypeCode:items.roomType}}" />
         </view>
       </view>
 

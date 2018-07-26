@@ -6,6 +6,31 @@ Page({
    */
   data: {
     roomId: "",
+    price:0,
+    index: 0,
+    index1: 0,
+    imgUrl: app.globalData.ImgUrl,
+    baseUrl: app.globalData.baseUrl,
+
+    
+    userInfo:{
+      isVerify: false,
+      tName:""
+      
+    },
+    phone: "",
+
+    orderInfo:{
+      startTime:"",
+      endTime: "",
+      tName:"",
+      phone:"",
+      planTime:"",
+      couponId:"",
+      price:0
+
+    },
+
     array: [
       '14:00 ~ 15:00',
       '15:00 ~ 16:00',
@@ -70,13 +95,10 @@ Page({
       '1',
       '2',
       '3'
-    ],
+    ]
 
 
-    index: 0,
-    index1: 0,
-    imgUrl: app.globalData.ImgUrl,
-    baseUrl: app.globalData.baseUrl
+   
 
   },
 
@@ -85,8 +107,21 @@ Page({
    */
   onLoad: function(options) {
 
-    this.data.roomId = options.roomId;
-    console.log(this.data.roomId);
+
+    this.setData({
+      roomId: options.roomId,
+      price : options.price
+    })
+
+    //获取用户是否已经做了实名制
+    var token = wx.getStorageSync('token');
+    getIsVerify(this,token);
+    //获取是否还有房间
+
+
+
+    //获取优惠券  
+
   },
 
   /**
@@ -154,25 +189,47 @@ Page({
     //赋值
     console.log(this.data.array1[this.data.index1]);
   },
-
+  getPhone: function (e) {
+    var val = e.detail.value;
+    this.setData({
+      phone:val
+    });
+  },
 
   //支付
   toPay: function() {
     console.log("支付开始")
+
+    var roomNum=this.data.array1[this.data.index1];
+    var price =this.data.price;
+    var planTime = this.data.array[this.data.index];
+    var userInfo = this.data.userInfo;
+    var orderInfo =  {
+      roomId: "AVC001",
+      fee: 1,
+      startTime:"2018-7-20",
+      endTime: "2018-7-30",
+      tName: userInfo.tName,
+      phone: this.data.phone,
+      planTime: planTime,
+      couponId:"",
+      price: price,
+      roomNum: roomNum
+    }
+ 
+    console.log(orderInfo)
     var token = wx.getStorageSync('token');
-
-
-
+   
     wx.request({
       url: this.data.baseUrl + '/order/wx/setOrder',
 
       data: {
-        roomId: "AVC001",
-        fee: 1
+        orderInfo
+        
       },
       header: {
         "Authorization": "Bearer " + token,
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"//x-www-form-urlencoded
       },
       method: 'POST',
       //dataType: 'text',
@@ -204,6 +261,23 @@ Page({
 
   }
 })
+
+function getIsVerify(that,  token) {
+  wx.request({
+    url: that.data.baseUrl + "/rlsb/isVerify",
+    method: 'GET',
+    header: {
+      Authorization: 'Bearer ' + token
+    },
+    success: function (res) {
+       console.log(res.data.data)
+      that.setData({
+        userInfo: res.data.data
+      })
+    }
+  })
+}
+
 
 function timeStamp() {
   return parseInt(new Date().getTime() / 1000) + ''

@@ -67,6 +67,13 @@ Page({
       roomType: "20180719101454135398418",
       imgUrl:""
     }],
+
+    roomTypePrice: [{
+      
+      name:"",
+      Price:''
+    }],
+
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl
   },
@@ -111,9 +118,10 @@ Page({
   //
   setOrder: function(e) {
     var _datasetId = e.target.dataset.id;
-
+    var money = e.target.dataset.money;
+   
     wx.navigateTo({
-      url: '/pages/order/order?roomId=' + _datasetId,
+      url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money,
     })
   },
 
@@ -206,7 +214,11 @@ Page({
   },
 
   showPay: function(e) {
+    
     var _datasetId = e.currentTarget.dataset.id;
+    console.log(_datasetId)
+    getRoomTypePrice(this, _datasetId,this.data.token);
+
     var curObj = this.data.isShowPay;
     if (curObj.showId == "") { //初始状态
       curObj.showId = _datasetId;
@@ -225,6 +237,27 @@ Page({
     });
   }
 })
+
+
+function getRoomTypePrice(that, typeCode, token) {
+  wx.request({
+    url: that.data.baseUrl + "/app/index/getRoomPirce",
+    method: 'GET',
+    data: {
+      typeCode: typeCode
+    },
+    header: {
+      Authorization: 'Bearer ' + token
+    },
+    success: function (res) {
+    
+      that.setData({
+        roomTypePrice: res.data.data
+      })
+    }
+  })
+}
+
 
 function getRoomTypes(that, shopId, token) {
   wx.request({

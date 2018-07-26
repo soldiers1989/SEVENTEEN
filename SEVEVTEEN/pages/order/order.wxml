@@ -1,4 +1,5 @@
 <view class='iconAndInof'>
+
   <image src='/imgs/order/orderBanner.jpg'></image>
   <view class='iconAndInof-text'>
     <text>广州大学城贝岗17号公寓</text>
@@ -32,9 +33,6 @@
 
   <view style='flex:1;' class='user-info-pick'>
     <picker bindchange="bindPickerChange1" value="{{index1}}" range="{{array1}}">
-      <!-- <view class="picker">
-          
-        </view> -->
       <text class='sum-room-num'>{{array1[index1]}}</text>
     </picker>
   </view>
@@ -42,19 +40,19 @@
 
   <image src='/imgs/common/arr-dwom.png'></image>
 </view>
-<view class='tips-info'>
+<view class='tips-info' wx:if="{{userInfo.isVerify==false}}">
   <text>您的账户还未认证,请先填写您的真实姓名,凭二代身份证到店入住</text>
 </view>
 <view class='user-info'>
   <view class='user-info-floor'>
     <text style='width:90px;'>真实姓名</text>
-    <input style='flex:1' placeholder="请填写身份证上的名字"></input>
+    <input style='flex:1' placeholder="请填写身份证上的名字" value='{{userInfo.tName}}'></input>
     <text style='width:37px;'></text>
   </view>
 
   <view class='user-info-floor'>
     <text style='width:90px;'>联系手机</text>
-    <input style='flex:1' placeholder="133232323232"></input>
+    <input style='flex:1' placeholder="133232323232" value='{{userInfo.phone}}' bindinput='getPhone'></input>
     <!-- <view style='flex:1'> -->
     <image src='/imgs/common/clear.png'></image>
     <!-- </view> -->
@@ -95,8 +93,8 @@
 
 <view class='addOrder'>
   <view class='order-money'>
-    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t239</text>
-    <text class='order-money-2'>已减:\t¥239</text>
+    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t{{price}}</text>
+    <text class='order-money-2'>已减:\t¥ 0</text>
   </view>
   <view class='order-pay'>
     <text catchtap='toPay'>去支付</text>

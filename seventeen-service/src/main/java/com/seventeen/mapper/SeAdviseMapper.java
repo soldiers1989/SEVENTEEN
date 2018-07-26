@@ -1,5 +1,6 @@
 package com.seventeen.mapper;
 
+import com.seventeen.bean.RoomTypePirce;
 import com.seventeen.bean.SeAdvise;
 import com.seventeen.bean.WxAppIndex.TypeRoom;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,7 +32,9 @@ public interface SeAdviseMapper extends CoreMapper<SeAdvise> {
             "GROUP BY a.room_type ")
     List<TypeRoom> getTypeRooms(@Param("shopId")String shopId);
 
-
-
-
+    @Select("SELECT a.`price`,b.name FROM `se_apartment_price_type` a " +
+            "INNER JOIN `se_tag` b ON a.`tag_id`=b.id " +
+            "WHERE a.ap_type_id=#{typeCode} " +
+            "ORDER BY b.id ASC")
+    List<RoomTypePirce> getTypePiece(@Param("typeCode")String typeCode);
 }

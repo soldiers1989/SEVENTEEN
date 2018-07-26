@@ -84,5 +84,11 @@ public interface SeApartmentService{
      */
     Result<List<TypeRoom>> getTypeRooms(String shop);
 
+    /**
+     * 获取类型价格
+     * @param typeCode
+     * @return
+     */
+    Result<List<RoomTypePirce>> getTypePiece(String typeCode);
 
 }

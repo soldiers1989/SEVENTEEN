@@ -2,10 +2,12 @@ package com.seventeen.service;
 
 
 import com.seventeen.bean.OrderCenter;
+import com.seventeen.bean.OrderInfo;
 import com.seventeen.bean.SeOrder;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -46,4 +48,5 @@ public interface SeOrderService {
      */
     Result<OrderCenter> noReplyOrder(String orderId, SysUser sysUser);
 
+    ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo);
 }
