@@ -64,6 +64,15 @@ public class OrderController {
 		return ResponseEntity.ok(seOrders);
 	}
 
+
+    @DeleteMapping("/wx")
+    @ApiOperation(value = "删除订单")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity deleteOrderByWx(@RequestParam String id,@AuthenticationPrincipal SysUser sysUser) {
+        Result<String> result = seOrderService.deleteOrderByWx(id,sysUser);
+        return ResponseEntity.ok(result);
+    }
+
 	@GetMapping("/wx/{orderId}/detail")
 	@ApiOperation(value = "获取未评价订单列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

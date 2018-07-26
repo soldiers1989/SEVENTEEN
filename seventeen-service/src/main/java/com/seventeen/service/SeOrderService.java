@@ -49,4 +49,12 @@ public interface SeOrderService {
     Result<OrderCenter> noReplyOrder(String orderId, SysUser sysUser);
 
     ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo);
+    /**
+     *
+     * @param id
+     * @param sysUser
+     * @return
+     */
+    Result<String> deleteOrderByWx(String id, SysUser sysUser);
+
 }

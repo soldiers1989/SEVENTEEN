@@ -2,6 +2,7 @@ package com.seventeen.service;
 
 import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
@@ -66,5 +67,13 @@ public interface SeCouponService {
     Result<List<CouponLog>> getCouponLog(String status, String remark, String startTime, String endTime, PageInfo pageInfo);
 
     Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo);
+
+    /**
+     *
+     * @param id
+     * @param sysUser
+     * @return
+     */
+    Result<String> exchangeCoupon(String id, SysUser sysUser);
 
 }

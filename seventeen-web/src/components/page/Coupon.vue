@@ -105,7 +105,7 @@
                     <el-input v-model="ruleForm.price" class="handle-input"></el-input>
                 </el-form-item>
                 <el-form-item label="金额上限" prop="maxPrice">
-                    <el-input placeholder="满多少立减" v-model="ruleForm.maxPrice" class="handle-input"></el-input>
+                    <el-input placeholder="满多少立减(0值默认不设置限制)" v-model="ruleForm.maxPrice" class="handle-input"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
                     <el-input v-model="ruleForm.remark"></el-input>

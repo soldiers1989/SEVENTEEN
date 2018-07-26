@@ -89,6 +89,7 @@
     so.ap_id = sa.id
     AND so.user_id = su.id
     and so.coupon_id = sc.id
+    AND so.status !='0'
     <if test="status != null and status  != ''">
       AND so.status = #{status}
     </if>

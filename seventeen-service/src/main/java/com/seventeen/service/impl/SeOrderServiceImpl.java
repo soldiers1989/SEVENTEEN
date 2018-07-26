@@ -35,7 +35,7 @@ import java.util.Map;
  * @Date: 2018/5/8 14:42
  */
 @Service
-public class SeOrderServiceImpl  implements SeOrderService  {
+public class SeOrderServiceImpl implements SeOrderService {
     private final Logger logger = LoggerFactory.getLogger(SeOrderServiceImpl.class);
 
     @Autowired
@@ -50,7 +50,7 @@ public class SeOrderServiceImpl  implements SeOrderService  {
      * @return
      */
     @Override
-    public Result<List<OrderCenter>> getOrderList(SysUser sysUser,String status, String remark, PageInfo pageInfo, String startTime, String endTime) {
+    public Result<List<OrderCenter>> getOrderList(SysUser sysUser, String status, String remark, PageInfo pageInfo, String startTime, String endTime) {
         Result<List<OrderCenter>> result = new Result<>();
 
         try {
@@ -61,15 +61,15 @@ public class SeOrderServiceImpl  implements SeOrderService  {
             /**
              * 小程序用户
              */
-            if(sysUser.getRoleIds().contains("admin")){
-                admin =  sysUser.getId();
+            if (sysUser.getRoleIds().contains("admin")) {
+                admin = sysUser.getId();
             }
 
-            ArrayList<OrderCenter> orderCenters = seOrderMapper.getSeOrders(admin,status, remark,startTime,endTime);
+            ArrayList<OrderCenter> orderCenters = seOrderMapper.getSeOrders(admin, status, remark, startTime, endTime);
             pageInfo.setTotal(page.getTotal());
             result.setData(orderCenters, pageInfo);
         } catch (Exception e) {
-            logger.error("e",e);
+            logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -83,25 +83,25 @@ public class SeOrderServiceImpl  implements SeOrderService  {
             OrderCenter orderCenter = seOrderMapper.getOrderDetail(orderId);
             result.setData(orderCenter);
         } catch (Exception e) {
-            logger.error("e",e);
+            logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
     }
 
     @Override
-    public Result<List<OrderCenter>> noReplyOrderList(String reply,SysUser sysUser, PageInfo pageInfo) {
+    public Result<List<OrderCenter>> noReplyOrderList(String reply, SysUser sysUser, PageInfo pageInfo) {
 
         Result<List<OrderCenter>> result = new Result<>();
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
             String id = sysUser.getId();
-            ArrayList<OrderCenter> orderCenters = seOrderMapper.getNoReplyOrderList(id,reply);
+            ArrayList<OrderCenter> orderCenters = seOrderMapper.getNoReplyOrderList(id, reply);
             pageInfo.setTotal(page.getTotal());
             result.setData(orderCenters, pageInfo);
         } catch (Exception e) {
-            logger.error("e",e);
+            logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -112,10 +112,29 @@ public class SeOrderServiceImpl  implements SeOrderService  {
         Result<OrderCenter> result = new Result<>();
         try {
 
-            OrderCenter orderCenter = seOrderMapper.noReplyOrder(orderId,"0");
+            OrderCenter orderCenter = seOrderMapper.noReplyOrder(orderId, "0");
             result.setData(orderCenter);
         } catch (Exception e) {
-            logger.error("e",e);
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<String> deleteOrderByWx(String id, SysUser sysUser) {
+        Result<String> result = new Result<>();
+        try {
+            SeOrder seOrder = new SeOrder();
+            seOrder.setId(id);
+            SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
+            if("4".equals(seOrder1.getStatus()) ||"5".equals(seOrder1.getStatus()) ){
+                seOrderMapper.deleteByid(id);
+            }else{
+                return result.setResultCode(300).setMessage("只能删除退订和订单完成的订单");
+            }
+        } catch (Exception e) {
+            logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

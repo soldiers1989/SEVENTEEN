@@ -81,7 +81,7 @@ page {
 .img-detail{
   height: 90rpx;
   width: 90rpx;
-  margin: 40rpx auto;
+  margin: 0rpx auto;
   margin-bottom: 20rpx;
 }
 

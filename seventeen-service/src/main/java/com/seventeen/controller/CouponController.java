@@ -3,6 +3,7 @@ package com.seventeen.controller;
 
 import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeCouponService;
 import com.seventeen.util.PageInfo;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,10 +41,18 @@ public class CouponController {
 	@GetMapping("/wx")
 	@ApiOperation(value = "微信端获取优惠券列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity couponListWx(String status,String remark,PageInfo pageInfo) {
+	public ResponseEntity couponListWx(String status,PageInfo pageInfo) {
 		Result<List<SeCoupon>> seCoupons = seCouponService.couponListWx(status,pageInfo);
 		return ResponseEntity.ok(seCoupons);
 	}
+
+    @GetMapping("/wx/exchange")
+    @ApiOperation(value = "微信端获取优惠券列表信息")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity exchangeCoupon(String id, @AuthenticationPrincipal SysUser sysUser) {
+        Result<String> result = seCouponService.exchangeCoupon(id,sysUser);
+        return ResponseEntity.ok(result);
+    }
 
 
 	@PostMapping

@@ -1,37 +1,59 @@
-<view class='tab_sel'>
-  <view class='tab_sel_all'>
-    <view class='text-box' style='border-bottom: 1px solid #bcbcbc;'>
-      <text>全部</text>
+<view>
+  <view class="nav-tabs">
+    <block wx:for="{{tabArray}}" wx:for-index="idx" wx:for-item="itemName">
+      <view class="tab-list  {{currentTab == idx?'active':'default'}}" data-current="{{idx}}" catchtap="swichNav">
+        <view class="{{currentTab == idx?'test':''}}">
+          {{itemName}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<view class='order_box' wx:if="{{currentTab==0}}" wx:for="{{allOrder}}" wx:for-item="item" wx:for-index="index">
+  <view class='order_title'>
+    <text>{{item.shopName}}</text>
+    <text style='color:red; text-align:right;'>{{item.status}}</text>
+  </view>
+  <view class='order_info'>
+    <view>
+      <text>订单号:\t {{item.id}}</text>
+    </view>
+    <view class='order_time'>
+      <text decode="{{true}}">入&nbsp;&nbsp;&nbsp;&nbsp;住:\t{{item.liveTime}}</text>
+    </view>
+    <view>
+      <text decode="{{true}}">房&nbsp;&nbsp;&nbsp;&nbsp;型:\t{{item.roomType}}</text>
     </view>
   </view>
-  <view class='tab_sel_in'>
-    <view class='text-box'>
-      <text>待入住</text>
+  <view class='order_pay'>
+    <text>订单总价:\t¥{{item.price}}</text>
+    <view class='order_btn' data-orderId='{{item.id}}' catchtap="deleteOrderTap">
+      <text>删除订单</text>
     </view>
   </view>
 </view>
 
-<view class='order_box'>
+<view class='order_box' wx:if="{{currentTab==1}}" wx:for="{{waitLive}}" wx:for-item="item" wx:for-index="index">
   <view class='order_title'>
-    <text>北亭店</text>
-    <text style='color:red; text-align:right;'>已离店</text>
+    <text>{{item.shopName}}</text>
+    <text style='color:red; text-align:right;'>{{item.status}}</text>
   </view>
   <view class='order_info'>
     <view>
-      <text>订单号:\t 234829</text>
+      <text>订单号:\t {{item.id}}</text>
     </view>
     <view class='order_time'>
-      <text>订单号:\t234829</text>
-      <text style=' text-align:right;'>订单号:\t23482sdfsdf9</text>
+      <text decode="{{true}}">入&nbsp;&nbsp;&nbsp;&nbsp;住:\t{{item.liveTime}}</text>
     </view>
     <view>
-      <text>订单号:\t234829</text>
+      <text decode="{{true}}">房&nbsp;&nbsp;&nbsp;&nbsp;型:\t{{item.roomType}}</text>
     </view>
   </view>
   <view class='order_pay'>
-     <text>订单总价:\t¥249.00</text>
-     <view class='order_btn'>
-      <text>删除订单</text>
+    <text>订单总价:\t¥{{item.price}}</text>
+    <view class='order_btn' data-orderId='{{item.id}}' catchtap="getDetailTap" >
+      <text>查看订单</text>
     </view>
   </view>
 </view>

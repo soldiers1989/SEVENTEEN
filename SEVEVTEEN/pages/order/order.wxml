@@ -7,7 +7,7 @@
     <text>可住2人</text>
   </view>
 </view>
-<view class='ioDate'>
+<view class='ioDate' data-room-type-id='20180725135132361976689' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
   <view class='ioDate-title'>
     <text>入住日期</text>
     <text>1晚</text>

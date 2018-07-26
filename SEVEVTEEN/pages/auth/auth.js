@@ -20,10 +20,6 @@ Page({
           return;
         }
       });
-    }else{
-      wx.switchTab({
-        url: '/pages/index/index',
-      })
     }
     wx.login({
       success: function (r) {
@@ -50,6 +46,9 @@ Page({
                         //4.解密成功后 获取自己服务器返回的结果
                         if (data.data.resultCode === 200) {
                           wx.setStorageSync('token', data.data.data);
+                          wx.switchTab({
+                            url: '/pages/index/index',
+                          })
                         } else {
                           console.log('解密失败')
                         }

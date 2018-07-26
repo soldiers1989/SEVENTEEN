@@ -55,7 +55,7 @@
         CASE suc.STATUS
         WHEN 1 THEN
         '未用'
-        WHEN 2 THEN
+        WHEN 0 THEN
         '已用'
         ELSE
         '失效'
@@ -93,23 +93,13 @@
         ORDER BY sc.id ASC
     </select>
 
-    <select id="couponListWx" resultType="com.seventeen.bean.CouponLog">
+    <select id="couponListWx" resultMap="BaseResultMap">
         SELECT
-        suc.user_id userId,
-        su.username userName,
-        suc.coupon_id couponId,
-        CASE suc.STATUS
-        WHEN 1 THEN
-        '未用'
-        WHEN 2 THEN
-        '已用'
-        ELSE
-        '失效'
-        END useStatus,
-        if(sc.STATUS=1,'可用','失效') couponStatus,
+        sc.name,
         sc.price,
-        sc.max_price maxPrice,
-        CONCAT_WS('至',sc.start_time,sc.end_time) useTime
+        sc.max_price,
+        sc.start_time,
+        sc.end_time
         FROM
         se_coupon sc,
         se_user_coupon suc,
@@ -119,8 +109,15 @@
         AND suc.user_id = su.id
         <if test="status != null and status  != ''">
             <choose>
-                <when test="status ==0 ">
-                    AND ( sc.status = '2' or sc.status = '0')                </when>
+                <when test="status ==1 ">
+                    and sc.`status` ='1' and suc.`status` ='1'
+                </when>
+                <when test="status ==2 ">
+                    and sc.`status`='2'
+                </when>
+                <when test="status ==3 ">
+                    and suc.`status`='0'
+                </when>
                 <otherwise>
                     AND sc.status = #{status}
                 </otherwise>

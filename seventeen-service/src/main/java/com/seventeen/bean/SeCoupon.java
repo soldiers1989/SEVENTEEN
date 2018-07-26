@@ -67,8 +67,9 @@ public class SeCoupon {
         return id;
     }
 
-    public void setId(String id) {
+    public SeCoupon setId(String id) {
         this.id = id == null ? null : id.trim();
+        return this;
     }
 
     public String getName() {
@@ -83,8 +84,9 @@ public class SeCoupon {
         return status;
     }
 
-    public void setStatus(String status) {
+    public SeCoupon setStatus(String status) {
         this.status = status == null ? null : status.trim();
+        return this;
     }
 
     public String getStartTime() {

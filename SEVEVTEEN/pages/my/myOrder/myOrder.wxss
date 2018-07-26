@@ -2,6 +2,36 @@ page {
   background-color: #f2f2f2;
 }
 
+.nav-tabs {
+  left: 0;
+  bottom: 0;
+  height: 75rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+}
+
+.active {
+  line-height: 75rpx;
+  text-align: center;
+  font-size: 30rpx;
+  flex: 1;
+}
+
+.default {
+  line-height: 75rpx;
+  text-align: center;
+  font-size: 30rpx;
+  flex: 1;
+}
+
+.test {
+  width: 50%;
+  margin: 0 auto 0;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
 .tab_sel {
   width: 100%;
   background: white;

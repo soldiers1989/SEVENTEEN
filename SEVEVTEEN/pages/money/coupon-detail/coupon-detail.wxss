@@ -25,7 +25,7 @@
 }
 
 .use {
-  width: 600rpx;
+  margin-left: 60rpx;
   height: 50rpx;
   text-align: end;
   margin-top: 80rpx;
@@ -38,7 +38,7 @@
 }
 
 .coupon-img {
-  width: 300rpx;
+  width: 150rpx;
   height: 150rpx;
   margin-top: 18rpx;
   margin-left: 20rpx;

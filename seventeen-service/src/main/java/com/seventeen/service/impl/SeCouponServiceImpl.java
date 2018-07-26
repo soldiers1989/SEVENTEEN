@@ -5,16 +5,18 @@ import com.github.pagehelper.PageHelper;
 import com.seventeen.bean.CouponLog;
 import com.seventeen.bean.SeCoupon;
 import com.seventeen.bean.SeCouponPriceType;
+import com.seventeen.bean.SeUserCoupon;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.SeCouponMapper;
 import com.seventeen.mapper.SeCouponPriceTypeMapper;
+import com.seventeen.mapper.SeUserCouponMapper;
 import com.seventeen.service.SeCouponService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
-import org.omg.CORBA.INTERNAL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +44,9 @@ public class SeCouponServiceImpl implements SeCouponService {
 
     @Autowired
     private SeCouponPriceTypeMapper seCouponPriceTypeMapper;
+
+    @Autowired
+    private SeUserCouponMapper seUserCouponMapper;
 
 
     @Override
@@ -214,9 +216,38 @@ public class SeCouponServiceImpl implements SeCouponService {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
 
+
             ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status);
             pageInfo.setTotal(page.getTotal());
             result.setData(seCoupons, pageInfo);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<String> exchangeCoupon(String id, SysUser sysUser) {
+        Result<String> result = new Result<>();
+        try {
+            SeCoupon seCoupon = new SeCoupon().setId(id).setStatus("1");
+            List<SeCoupon> seCoupons = SeCouponMapper.select(seCoupon);
+            if(!seCoupons.isEmpty()){
+                SeUserCoupon seUserCoupon = new SeUserCoupon();
+                seUserCoupon.setCouponId(id);
+                seUserCoupon.setStatus("1");
+                seUserCoupon.setUserId(sysUser.getId());
+                List<SeUserCoupon> seUserCoupons = seUserCouponMapper.select(seUserCoupon);
+                if(seUserCoupons.isEmpty()){
+                    seUserCoupon.setId(IDGenerator.getId());
+                    seUserCoupon.setUpdateTime(DateUtil.now());
+                    seUserCoupon.setCreateBy(sysUser.getUsername());
+                    seUserCoupon.setCreateTime(DateUtil.now());
+                    seUserCouponMapper.insert(seUserCoupon);
+                }
+
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
