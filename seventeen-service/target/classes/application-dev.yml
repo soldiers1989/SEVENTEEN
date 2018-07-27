@@ -29,9 +29,11 @@ spring:
     show-sql: true
     database: MYSQL
   datasource:
-    url: jdbc:mysql://119.29.196.106:3306/seventeen?useSSL=false&&characterEncoding=UTF-8
-    username: test
-    password: 'seventeenTest'
+
+    url: jdbc:mysql://39.107.111.100:3306/seventeen?useSSL=false&&characterEncoding=UTF-8
+    username: root
+    password: '!@#17inn'
+
     initialize: false
     driver-class-name: com.mysql.jdbc.Driver
     tomcat:
@@ -55,6 +57,14 @@ spring:
 endpoints:
   shutdown:
     enabled: true
+
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
 
 mybatis:
   type-aliases-package: com.seventeen.mapper
