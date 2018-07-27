@@ -14,6 +14,7 @@ import com.seventeen.mapper.SeOrderMapper;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.SeOrderService;
+import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
 import javafx.scene.input.DataFormat;
 import org.apache.commons.lang.RandomStringUtils;
@@ -141,21 +142,41 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     public static void main(String[] args) {
-        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-00");
-        System.out.println(LocalDateTime.now().format(dateTimeFormatter));
+
     }
 
     @Override
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
+        String orderId = IDGenerator.getId();//RandomStringUtils.randomAlphanumeric(23);
+        System.out.println("订单号:" + orderId);
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        System.out.println(LocalDateTime.now().format(dateTimeFormatter));
         Result result=new Result();
-        SeOrder se=new SeOrder();
-        //查出该分类下的空房
+        //List<SeOrder> seList=new ArrayList<>();
+        if(!orderInfo.getRoomNum().equals("1")){//多间时候需要拆分订单
+            List<SeOrder> seList=new ArrayList<>();
 
 
 
-
-
-
+        }else{
+            SeOrder se=new SeOrder();
+            se.setId(orderId);
+            se.setApId(orderInfo.getRoomId());
+            se.setArriveTime(orderInfo.getPlanTime());
+            se.setOrderTime(LocalDateTime.now().format(dateTimeFormatter));
+            se.setCreateTime(LocalDateTime.now().format(dateTimeFormatter));
+            se.setCouponId(orderInfo.getCouponId());
+            se.setInTime(orderInfo.getStartTime());
+            se.setOutTime(orderInfo.getEndTime());
+            se.setUserId(sysUser.getId());
+            se.setPriceTagId(orderInfo.getTagId());
+            se.setPrice(orderInfo.getPrice());
+            se.setCreateBy(orderInfo.gettName());
+            se.setCreatorPhone(orderInfo.getPhone());
+            se.setStatus("-1");
+            se.setIsReply("0");
+            seOrderMapper.insert(se);
+        }
 
 
 
@@ -163,8 +184,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
 
         //本系统业务下单生产订单ID
-        String orderId = RandomStringUtils.randomAlphanumeric(24);
-        System.out.println("订单号:" + orderId);
+
         //本次订单随机串
         String nonceStr = RandomStringUtils.randomAlphanumeric(32);
         try {
@@ -179,7 +199,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             data.put("notify_url", "https://www.17inn.com/order/wx/payCallback");//异步回调api
             data.put("spbill_create_ip", "39.107.111.100");//支付ip
             data.put("out_trade_no", orderId);//商品订单号
-            data.put("total_fee", orderInfo.getFee());//真实金额
+            data.put("total_fee","1" );//真实金额orderInfo.getFee()
             data.put("trade_type", "JSAPI");//JSAPI、h5调用
             data.put("openid", sysUser.getOpenid());//支付用户openid
 
@@ -206,7 +226,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         } catch (Exception e) {
             logger.error("下的错误",e);
         }
-        return null;
+        return ResponseEntity.ok(result);
     }
 
 }

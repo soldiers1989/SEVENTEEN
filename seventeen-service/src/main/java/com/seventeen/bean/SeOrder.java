@@ -26,13 +26,33 @@ public class SeOrder {
 
     private String price;
 
+    private String priceTagId;
+
     private String remark;
 
     private String createTime;
 
     private String createBy;
 
+    private String creatorPhone;
+
     private String updateTime;
+
+    public String getCreatorPhone() {
+        return creatorPhone;
+    }
+
+    public void setCreatorPhone(String creatorPhone) {
+        this.creatorPhone = creatorPhone;
+    }
+
+    public String getPriceTagId() {
+        return priceTagId;
+    }
+
+    public void setPriceTagId(String priceTagId) {
+        this.priceTagId = priceTagId;
+    }
 
     public String getId() {
         return id;

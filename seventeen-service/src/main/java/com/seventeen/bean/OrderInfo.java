@@ -12,6 +12,7 @@ public class OrderInfo {
     private String couponId;
     private String price;
     private String roomNum;
+    private String tagId;
 
     @Override
     public String toString() {
@@ -27,6 +28,14 @@ public class OrderInfo {
                 ", price='" + price + '\'' +
                 ", roomNum='" + roomNum + '\'' +
                 '}';
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
     }
 
     public String getRoomId() {

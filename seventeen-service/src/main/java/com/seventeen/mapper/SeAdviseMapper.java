@@ -32,7 +32,7 @@ public interface SeAdviseMapper extends CoreMapper<SeAdvise> {
             "GROUP BY a.room_type ")
     List<TypeRoom> getTypeRooms(@Param("shopId")String shopId);
 
-    @Select("SELECT a.`price`,b.name FROM `se_apartment_price_type` a " +
+    @Select("SELECT a.`price`,b.name,a.tag_id FROM `se_apartment_price_type` a " +
             "INNER JOIN `se_tag` b ON a.`tag_id`=b.id " +
             "WHERE a.ap_type_id=#{typeCode} " +
             "ORDER BY b.id ASC")

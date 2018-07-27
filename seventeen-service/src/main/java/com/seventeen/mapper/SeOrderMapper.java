@@ -19,6 +19,10 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
 
     OrderCenter noReplyOrder(@Param("id") String id,@Param("reply") String reply);
 
+
+
+
+
     @Update("update se_order so set so.status ='0' where so.id = #{id} ")
     void deleteByid(@Param("id") String id);
 }
