@@ -196,7 +196,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             data.put("fee_type", "CNY");
             data.put("body", "17inn订房");//商品描述
             data.put("nonce_str", nonceStr);//随机字符串
-            data.put("notify_url", "https://www.17inn.com/order/wx/payCallback");//异步回调api
+            data.put("notify_url", "https://www.17inn.com/seventeen/WX/callBack");//异步回调api
             data.put("spbill_create_ip", "39.107.111.100");//支付ip
             data.put("out_trade_no", orderId);//商品订单号
             data.put("total_fee","1" );//真实金额orderInfo.getFee()
