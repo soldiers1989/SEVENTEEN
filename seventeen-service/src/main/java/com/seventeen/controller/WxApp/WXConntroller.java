@@ -41,7 +41,7 @@ public class WXConntroller  {
         xmlString = inputString.toString();
         request.getReader().close();
         log.info("----接收到的数据如下：---" + xmlString);
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         String result_code = "";
         String return_code = "";
         String out_trade_no = "";
