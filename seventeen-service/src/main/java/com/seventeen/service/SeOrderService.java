@@ -57,4 +57,9 @@ public interface SeOrderService {
      */
     Result<String> deleteOrderByWx(String id, SysUser sysUser);
 
+    /**
+     * 支付后修改订单状态
+     * @param orderId
+     */
+    void  updateOrderStatus(String orderId);
 }

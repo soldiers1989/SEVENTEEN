@@ -1,9 +1,16 @@
 package com.seventeen.controller.WxApp;
 
+import com.seventeen.bean.OrderCenter;
+import com.seventeen.bean.SeOrder;
+import com.seventeen.core.Result;
+import com.seventeen.mapper.SeOrderMapper;
 import com.seventeen.pay.wx.util.PayCommonUtil;
 import com.seventeen.pay.wx.util.XMLUtil;
+import com.seventeen.service.LockService;
+import com.seventeen.service.SeOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -24,6 +32,16 @@ import java.util.TreeMap;
 @Slf4j
 @RequestMapping("/WX/callBack")
 public class WXConntroller  {
+
+    @Autowired
+    private SeOrderService seOrderService;
+
+    @Autowired
+    private SeOrderMapper seOrderMapper;
+
+
+    @Autowired
+    private LockService lockService;
 
     @RequestMapping(produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -51,7 +69,27 @@ public class WXConntroller  {
         return_code = map.get("return_code");
 
         if (checkSign(xmlString)) {
-//            this.memberOrderService.updateOrderInfo(out_trade_no);
+            if(result_code.equals("SUCCESS")) {
+                seOrderService.updateOrderStatus(out_trade_no);
+
+                SeOrder seOrder=new SeOrder();
+                seOrder.setId(out_trade_no);
+                seOrder = seOrderMapper.selectOne(seOrder);
+                LocalDateTime start=  LocalDateTime.of(
+                        Integer.valueOf(seOrder.getInTime().substring(0, 4)),
+                        Integer.valueOf(seOrder.getInTime().substring(5, 7)),
+                        Integer.valueOf(seOrder.getInTime().substring(8, 10)),
+                        Integer.valueOf(seOrder.getInTime().substring(11, 13)), 0, 0);
+                LocalDateTime out=  LocalDateTime.of(
+                        Integer.valueOf(seOrder.getOutTime().substring(0, 4)),
+                        Integer.valueOf(seOrder.getOutTime().substring(5, 7)),
+                        Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
+                        Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
+
+               lockService.updataLockPassWord(seOrder.getApId(),start,out);
+
+            }
+
 //            MemberOrder memberOrder = memberOrderService.get(out_trade_no);
 //            String couponId = memberOrder.getCouponId();
 //            if (StringUtils.isNotEmpty(couponId)) {
@@ -62,6 +100,17 @@ public class WXConntroller  {
             return returnXML("FAIL");
         }
 
+
+    }
+
+    public static void main(String[] args) {
+        String s="2018-07-25 14:00:00";
+        LocalDateTime of = LocalDateTime.of(
+                Integer.valueOf(s.substring(0, 4)),
+                Integer.valueOf(s.substring(5, 7)),
+                Integer.valueOf(s.substring(8, 10)),
+                Integer.valueOf(s.substring(11, 13)), 0, 0);
+        System.out.println(of);
 
     }
 

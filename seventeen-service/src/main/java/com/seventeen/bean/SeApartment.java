@@ -40,8 +40,29 @@ public class SeApartment {
 
     private String roomType;
 
+    private String LockId;
+
+    private String LockPwdId;
+
     @Transient
     private ArrayList<String> good;
+
+
+    public String getLockId() {
+        return LockId;
+    }
+
+    public void setLockId(String lockId) {
+        LockId = lockId;
+    }
+
+    public String getLockPwdId() {
+        return LockPwdId;
+    }
+
+    public void setLockPwdId(String lockPwdId) {
+        LockPwdId = lockPwdId;
+    }
 
     public String getShopId() {
         return shopId;

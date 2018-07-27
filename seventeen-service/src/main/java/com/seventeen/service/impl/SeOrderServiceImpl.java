@@ -179,10 +179,6 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
 
 
-
-
-
-
         //本系统业务下单生产订单ID
 
         //本次订单随机串
@@ -229,4 +225,17 @@ public class SeOrderServiceImpl implements SeOrderService {
         return ResponseEntity.ok(result);
     }
 
+
+    /**
+     * 支付后修改订单状态
+     *
+     * @param orderId
+     */
+    @Override
+    public void updateOrderStatus(String orderId) {
+        SeOrder se=new SeOrder();
+        se.setId(orderId);
+        se.setStatus("1");
+        seOrderMapper.updateByPrimaryKey(se);
+    }
 }
