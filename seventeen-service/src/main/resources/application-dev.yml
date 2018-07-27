@@ -56,6 +56,14 @@ endpoints:
   shutdown:
     enabled: true
 
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
 mybatis:
   type-aliases-package: com.seventeen.mapper
   configuration:

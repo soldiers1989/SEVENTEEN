@@ -21,6 +21,13 @@ Page({
     var start = this.data.startDate;
     var sDate = 0;
     var end = this.data.endDate;
+    if (end === null || start === null){
+      wx.showToast({
+        title: "请选择完整日期",
+        duration: 2000
+      })
+      return;
+    }
     var eDate = 0;
     var day = 0;
 
@@ -68,7 +75,7 @@ Page({
         chooseDate: chooseDate
       })
       wx.navigateBack({
-        url: '../index/index'
+        url: '../order/order'
       })
     }
     var that = this;
@@ -90,7 +97,7 @@ Page({
     let weeks = []
     let month = date.getMonth() + 1//当前月份
     let day = date.getDate()//当天
-    let daysCount = 365//一共显示多少天
+    let daysCount = 183//一共显示多少天
     let dayscNow = 0//计数器
     let monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]//月份列表
     let nowMonthList = []//本年剩余年份
@@ -110,7 +117,7 @@ Page({
       nowMonthList.push(i)
     }
     let yearList = [year]//年份最大可能
-    for (let i = 0; i < daysCount / 365 + 2; i++) {
+    for (let i = 0; i < daysCount / 183 + 2; i++) {
       yearList.push(year + i + 1)
     }
     let leapYear = function (Year) {//判断是否闰年 

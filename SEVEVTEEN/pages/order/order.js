@@ -107,7 +107,7 @@ Page({
     var time = "";
     var url
     if (chooseDate && chooseDate.end) {
-      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start + "-" + this.data.chooseDate.end + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
+      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start.date + "-" + this.data.chooseDate.end.date + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
     } else {
       url = "/pages/dates/date";
     }

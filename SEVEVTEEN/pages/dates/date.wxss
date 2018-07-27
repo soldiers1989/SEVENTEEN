@@ -64,6 +64,7 @@
 
 .mouth-container{
   padding-top: 105px;
+  margin-bottom: 100rpx;
 }
 
 .mouthhead {

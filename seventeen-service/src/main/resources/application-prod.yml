@@ -52,6 +52,10 @@ spring:
 #      max-idle: 16
 #      min-idle: 0
 #    timeout: 1000
+endpoints:
+  shutdown:
+    enabled: true
+
 security:
   basic:
     enabled: false
