@@ -4,9 +4,11 @@ import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Mapper
 public interface SeOrderMapper extends CoreMapper<SeOrder> {
@@ -20,7 +22,8 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
     OrderCenter noReplyOrder(@Param("id") String id,@Param("reply") String reply);
 
 
-
+    @Select("select date_format(in_time, '%Y-%m-%d %H:%i:%s') inTime , date_format(out_time, '%Y-%m-%d %H:%i:%s') outTime from se_order so where so.status in('1','2','3')")
+    List<SeOrder> getOrdersByStatus();
 
 
     @Update("update se_order so set so.status ='0' where so.id = #{id} ")

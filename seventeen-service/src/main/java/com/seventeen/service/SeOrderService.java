@@ -62,4 +62,7 @@ public interface SeOrderService {
      * @param orderId
      */
     void  updateOrderStatus(String orderId);
+
+    Result getOrderDate(String roomType, SysUser sysUser);
+
 }

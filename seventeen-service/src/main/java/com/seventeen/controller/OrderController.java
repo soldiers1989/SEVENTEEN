@@ -89,7 +89,6 @@ public class OrderController {
 		return ResponseEntity.ok(orderCenter);
 	}
     @PostMapping("/wx/setOrder")
-
     @ApiOperation(value = "获取订单详细信息")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
     public ResponseEntity setOrder(@AuthenticationPrincipal SysUser sysUser, @RequestBody OrderInfo orderInfo) {
@@ -97,5 +96,13 @@ public class OrderController {
         ResponseEntity entity= seOrderService.setOrder(sysUser,orderInfo);
         return entity;
     }
+
+	@GetMapping("/wx/getOrderDate")
+	@ApiOperation(value = "获取订单满房时间")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getOrderDate(@AuthenticationPrincipal SysUser sysUser,String roomType) {
+		Result result= seOrderService.getOrderDate(roomType,sysUser);
+		return ResponseEntity.ok(result);
+	}
 
 }
