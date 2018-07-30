@@ -63,6 +63,8 @@
     if(st.name is null,'无房间类型',st.name) roomType,
     if(ss.name is null,'无门店管理',ss.name) shopName,
     CASE so.`status`
+    WHEN -1 THEN
+    '未支付'
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
@@ -79,16 +81,15 @@
     CONCAT_WS('至',so.in_time,so.out_time) liveTime,
     so.create_time orderTime
     FROM
-    se_order so,
+    se_order so
+      LEFT JOIN se_coupon sc ON so.coupon_id = sc.id ,
     sys_user su,
-    se_coupon sc,
     se_apartment sa
     left JOIN se_tag st on sa.room_type = st.id
     left JOIN se_shop ss on sa.shop_id = ss.id
     WHERE
     so.ap_id = sa.id
     AND so.user_id = su.id
-    and so.coupon_id = sc.id
     AND so.status !='0'
     <if test="status != null and status  != ''">
       AND so.status = #{status}
@@ -121,6 +122,8 @@
     if(st.name is null,'无房间类型',st.name) roomType,
     if(ss.name is null,'无门店管理',ss.name) shopName,
     CASE so.`status`
+    WHEN -1 THEN
+    '未支付'
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
@@ -137,9 +140,9 @@
     CONCAT_WS('至',so.in_time,so.out_time) liveTime,
     so.create_time orderTime
     FROM
-    se_order so,
+    se_order so
+    LEFT JOIN se_coupon sc ON so.coupon_id = sc.id ,
     sys_user su,
-    se_coupon sc,
     se_apartment_img sai,
     se_apartment sa
     left JOIN se_tag st on sa.room_type = st.id
@@ -149,7 +152,6 @@
     AND so.user_id = su.id
     AND sa.id = sai.ap_id
     and sai.master='1'
-    and so.coupon_id = sc.id
     AND so.status ='5'
     AND so.user_id = #{id}
     AND so.is_reply=#{reply}
@@ -167,6 +169,8 @@
     if(st.name is null,'无房间类型',st.name) roomType,
     if(ss.name is null,'无门店管理',ss.name) shopName,
     CASE so.`status`
+     WHEN -1 THEN
+    '未支付'
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
@@ -183,9 +187,9 @@
     CONCAT_WS('至',so.in_time,so.out_time) liveTime,
     so.create_time orderTime
     FROM
-    se_order so,
+    se_order so
+      LEFT JOIN se_coupon sc ON so.coupon_id = sc.id ,
     sys_user su,
-    se_coupon sc,
     se_apartment_img sai,
     se_apartment sa
     left JOIN se_tag st on sa.room_type = st.id
@@ -195,7 +199,6 @@
     AND so.user_id = su.id
     AND sa.id = sai.ap_id
     and sai.master='1'
-    and so.coupon_id = sc.id
     AND so.status ='5'
     AND so.id = #{id}
     AND so.is_reply=#{reply}
@@ -215,6 +218,8 @@
     if(sso.name is null,'无门店管理',sso.name) shopName,
     if(st1.remark is null or st1.remark='','无',st1.remark) remark,
     CASE so.`status`
+      WHEN -1 THEN
+      '未支付'
     WHEN 1 THEN
     '已下订'
     WHEN 2 THEN
@@ -234,18 +239,17 @@
     sol.id_card idCard
     FROM
     sys_user su,
-    se_coupon sc,
     se_apartment sa
     left JOIN se_tag st on sa.room_type = st.id
     left JOIN se_shop sso on sa.shop_id = sso.id,
     se_order so
+    LEFT JOIN se_coupon sc ON so.coupon_id = sc.id
     left JOIN se_tag st1 on so.price_tag_id = st1.id
     left JOIN se_order_liver sol on sol.order_id = so.id
 
     WHERE
     so.ap_id = sa.id
     AND so.user_id = su.id
-    and so.coupon_id = sc.id
     <if test="orderId != null and orderId  != ''">
       AND  so.id = #{orderId}
     </if>

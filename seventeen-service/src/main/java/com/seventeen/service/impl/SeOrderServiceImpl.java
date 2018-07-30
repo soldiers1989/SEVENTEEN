@@ -3,14 +3,14 @@ package com.seventeen.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.wxpay.sdk.WXPay;
-import com.seventeen.bean.OrderCenter;
-import com.seventeen.bean.OrderInfo;
-import com.seventeen.bean.SeOrder;
+import com.seventeen.bean.*;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
+import com.seventeen.mapper.SeOrderLiverMapper;
 import com.seventeen.mapper.SeOrderMapper;
+import com.seventeen.mapper.SeUserAttestationMapper;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.SeOrderService;
@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +42,10 @@ public class SeOrderServiceImpl implements SeOrderService {
 
     @Autowired
     private SeOrderMapper seOrderMapper;
+    @Autowired
+    private SeOrderLiverMapper seOrderLiverMapper;
+    @Autowired
+    private SeUserAttestationMapper seUserAttestationMapper;
 
     /**
      * @param status
@@ -146,6 +151,7 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
         String orderId = IDGenerator.getId();//RandomStringUtils.randomAlphanumeric(23);
         System.out.println("订单号:" + orderId);
@@ -178,6 +184,20 @@ public class SeOrderServiceImpl implements SeOrderService {
             se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 10000000)));
 
             seOrderMapper.insert(se);
+
+            SeOrderLiver ol=new SeOrderLiver();
+            ol.setId(IDGenerator.getId());
+            ol.setOrderId(orderId);
+            ol.setCreateBy(se.getCreateBy());
+            ol.setCreateTime(se.getCreateTime());
+            ol.setPhone(se.getCreatorPhone());
+            ol.setLiver(se.getCreateBy());
+            ol.setUpdateTime(LocalDateTime.now().format(dateTimeFormatter));
+            SeUserAttestation su=new SeUserAttestation();
+            su.setUserId(sysUser.getId());
+            SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(su);
+            ol.setIdCard(seUserAttestation.getIdCode());
+            seOrderLiverMapper.insert(ol);
         }
 
 
