@@ -175,6 +175,8 @@ public class SeOrderServiceImpl implements SeOrderService {
             se.setCreatorPhone(orderInfo.getPhone());
             se.setStatus("-1");
             se.setIsReply("0");
+            se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 10000000)));
+
             seOrderMapper.insert(se);
         }
 
@@ -233,8 +235,10 @@ public class SeOrderServiceImpl implements SeOrderService {
      */
     @Override
     public void updateOrderStatus(String orderId) {
+
         SeOrder se=new SeOrder();
         se.setId(orderId);
+        se=seOrderMapper.selectOne(se);
         se.setStatus("1");
         seOrderMapper.updateByPrimaryKey(se);
     }

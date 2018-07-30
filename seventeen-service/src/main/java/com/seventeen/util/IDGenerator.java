@@ -1,8 +1,12 @@
 package com.seventeen.util;
 
+import net.bytebuddy.utility.RandomString;
+import tk.mybatis.mapper.util.StringUtil;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @Author: csk
@@ -30,9 +34,13 @@ public class IDGenerator {
 		return tempString;
 	}
 
+
+
+
 	public static void main(String[] args) {
-		for (int i = 0; i < 100; i++) {
-			System.out.println(getId());
-		}
+        System.out.println();
+//        for (int i = 0; i < 100; i++) {
+//			System.out.println(getId());
+//		}
 	}
 }

@@ -57,10 +57,9 @@ public class LockServiceImpl implements LockService {
         map.put("accessToken",token);
         map.put("lockId",seApartment.getLockId());
         map.put("keyboardPwdId",seApartment.getLockPwdId());
-        map.put("newKeyboardPwd","12345678");
+        map.put("newKeyboardPwd","98765432");
         map.put("startDate",start);
         map.put("endDate",end);
-        map.put("endDate","1");
         map.put("changeType","2");
         map.put("date",System.currentTimeMillis());
 
@@ -72,10 +71,10 @@ public class LockServiceImpl implements LockService {
     }
 
     public static void main(String[] args) {
-        LockServiceImpl s=new LockServiceImpl();
-        LocalDateTime.now();
-        s.updataLockPassWord("1217974",LocalDateTime.now(),LocalDateTime.now().plusDays(1));
-//        System.out.println(s.mapToDataString(map));
+//        LockServiceImpl s=new LockServiceImpl();
+//        LocalDateTime.now();
+//        s.updataLockPassWord("20180725230836716205288",LocalDateTime.now(),LocalDateTime.now().plusDays(1));
+        System.out.println(System.currentTimeMillis());
     }
 
     String mapToDataString(Map<String,Object> map){

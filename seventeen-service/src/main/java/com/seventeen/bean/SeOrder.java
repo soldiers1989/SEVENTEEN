@@ -38,6 +38,16 @@ public class SeOrder {
 
     private String updateTime;
 
+    private String lockPwd;
+
+    public String getLockPwd() {
+        return lockPwd;
+    }
+
+    public void setLockPwd(String lockPwd) {
+        this.lockPwd = lockPwd;
+    }
+
     public String getCreatorPhone() {
         return creatorPhone;
     }
