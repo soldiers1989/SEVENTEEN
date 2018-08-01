@@ -144,6 +144,14 @@ public class ApartmentController {
 		return ResponseEntity.ok(result);
 	}
 
+	@GetMapping("/wx/getApartmentByTime")
+	@ApiOperation(value = "获取时间段内可用房间")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity updatePriceType(String startTime,String endTime,String roomType) {
+		Result result = seApartmentService.getApartmentByTime(startTime,endTime,roomType);
+		return ResponseEntity.ok(result);
+	}
+
 	@GetMapping("/advise")
 	@ApiOperation(value = "获取意见投诉列表")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,6 +104,14 @@ public class OrderController {
 	public ResponseEntity getOrderDate(@AuthenticationPrincipal SysUser sysUser,String roomType) {
 		Result result= seOrderService.getOrderDate(roomType,sysUser);
 		return ResponseEntity.ok(result);
+	}
+
+	/**
+	 * 每月1号凌晨插入月历数据
+	 */
+	@Scheduled(cron = "0 0 0 1 * ? ")
+	public void timerCron() {
+		seOrderService.addOrderCalendar();
 	}
 
 }

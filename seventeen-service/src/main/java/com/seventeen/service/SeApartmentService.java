@@ -91,4 +91,5 @@ public interface SeApartmentService{
      */
     Result<List<RoomTypePirce>> getTypePiece(String typeCode);
 
+    Result getApartmentByTime(String startTime, String endTime, String roomType);
 }

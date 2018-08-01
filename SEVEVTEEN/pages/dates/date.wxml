@@ -25,7 +25,7 @@
       <view class="day" wx:if="{{weeks[index]>3}}"></view>
       <view class="day" wx:if="{{weeks[index]>4}}"></view>
       <view class="day" wx:if="{{weeks[index]>5}}"></view>
-      <view class="day {{item.selected? 'bc':''}}" wx:for="{{date}}" wx:for-index="idx" data-index="{{index}}" data-indexs="{{idx}}" bindtap="selectday">
+      <view class="day {{item.selected? 'bc':''}} {{item.canUse==0 ? 'bc3':''}}" wx:for="{{date}}" wx:for-index="idx" data-index="{{index}}" data-indexs="{{idx}}" bindtap="selectday">
         {{date[idx].day}}
         <view class="actname2 {{item.selected ? 'bc2':''}}" wx:if="{{item.selected? 'bc2':''}}">{{item.live}}</view>
       </view>

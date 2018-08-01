@@ -63,6 +63,8 @@ public interface SeOrderService {
      */
     void  updateOrderStatus(String orderId);
 
+    void addOrderCalendar();
+
     Result getOrderDate(String roomType, SysUser sysUser);
 
 }

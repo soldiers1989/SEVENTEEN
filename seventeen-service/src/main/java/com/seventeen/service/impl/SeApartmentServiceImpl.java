@@ -78,23 +78,23 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         try {
             String[] split = ids.split(",");
             seApartmentMapper.deleteApartment(split);
-          /** 不物理删除图片
-           * for (String id : split) {
-                List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(id);
-                for (SeApartmentImg seApartmentImg : seApartmentImgs) {
-                    Path path = Paths.get(FileUploadUtil.roomImg, seApartmentImg.getApId());
-                    String fileSuffix = seApartmentImg.getName().substring(seApartmentImg.getName().lastIndexOf("."), seApartmentImg.getName().length());
-                    String fileName = seApartmentImg.getId();
-                    Path path_mix = Paths.get(FileUploadUtil.roomImg, fileName + "_mix" + fileSuffix);
-                    if (Files.exists(path)) {
-                        Files.delete(path);
-                    }
-                    if (Files.exists(path_mix)) {
-                        Files.delete(path_mix);
-                    }
-                }
-            }
-            seApartmentImgMapper.deleteByApId(split);*/
+            /** 不物理删除图片
+             * for (String id : split) {
+             List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(id);
+             for (SeApartmentImg seApartmentImg : seApartmentImgs) {
+             Path path = Paths.get(FileUploadUtil.roomImg, seApartmentImg.getApId());
+             String fileSuffix = seApartmentImg.getName().substring(seApartmentImg.getName().lastIndexOf("."), seApartmentImg.getName().length());
+             String fileName = seApartmentImg.getId();
+             Path path_mix = Paths.get(FileUploadUtil.roomImg, fileName + "_mix" + fileSuffix);
+             if (Files.exists(path)) {
+             Files.delete(path);
+             }
+             if (Files.exists(path_mix)) {
+             Files.delete(path_mix);
+             }
+             }
+             }
+             seApartmentImgMapper.deleteByApId(split);*/
         } catch (Exception e) {
             logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -271,7 +271,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             seTagMapper.updateByPrimaryKeySelective(seTag);
 
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -434,7 +434,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
                     seApartmentPriceType.setTagId(domain.getPriceTypeId());
                     List<SeApartmentPriceType> select = seApartmentPriceTypeMapper.select(seApartmentPriceType);
                     if (select.size() > 0) {
-                        seApartmentPriceTypeMapper.updateSeApartmentPriceType(price,"1" ,time.get(0), time.get(1), apartmentPriceRoom.getRoomTypeId(), domain.getPriceTypeId());
+                        seApartmentPriceTypeMapper.updateSeApartmentPriceType(price, "1", time.get(0), time.get(1), apartmentPriceRoom.getRoomTypeId(), domain.getPriceTypeId());
                     } else {
                         seApartmentPriceType.setPrice(price);
                         seApartmentPriceType.setStartTime(time.get(0));
@@ -447,7 +447,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
                 }
             }
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -464,7 +464,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             pageInfo.setTotal(page.getTotal());
             result.setData(seAdviseList, pageInfo);
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -482,7 +482,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             seAdvise.setUserId(sysUser.getId());
             seAdviseMapper.insert(seAdvise);
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -513,6 +513,22 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         Result result = new Result<>();
         List<RoomTypePirce> typeRooms = seAdviseMapper.getTypePiece(typeCode);
         result.setData(typeRooms);
+        return result;
+    }
+
+    @Override
+    public Result getApartmentByTime(String startTime, String endTime, String roomType) {
+        Result result = new Result<>();
+        try {
+            startTime = startTime+" 14:00:00";
+            endTime = endTime+" 12:00:00";
+
+            ArrayList<String> seApartments = seApartmentMapper.getApartmentByTime(startTime, endTime, roomType);
+            result.setData(seApartments);
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
         return result;
     }
 }

@@ -4,25 +4,17 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.wxpay.sdk.WXPay;
 import com.seventeen.bean.*;
-import com.seventeen.bean.OrderCenter;
-import com.seventeen.bean.OrderInfo;
-import com.seventeen.bean.SeApartment;
-import com.seventeen.bean.SeOrder;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
-import com.seventeen.mapper.SeOrderLiverMapper;
-import com.seventeen.mapper.SeApartmentMapper;
-import com.seventeen.mapper.SeOrderMapper;
-import com.seventeen.mapper.SeUserAttestationMapper;
+import com.seventeen.mapper.*;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.SeOrderService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
-import javafx.scene.input.DataFormat;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 /**
@@ -53,7 +44,10 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeOrderLiverMapper seOrderLiverMapper;
     @Autowired
     private SeUserAttestationMapper seUserAttestationMapper;
-
+    @Autowired
+    private SeOrderCalendarMapper seOrderCalendarMapper;
+    @Autowired
+    private SeTagMapper seTagMapper;
     @Autowired
     private SeApartmentMapper seApartmentMapper;
 
@@ -156,10 +150,6 @@ public class SeOrderServiceImpl implements SeOrderService {
         return result;
     }
 
-    public static void main(String[] args) {
-
-    }
-
     @Override
     @Transactional
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
@@ -194,7 +184,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
             seOrderMapper.insert(se);
 
-            SeOrderLiver ol=new SeOrderLiver();
+            SeOrderLiver ol = new SeOrderLiver();
             ol.setId(IDGenerator.getId());
             ol.setOrderId(orderId);
             ol.setCreateBy(se.getCreateBy());
@@ -202,7 +192,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             ol.setPhone(se.getCreatorPhone());
             ol.setLiver(se.getCreateBy());
             ol.setUpdateTime(LocalDateTime.now().format(dateTimeFormatter));
-            SeUserAttestation su=new SeUserAttestation();
+            SeUserAttestation su = new SeUserAttestation();
             su.setUserId(sysUser.getId());
             SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(su);
             ol.setIdCard(seUserAttestation.getIdCode());
@@ -266,95 +256,114 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Transactional(rollbackFor = Exception.class)
     public void updateOrderStatus(String orderId) {
 
-        SeOrder se=new SeOrder();
+        SeOrder se = new SeOrder();
         se.setId(orderId);
-        se=seOrderMapper.selectOne(se);
+        se = seOrderMapper.selectOne(se);
         se.setStatus("1");
         seOrderMapper.updateByPrimaryKey(se);
     }
 
-
     @Override
-    public Result getOrderDate(String roomType, SysUser sysUser)  {
-        Result result = new Result();
+    @Transactional(rollbackFor = Exception.class)
+    public void addOrderCalendar() {
+        Date firstday, lastday;
+        try {
+            SeTag seTag = new SeTag();
+            seTag.setStatus("1");
+            seTag.setType("r");
+            List<SeTag> roomTypes = seTagMapper.select(seTag);
+            for (SeTag roomType : roomTypes) {
+                String id = roomType.getId();
 
-        SeApartment seApartment = new SeApartment();
-        seApartment.setRoomType(roomType);
-        List<SeApartment> seApartments = seApartmentMapper.select(seApartment);
+                SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                seOrderCalendar.setRoomTypeId(id);
+                int i = seOrderCalendarMapper.selectCount(seOrderCalendar);
+                if (i > 0) {
+                    Calendar instance = Calendar.getInstance();
+                    instance.add(Calendar.MONTH, 3);
+                    instance.set(Calendar.DAY_OF_MONTH, 1);
+                    firstday = instance.getTime();
+                    instance = Calendar.getInstance();
+                    instance.add(Calendar.MONTH, 4);
+                    instance.set(Calendar.DAY_OF_MONTH, 0);
+                    lastday = instance.getTime();
 
-
-        List<SeOrder> seOrders = seOrderMapper.getOrdersByStatus();
-        int size = seOrders.size();
-        if (size > 0) {
-            ExecutorService executorService = Executors.newCachedThreadPool();
-            final Semaphore semaphore = new Semaphore(50);
-            final CountDownLatch countDownLatch = new CountDownLatch(size);
-            List<List> list = Collections.synchronizedList(new ArrayList());
-            for (SeOrder seOrder : seOrders) {
-                executorService.execute(() -> {
-                    try {
-                        semaphore.acquire();
-                        list.add(getOrderDateList(seOrder));
-                        semaphore.release();
-                    } catch (Exception e) {
-                        logger.error("exception", e);
-                        throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+                    int month = instance.get(Calendar.MONTH) + 1;
+                    int year = instance.get(Calendar.YEAR);
+                    seOrderCalendar.setMonth(month < 10 ? "0" + String.valueOf(month) : String.valueOf(month));
+                    seOrderCalendar.setYear(String.valueOf(year));
+                    i = seOrderCalendarMapper.selectCount(seOrderCalendar);
+                    if (i <= 0) {
+                        addThreeMonthCalendar(id, firstday, lastday);
                     }
-                    countDownLatch.countDown();
 
-                });
-            }
-            try {
-                countDownLatch.await();
-            } catch (InterruptedException e) {
-                logger.error("exception", e);
-                throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
-            }
-            executorService.shutdown();
+                } else {
+                    Calendar instance = Calendar.getInstance();
+                    instance.set(Calendar.DAY_OF_MONTH, 1);
+                    firstday = instance.getTime();
+                    instance = Calendar.getInstance();
+                    instance.add(Calendar.MONTH, 3);
+                    instance.set(Calendar.DAY_OF_MONTH, 0);
+                    lastday = instance.getTime();
 
-            /**
-             * 所有线程完成后进行业务处理*/
-
-            int t = 1;
-            for (int i = 0; i < list.size(); i++) {
-                List dateList = list.get(i);
-                if(i+1<list.size()){
-                    boolean flag = dateList.retainAll(list.get(i + 1));
-                    if(flag==true){
-                        t+=1;
-                        list.add(i+1,dateList);
-                    }
-                }else{
-                    if(t==size){
-                        logger.info("不可用日期:{}",dateList);
-
-                    }
+                    addThreeMonthCalendar(id, firstday, lastday);
                 }
             }
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
 
+    @Override
+    public Result getOrderDate(String roomType, SysUser sysUser) {
+        Result result = new Result();
+
+        try {
+            ArrayList seApartments= seApartmentMapper.getCanUseApartments(roomType);
+            seApartments.size();
+            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+            seOrderCalendar.setRoomTypeId(roomType);
+            seOrderCalendar.setOrders(seApartments.size());
+            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
+            result.setData(seOrderCalendars);
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
         return result;
     }
 
-    private List getOrderDateList(SeOrder seOrder) {
-        List list = Collections.synchronizedList(new ArrayList());
-        String inTime = seOrder.getInTime();
-        String outTime = seOrder.getOutTime();
-        Date inDate = DateUtil.parseAndToDate(inTime, "yyyy-MM-dd HH:mm:ss");
-        Date outDate = DateUtil.parseAndToDate(outTime, "yyyy-MM-dd HH:mm:ss");
+    @Transactional(rollbackFor = Exception.class)
+    public void addThreeMonthCalendar(String id, Date inDate, Date outDate) {
+        List<String> list = new ArrayList();
+        List<SeOrderCalendar> addList = new ArrayList();
+
 
         LocalDate startDate = DateUtil.toLocalDate(inDate);
         LocalDate endDate = DateUtil.toLocalDate(outDate);
-
         long distance = ChronoUnit.DAYS.between(startDate, endDate);
-        if (distance < 1) {
-            return null;
+        if (distance >= 1) {
+            Stream.iterate(startDate, d -> {
+                return d.plusDays(1);
+            }).limit(distance + 1).forEach(f -> {
+                list.add(f.toString());
+            });
         }
-        Stream.iterate(startDate, d -> {
-            return d.plusDays(1);
-        }).limit(distance + 1).forEach(f -> {
-            list.add(f.toString());
-        });
-        return list;
+        for (String date : list) {
+            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+            String[] dateArr = date.split("-");
+            seOrderCalendar.setId(IDGenerator.getId());
+            seOrderCalendar.setRoomTypeId(id);
+            seOrderCalendar.setYear(dateArr[0]);
+            seOrderCalendar.setMonth(dateArr[1]);
+            seOrderCalendar.setDay(dateArr[2]);
+            seOrderCalendar.setOrders(0);
+            addList.add(seOrderCalendar);
+        }
+        if (!list.isEmpty()) {
+            seOrderCalendarMapper.addSeOrderCalendarList(addList);
+        }
+        return;
     }
 }

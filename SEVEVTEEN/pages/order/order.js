@@ -104,12 +104,16 @@ Page({
   choseLiveDateTap: function(e) {
     //日历模态框
     var chooseDate = this.data.chooseDate;
-    var time = "";
+    var time="";
+
+    if (chooseDate!=null){
+       time = this.data.chooseDate.time;
+    }
     var url
     if (chooseDate && chooseDate.end) {
-      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start.date + "-" + this.data.chooseDate.end.date + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate
+      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start.date + "-" + this.data.chooseDate.end.date + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate + "&&time=" + time+"&&roomType=" +"20180730212605678983465"
     } else {
-      url = "/pages/dates/date";
+      url = "/pages/dates/date?roomType=" + "20180730212605678983465";
     }
     wx.getLocation({
       type: 'wgs84',

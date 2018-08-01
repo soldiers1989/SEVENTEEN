@@ -74,4 +74,25 @@
         ORDER BY ap_num ASC
     </select>
 
+    <select id="getApartmentByTime" resultType="java.lang.String">
+        select sa.id from se_apartment sa where
+        sa.`status` !='0'
+        and
+        sa.id not in (
+        SELECT
+        sa.id
+        FROM
+        se_order so,
+        se_apartment sa
+        WHERE
+        so.ap_id = sa.id
+        AND sa.room_type = #{roomType}
+        and so.`status` in ('1','2','3')
+        and ((so.in_time &lt; DATE_FORMAT(#{outTime},'%Y-%m-%d %H:%i' ) and  so.out_time &gt; DATE_FORMAT(#{inTime},'%Y-%m-%d %H:%i' ))
+        or   (so.out_time &lt; DATE_FORMAT(#{outTime},'%Y-%m-%d %H:%i' ) and  so.in_time &gt; DATE_FORMAT(#{inTime},'%Y-%m-%d %H:%i' ))
+        or   (so.out_time &gt; DATE_FORMAT(#{outTime},'%Y-%m-%d %H:%i' ) and  so.in_time &lt; DATE_FORMAT(#{inTime},'%Y-%m-%d %H:%i' )))
+        group by sa.id)
+        order by sa.id desc
+    </select>
+
 </mapper>
