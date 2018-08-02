@@ -153,6 +153,13 @@ public class SysUserController {
 		return ResponseEntity.ok(SysUsermapper.selectElementsByIds(userId));
 	}
 
+	@GetMapping("/wx")
+	@ApiOperation("根据用户id查询用户信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity findOneBywx(@AuthenticationPrincipal SysUser sysUser) {
+		return ResponseEntity.ok(new Result(sysUser));
+	}
+
 	@GetMapping("clear")
 	@ApiOperation("清除所有用户缓存")
 	@Caching(evict = { @CacheEvict(value = "sysUser", allEntries = true),

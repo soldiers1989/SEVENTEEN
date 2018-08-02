@@ -13,16 +13,15 @@ import com.seventeen.service.SeApartmentService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +34,10 @@ import java.util.stream.Collectors;
 @Service
 public class SeApartmentServiceImpl implements SeApartmentService {
     private final Logger logger = LoggerFactory.getLogger(SeApartmentServiceImpl.class);
+
+
+    @Value("${file.upload.url}")
+    private String imgUrl;
 
     @Autowired
     private SeApartmentMapper seApartmentMapper;
@@ -181,6 +184,10 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
             SeApartment seApartment = seApartmentMapper.selectByPrimaryKey(apNum);
             List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(apNum);
+            for (SeApartmentImg seApartmentImg : seApartmentImgs) {
+                seApartmentImg.setUrl(StringUtils.isBlank(seApartmentImg.getUrl())==true?"":imgUrl + seApartmentImg.getUrl());
+                seApartmentImg.setMixUrl(StringUtils.isBlank(seApartmentImg.getMixUrl())==true?"":imgUrl + seApartmentImg.getMixUrl());
+            }
             List<SeApartmentGood> seApartmentGoods = seApartmentGoodMapper.selectByApids(apNum);
 
             seApartmentDetail.setSeApartment(seApartment);

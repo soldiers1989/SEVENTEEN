@@ -74,7 +74,6 @@ public class FileUploadController {
     public ResponseEntity<Result> handleFileUpload(@RequestParam("file") MultipartFile[] files, @RequestHeader(name = "Room", required = false) String Room, @AuthenticationPrincipal UserDetails userDetails) {
         Result result = new Result();
         File rootDir = new File(FileUploadUtil.roomImg);
-
         String[] val = Room.split("_");
 
         if (!rootDir.exists()) {

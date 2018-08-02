@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    userUrl: app.globalData.baseUrl,
     routers: [{
         name: '优惠券',
         url: '/pages/money/coupon-detail/coupon-detail',
@@ -70,27 +71,56 @@ Page({
       }
     ]
   },
-
+  getUserInfo: function() {
+    let that = this;
+    wx.request({
+      url: this.data.userUrl + "/sys/users/wx",
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      success: function(data) {
+        if (data.data.resultCode === 200) {
+          that.setData({
+            userInfo: data.data.data
+          })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function() {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
     var that = this;
     var token = wx.getStorageSync('token');
-
+    this.getUserInfo();
     wx.request({
       url: app.globalData.baseUrl + "/rlsb/isVerify",
       method: "GET",
       header: {
         "Authorization": "Bearer " + token
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data.data);
 
         var _obj = that.data.routers;
-        _obj[3].flag = res.data.data==true?false:true;
+        _obj[3].flag = res.data.data == true ? false : true;
         that.setData({
-          routers:_obj
+          routers: _obj
         })
         console.log(_obj);
       }
@@ -149,10 +179,18 @@ Page({
   toPage: function(e) {
     var _datasetId = e.currentTarget.dataset;
     if (_datasetId.flag) {
+      if (_datasetId.name === '客服') {
+        wx.makePhoneCall({
+          phoneNumber: '020-82566710' //仅为示例，并非真实的电话号码
+        })
+      }
 
-      wx.navigateTo({
-        url: _datasetId.xxurl,
-      })
+      if (_datasetId.xxurl != null) {
+        wx.navigateTo({
+          url: _datasetId.xxurl,
+        })
+      }
+
     } else {
       wx.showToast({
         title: '已验证',
@@ -166,6 +204,6 @@ Page({
 })
 
 // function loadIsVerify() {
-  
+
 
 // }
