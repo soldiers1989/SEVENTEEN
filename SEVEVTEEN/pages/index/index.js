@@ -70,13 +70,19 @@ Page({
       remark: null,
       roomType: "20180719101454135398418",
       imgUrl: ""
+
     }],
 
     roomTypePrice: [{
 
       name: "",
-      Price: ''
+      Price: '',
+      tagId: "",
+      name:"",
+      Price:''
     }],
+
+    userVip:{},
 
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl
@@ -123,9 +129,9 @@ Page({
   setOrder: function(e) {
     var _datasetId = e.target.dataset.id;
     var money = e.target.dataset.money;
-
+    var tagId = e.target.dataset.tagid;
     wx.navigateTo({
-      url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money,
+      url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money + "&tagId=" + tagId,
     })
   },
   getTotalAssess: function(pageNum) {
@@ -246,7 +252,23 @@ Page({
         })
         getRoomTypes(that, that.data.Shops[0].id, token);
       }
-    })
+    });
+
+    wx.request({
+      url: that.data.baseUrl + "/sys/users/userVip",
+      method: 'GET',
+      header: {
+        Authorization: 'Bearer ' + token
+      },
+      success: function (res) {
+        //console.log(res.data)
+        wx.setStorageSync('userVip', res.data.data)
+        that.setData({
+          userVip: res.data.data
+        })
+      }
+    });
+   
   },
   onReachBottom: function() {
     if (this.data.tabArr.curHdIndex == "t2") {
@@ -341,3 +363,5 @@ function getRoomTypes(that, shopId, token) {
     }
   })
 }
+
+

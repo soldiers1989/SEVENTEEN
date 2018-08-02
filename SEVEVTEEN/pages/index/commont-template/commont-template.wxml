@@ -8,15 +8,25 @@
           <image class='roomPay-text-t1-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
         </view>
         <view class='roomPay-text-t2'>
-          <text>获得{{items.price}}积分</text>
+          <view wx:if="{{items.name=='会员价'}}">
+            <text>获得 {{items.price*userVip.discount}}积分</text>
+          </view>
+          <view wx:else>
+            <text>获得{{items.price}}积分</text>
+          </view>
           <image src='/imgs/index/quan.png'></image>
         </view>
       </view>
       <view class='roomPay-text-money'>
-        <text class='roomPay-text-money-t1'>¥ {{items.price}}</text>
+        <view wx:if="{{items.name=='会员价'}}">
+          <text class='roomPay-text-money-t1'>¥ {{items.price*userVip.discount}}</text>
+        </view>
+        <view wx:else>
+          <text class='roomPay-text-money-t1'>¥ {{items.price}}</text>
+        </view>
         <!-- <text class='roomPay-text-money-t2'>¥100减20</text> -->
       </view>
-      <view class='btn-ding' data-id='{{roomTypeCode}}' data-money="{{items.price}}" catchtap='setOrder'>订</view>
+      <view class='btn-ding' data-id='{{roomTypeCode}}' data-money="{{items.name=='会员价'?items.price*userVip.discount:items.price}}" data-tagId='{{items.tagId}}' catchtap='setOrder'>订</view>
     </view>
   </view>
 

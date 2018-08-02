@@ -56,8 +56,9 @@
             <image class='right-icon' src='{{imgUrl}}/imgs/index/top-arr.png'></image>
           </view>
         </view>
+        
         <view class='{{isShowPay.showId==items.roomType?isShowPay.flag==true?"pay-list":"none":"none"}}' style='height:{{isShowPay.showId==items.roomType?"200px":""}}'>
-          <template is="roomPay" data="{{imgUrl: imgUrl,roomTypePrice:roomTypePrice,roomTypeCode:items.roomType}}" />
+          <template is="roomPay" data="{{imgUrl: imgUrl,roomTypePrice:roomTypePrice,roomTypeCode:items.roomType,userVip:userVip}}" />
         </view>
       </view>
 

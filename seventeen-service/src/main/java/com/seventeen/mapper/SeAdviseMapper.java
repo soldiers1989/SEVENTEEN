@@ -28,7 +28,7 @@ public interface SeAdviseMapper extends CoreMapper<SeAdvise> {
             "FROM se_shop ss,`se_apartment` a   " +
             "LEFT JOIN se_tag st ON a.room_type = st.id " +
             "LEFT JOIN `se_apartment_img` i ON i.ap_id=a.id " +
-            "WHERE a.shop_id = ss.`id` AND ss.id = #{shopId} AND a.status!=0" +
+            "WHERE a.shop_id = ss.`id` AND ss.id = #{shopId} AND a.status!=0   " +
             "GROUP BY a.room_type ")
     List<TypeRoom> getTypeRooms(@Param("shopId")String shopId);
 

@@ -6,30 +6,30 @@ Page({
    */
   data: {
     roomId: "",
-    price: 0,
+    price:0,
     index: 0,
     index1: 0,
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl,
 
-
-    userInfo: {
+    
+    userInfo:{
       isVerify: false,
-      tName: ""
-
+      tName:""
+      
     },
     phone: "",
+    tagId:"",
 
-    orderInfo: {
-      startTime: "",
-      endTime: "",
-      tName: "",
-      phone: "",
-      planTime: "",
-      couponId: "",
-      price: 0
-
-    },
+    // orderInfo:{
+    //   startTime:"",
+    //   endTime: "",
+    //   tName:"",
+    //   phone:"",
+    //   planTime:"",
+    //   couponId:"",
+    //   price:0
+    // },
 
     array: [
       '14:00 ~ 15:00',
@@ -98,7 +98,7 @@ Page({
     ]
 
 
-
+   
 
   },
   choseLiveDateTap: function(e) {
@@ -162,7 +162,7 @@ Page({
         })
       }
     })
-    
+
   },
   /**
    * 生命周期函数--监听页面加载
@@ -172,12 +172,13 @@ Page({
 
     this.setData({
       roomId: options.roomId,
-      price: options.price
+      price : options.price,
+      tagId: options.tagId
     })
 
     //获取用户是否已经做了实名制
     var token = wx.getStorageSync('token');
-    getIsVerify(this, token);
+    getIsVerify(this,token);
     //获取是否还有房间
 
 
@@ -251,47 +252,65 @@ Page({
     //赋值
     console.log(this.data.array1[this.data.index1]);
   },
-  getPhone: function(e) {
+  getPhone: function (e) {
     var val = e.detail.value;
     this.setData({
-      phone: val
+      phone:val
     });
   },
 
   //支付
   toPay: function() {
     console.log("支付开始")
-
-    var roomNum = this.data.array1[this.data.index1];
-    var price = this.data.price;
-    var planTime = this.data.array[this.data.index];
-    var userInfo = this.data.userInfo;
-    var orderInfo = {
-      roomId: "AVC001",
-      fee: 1,
-      startTime: "2018-7-20",
-      endTime: "2018-7-30",
-      tName: userInfo.tName,
-      phone: this.data.phone,
-      planTime: planTime,
-      couponId: "",
-      price: price,
-      roomNum: roomNum
+    
+    if (this.data.userInfo.isVerify==false) {
+      wx.showToast({
+        title: '您还没通过实名认证',
+        icon: 'none'
+      })
+      wx.redirectTo({//关闭当前页面，跳转到应用内的某个页面
+        url: '/pages/my/rlsb/rlsb'
+      })
+      return;
     }
 
-    console.log(orderInfo)
+    var roomNum=this.data.array1[this.data.index1];
+    var price =this.data.price;
+    var planTime = this.data.array[this.data.index];
+    var userInfo = this.data.userInfo;
+    var phone=this.data.phone;
+    if(phone==""){
+      wx.showToast({
+        title: '手机号不能为空',
+        icon:'none'
+      })
+      return;
+    }
+
+    
+      
+
     var token = wx.getStorageSync('token');
 
     wx.request({
       url: this.data.baseUrl + '/order/wx/setOrder',
 
       data: {
-        orderInfo
-
+        roomId: "20180725230836716205288",
+        fee: price,
+        startTime: "2018-7-20 ",
+        endTime: "2018-7-30",
+        tName: userInfo.tName,
+        phone: phone,
+        planTime: planTime,
+        couponId: "",
+        price: price,
+        roomNum: roomNum,
+        tagId: this.data.tagId
       },
       header: {
         "Authorization": "Bearer " + token,
-        "Content-Type": "application/json" //x-www-form-urlencoded
+        "Content-Type": "application/json"
       },
       method: 'POST',
       //dataType: 'text',
@@ -299,7 +318,7 @@ Page({
       success: function(res) {
         console.log(res)
         if (res.statusCode == 200) {
-          var dd = res.data.data;
+          var dd=res.data.data;
           console.log()
           wx.requestPayment({
             timeStamp: dd.timeStamp,
@@ -324,15 +343,15 @@ Page({
   }
 })
 
-function getIsVerify(that, token) {
+function getIsVerify(that,  token) {
   wx.request({
     url: that.data.baseUrl + "/rlsb/isVerify",
     method: 'GET',
     header: {
       Authorization: 'Bearer ' + token
     },
-    success: function(res) {
-      console.log(res.data.data)
+    success: function (res) {
+       console.log(res.data.data)
       that.setData({
         userInfo: res.data.data
       })
