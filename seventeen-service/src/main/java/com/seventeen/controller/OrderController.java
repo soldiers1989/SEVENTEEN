@@ -50,14 +50,14 @@ public class OrderController {
 	 * @return
 	 */
 	@GetMapping
-	@ApiOperation(value = "获取订单列表信息")
-	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity OrderList(String status,String remark,String startTime,String endTime,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
+    @ApiOperation(value = "获取订单列表信息")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity OrderList(String status,String remark,String startTime,String endTime,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
         Result<List<OrderCenter>> seOrders = seOrderService.getOrderList(sysUser, status, remark, pageInfo, startTime, endTime);
         return ResponseEntity.ok(seOrders);
     }
 
-	@GetMapping("/wx")
+    @GetMapping("/wx")
 	@ApiOperation(value = "获取未评价订单列表信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity noReplyOrderList(String reply,PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {

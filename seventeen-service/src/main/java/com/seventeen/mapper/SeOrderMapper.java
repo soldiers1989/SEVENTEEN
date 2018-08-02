@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +29,5 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
 
     @Update("update se_order so set so.status ='0' where so.id = #{id} ")
     void deleteByid(@Param("id") String id);
+
 }

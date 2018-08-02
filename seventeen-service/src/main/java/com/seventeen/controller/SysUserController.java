@@ -5,6 +5,7 @@ import com.seventeen.bean.core.SysRoleAuthority;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.mapper.SysUserMapper;
+import com.seventeen.service.SeUserVipService;
 import com.seventeen.service.impl.SysUserService;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
@@ -17,6 +18,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -35,6 +37,9 @@ public class SysUserController {
 
 	@Autowired
 	private SysUserMapper SysUsermapper;
+
+	@Autowired
+	private SeUserVipService seUserVipService;
 
 	@PostMapping
 	@ApiOperation("新增用户")
@@ -155,4 +160,12 @@ public class SysUserController {
 	public ResponseEntity clearCache() {
 		return ResponseEntity.ok("用户缓存清除成功。");
 	}
+
+
+    @GetMapping("userVip")
+    public ResponseEntity getUserVip(@AuthenticationPrincipal SysUser sysUser) {
+        return ResponseEntity.ok(seUserVipService.getUserVipInfo(sysUser.getId()));
+    }
+
+
 }
