@@ -46,28 +46,15 @@ public class SeApartmentImg {
     }
 
     public String getUrl() {
-
-        if(StringUtils.isBlank(url)){
-            return "";
-        }
-        if(url.contains(FileUploadUtil.FILE_URL)){
-            return url;
-        }
-        return FileUploadUtil.FILE_URL + "/" + url;    }
+        return url;
+    }
 
     public void setUrl(String url) {
         this.url = url;
     }
 
     public String getMixUrl() {
-
-        if(StringUtils.isBlank(mixUrl)){
-            return "";
-        }
-        if(mixUrl.contains(FileUploadUtil.FILE_URL)){
-            return mixUrl;
-        }
-        return FileUploadUtil.FILE_URL + "/" + mixUrl;
+        return mixUrl;
     }
 
     public void setMixUrl(String mixUrl) {

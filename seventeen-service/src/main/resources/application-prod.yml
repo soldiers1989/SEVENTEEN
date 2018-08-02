@@ -80,7 +80,7 @@ info:
 
 file:
   upload:
-    url: https://www.17inn.com/:80
+    url: https://www.17inn.com/jar/
 
 wx:
   app:

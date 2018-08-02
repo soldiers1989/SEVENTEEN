@@ -60,9 +60,8 @@ Page({
     })
   },
   callClientTap: function (event) {
-
     wx.makePhoneCall({
-      phoneNumber: '1340000' //仅为示例，并非真实的电话号码
+      phoneNumber: '020-82566710' //仅为示例，并非真实的电话号码
     })
   },
   replyToTap: function (e) {
