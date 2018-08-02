@@ -52,12 +52,14 @@ Page({
             that.setData({
               reply: that.data.systemOrder.concat(data.data.data),
               replyPageTotal: data.data.pageInfo.total,
+              replyPageNum: data.data.pageInfo.pageNum,
               replyhasMoreData
             })
           } else {
             that.setData({
               reply: data.data.data,
               replyPageTotal: data.data.pageInfo.total,
+              replyPageNum: data.data.pageInfo.pageNum,
               replyhasMoreData
             })
           }
@@ -97,12 +99,14 @@ Page({
             that.setData({
               noReply: that.data.noReply.concat(data.data.data),
               pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
               noReplyhasMoreData
             })
           } else {
             that.setData({
               noReply: data.data.data,
               pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
               noReplyhasMoreData
             })
           }

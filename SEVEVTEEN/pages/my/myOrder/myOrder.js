@@ -96,12 +96,14 @@ Page({
             that.setData({
               allOrder: that.data.allOrder.concat(data.data.data),
               allOrderPageTotal: data.data.pageInfo.total,
+              allOrderPageNum: data.data.pageInfo.pageNum,
               allOrderHasMoreData
             })
           } else {
             that.setData({
               allOrder: data.data.data,
               allOrderPageTotal: data.data.pageInfo.total,
+              allOrderPageNum: data.data.pageInfo.pageNum,
               allOrderHasMoreData
             })
           }
@@ -141,12 +143,14 @@ Page({
             that.setData({
               waitLive: that.data.waitLive.concat(data.data.data),
               waitLivePageTotal: data.data.pageInfo.total,
+              waitLivePageNum: data.data.pageInfo.pageNum,
               waitLiveHasMoreData
             })
           } else {
             that.setData({
               waitLive: data.data.data,
               waitLivePageTotal: data.data.pageInfo.total,
+              waitLivePageNum: data.data.pageInfo.pageNum,
               waitLiveHasMoreData
             })
           }

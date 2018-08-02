@@ -215,8 +215,6 @@ public class SeCouponServiceImpl implements SeCouponService {
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-
-
             ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status);
             pageInfo.setTotal(page.getTotal());
             result.setData(seCoupons, pageInfo);
@@ -242,11 +240,10 @@ public class SeCouponServiceImpl implements SeCouponService {
                 if(seUserCoupons.isEmpty()){
                     seUserCoupon.setId(IDGenerator.getId());
                     seUserCoupon.setUpdateTime(DateUtil.now());
-                    seUserCoupon.setCreateBy(sysUser.getUsername());
+                    seUserCoupon.setCreateBy(sysUser.getId());
                     seUserCoupon.setCreateTime(DateUtil.now());
                     seUserCouponMapper.insert(seUserCoupon);
                 }
-
             }
         } catch (Exception e) {
             logger.error(e.getMessage());

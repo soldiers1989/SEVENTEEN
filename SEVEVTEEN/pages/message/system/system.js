@@ -41,12 +41,14 @@ Page({
             that.setData({
               systemOrder: that.data.systemOrder.concat(data.data.data),
               pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
               hasMoreData
             })
           }else{
             that.setData({
               systemOrder: data.data.data,
               pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
               hasMoreData
             })
           }

@@ -49,12 +49,14 @@ Page({
             that.setData({
               canUse: that.data.canUse.concat(data.data.data),
               canUsePageTotal: data.data.pageInfo.total,
+              canUsePageNum: data.data.pageInfo.pageNum,
               canUseHasMoreData
             })
           } else {
             that.setData({
               canUse: data.data.data,
               canUsePageTotal: data.data.pageInfo.total,
+              canUsePageNum: data.data.pageInfo.pageNum,
               canUseHasMoreData
             })
           }
@@ -94,12 +96,14 @@ Page({
             that.setData({
               hadUse: that.data.hadUse.concat(data.data.data),
               hadUsePageTotal: data.data.pageInfo.total,
+              hadUsePageNum: data.data.pageInfo.pageNum,
               hadUseHasMoreData
             })
           } else {
             that.setData({
               hadUse: data.data.data,
               hadUsePageTotal: data.data.pageInfo.total,
+              hadUsePageNum: data.data.pageInfo.pageNum,
               hadUseHasMoreData
             })
           }
@@ -139,12 +143,14 @@ Page({
             that.setData({
               overdue: that.data.overdue.concat(data.data.data),
               overduePageTotal: data.data.pageInfo.total,
+              overduePageNum: data.data.pageInfo.pageNum,
               overdueHasMoreData
             })
           } else {
             that.setData({
               overdue: data.data.data,
               overduePageTotal: data.data.pageInfo.total,
+              overduePageNum: data.data.pageInfo.pageNum,
               overdueHasMoreData
             })
           }

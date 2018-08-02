@@ -7,7 +7,11 @@ const commont = require("commont-template/commont-template.js");
 Page({
   data: {
     token: "21",
-
+    pageNum: 1,
+    pageSize: 10,
+    pageTotal: 0,
+    hasMoreData: true,
+    assessUrl: app.globalData.baseUrl + '/assess',
     tabArr: {
       curHdIndex: "t1"
       //  curBdIndex: 0 
@@ -65,13 +69,13 @@ Page({
       price: "9999",
       remark: null,
       roomType: "20180719101454135398418",
-      imgUrl:""
+      imgUrl: ""
     }],
 
     roomTypePrice: [{
-      
-      name:"",
-      Price:''
+
+      name: "",
+      Price: ''
     }],
 
     imgUrl: app.globalData.ImgUrl,
@@ -119,15 +123,60 @@ Page({
   setOrder: function(e) {
     var _datasetId = e.target.dataset.id;
     var money = e.target.dataset.money;
-   
+
     wx.navigateTo({
       url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money,
     })
   },
-
+  getTotalAssess: function(pageNum) {
+    let that = this;
+    wx.request({
+      url: this.data.assessUrl + "/wx/allAssess?pageNum=" + pageNum,
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      success: function(data) {
+        if (data.data.resultCode === 200) {
+          let hasMoreData = true;
+          if (data.data.data.assessContent.length < that.data.pageSize) {
+            hasMoreData = false;
+          }
+          if (pageNum > 1) {
+            that.setData({
+              assess: that.data.assess.assessContent.concat(data.data.data.assessContent),
+              pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
+              hasMoreData
+            })
+          } else {
+            that.setData({
+              assess: data.data.data,
+              pageTotal: data.data.pageInfo.total,
+              pageNum: data.data.pageInfo.pageNum,
+              hasMoreData
+            })
+          }
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function() {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
   //切换tab页
   tabSel: function(e) {
-
+    let that = this;
     var _datasetId = e.target.dataset.id;
     console.log(e.currentTarget.dataset.id)
     var sid = e.currentTarget.dataset.id;
@@ -137,7 +186,9 @@ Page({
     this.setData({
       tabArr: _obj
     });
-
+    if (_datasetId == "t2") {
+      this.getTotalAssess(1);
+    }
   },
   //日历模态框
   showDates: function() {
@@ -197,6 +248,19 @@ Page({
       }
     })
   },
+  onReachBottom: function() {
+    if (this.data.tabArr.curHdIndex == "t2") {
+      if (this.data.hasMoreData) {
+        let pageNum = this.data.pageNum + 1
+        this.getTotalAssess(pageNum)
+      } else {
+        wx.showToast({
+          title: '没有更多数据',
+        })
+      }
+    }
+
+  },
   onShow: function() {
     var chooseDate = this.data.chooseDate;
     var time = "";
@@ -214,10 +278,10 @@ Page({
   },
 
   showPay: function(e) {
-    
+
     var _datasetId = e.currentTarget.dataset.id;
     console.log(_datasetId)
-    getRoomTypePrice(this, _datasetId,this.data.token);
+    getRoomTypePrice(this, _datasetId, this.data.token);
 
     var curObj = this.data.isShowPay;
     if (curObj.showId == "") { //初始状态
@@ -249,8 +313,8 @@ function getRoomTypePrice(that, typeCode, token) {
     header: {
       Authorization: 'Bearer ' + token
     },
-    success: function (res) {
-    
+    success: function(res) {
+
       that.setData({
         roomTypePrice: res.data.data
       })
@@ -272,7 +336,7 @@ function getRoomTypes(that, shopId, token) {
     success: function(res) {
       // console.log(res.data.data)
       that.setData({
-        roomTypes:res.data.data
+        roomTypes: res.data.data
       })
     }
   })

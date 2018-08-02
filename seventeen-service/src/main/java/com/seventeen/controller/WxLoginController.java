@@ -74,13 +74,13 @@ public class WxLoginController {
             if (null != result && result.length() > 0) {
                 SysUser sysUser = new SysUser();
                 JSONObject userInfoJSON = JSONObject.parseObject(result);
-                sysUser.setId(IDGenerator.getId());
                 sysUser.setPassword(StringUtils.isEmpty(phone) == true ? "123456" : phone);
                 sysUser.setCreateDate(new Date());
                 sysUser.setOpenid(userInfoJSON.getString("openId"));
                 sysUser.setSex(userInfoJSON.getString("gender"));
                 sysUser.setUsername(userInfoJSON.getString("nickName"));
                 sysUser.setUnionid(userInfoJSON.getString("unionId"));
+                sysUser.setAvatarUrl(userInfoJSON.getString("avatarUrl"));
                 sysUser.setDescription("小程序用户");
                 sysUser.setPhone(StringUtils.isEmpty(phone) == true ? "" : phone);
                 String token = authService.register(sysUser);

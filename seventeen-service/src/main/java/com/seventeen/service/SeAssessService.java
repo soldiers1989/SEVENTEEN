@@ -37,7 +37,7 @@ public interface SeAssessService {
      * @param seAssessContent
      * @return
      */
-    Result<List<SeAssessContent>> addAssess(SeAssessContent seAssessContent);
+    Result<List<SeAssessContent>> addAssess(SeAssessContent seAssessContent,SysUser sysUser);
 
     /**
      *
@@ -55,5 +55,7 @@ public interface SeAssessService {
     Result<List<AssessPoint>> getreplyAssessList(SysUser sysUser, PageInfo pageInfo);
 
     Result addAssessByWx(SeAssessByWx seAssessByWx, SysUser sysUser);
+
+    Result getAllAssess(PageInfo pageInfo, SysUser sysUser);
 
 }

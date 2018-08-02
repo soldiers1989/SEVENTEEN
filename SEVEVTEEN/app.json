@@ -1,16 +1,14 @@
 {
   "pages": [
-      "pages/auth/auth",
+        "pages/auth/auth",
+        
+        "pages/index/index",
+        
     "pages/my/rlsb/rlsb",
     "pages/my/my",
-
-
     "pages/my/toushu/toushu",
-
     "pages/my/integral/integral",
     "pages/my/myOrder/myOrder",
-  
-    "pages/index/index",
     "pages/message/system/system",
     "pages/message/system/system-detail/system-detail",
     "pages/message/reply/evaluate/evaluate",

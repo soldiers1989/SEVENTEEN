@@ -85,13 +85,11 @@ public class SeAssessServiceImpl implements SeAssessService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result<List<SeAssessContent>> addAssess(SeAssessContent seAssessContent) {
+    public Result<List<SeAssessContent>> addAssess(SeAssessContent seAssessContent,SysUser sysUser) {
         Result<List<SeAssessContent>> result = new Result<>();
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
             String id = seAssessContent.getAssessId();
-            seAssessContent.setCreateBy(authentication.getName());
+            seAssessContent.setCreateBy(sysUser.getId());
             seAssessContent.setCreateTime(DateUtil.now());
             List<SeAssessContent> seAssessContents = seAssessContentMapper.getseAssessContent(id);
             /**
@@ -191,7 +189,7 @@ public class SeAssessServiceImpl implements SeAssessService {
             }
             seAssess.setAssessPointId(IDGenerator.getId());
             seAssess.setContentId(IDGenerator.getId());
-            seAssess.setCreateBy(sysUser.getUsername());
+            seAssess.setCreateBy(sysUser.getId());
             seAssess.setCreateTime(DateUtil.now());
             seAssessMapper.insert(seAssess);
 
@@ -201,7 +199,7 @@ public class SeAssessServiceImpl implements SeAssessService {
             seAssessContent.setContent(seAssessByWx.getContent());
             seAssessContent.setStatus("1");
             seAssessContent.setCreateTime(DateUtil.now());
-            seAssessContent.setCreateBy(sysUser.getUsername());
+            seAssessContent.setCreateBy(sysUser.getId());
             seAssessContentMapper.insert(seAssessContent);
 
             List<SeAssessByWx.AssessPoint> points = seAssessByWx.getPoint();
@@ -216,7 +214,7 @@ public class SeAssessServiceImpl implements SeAssessService {
                 seAssessPoint.setTagId(point.getId());
                 seAssessPoint.setPoint(String.valueOf(totalPoint));
                 seAssessPoint.setPointArr(StringUtils.join(star,","));
-                seAssessPoint.setCreateBy(sysUser.getUsername());
+                seAssessPoint.setCreateBy(sysUser.getId());
                 seAssessPoint.setCreateTime(DateUtil.now());
                 seAssessPointMapper.insert(seAssessPoint);
             }
@@ -227,4 +225,44 @@ public class SeAssessServiceImpl implements SeAssessService {
         }
         return result;
     }
+
+    @Override
+    public Result getAllAssess(PageInfo pageInfo, SysUser sysUser) {
+        Result result = new Result<>();
+        try {
+            WxTotalAssess wxTotalAssess = new WxTotalAssess();
+            String totalPoint = seAssessPointMapper.getseAssessTotalPoint();
+            List<WxTotalAssess.AssessTarget> assessTargets = seAssessPointMapper.getseAssessList();
+            for (WxTotalAssess.AssessTarget assessTarget : assessTargets) {
+                ArrayList arrayList = new ArrayList();
+                for (int i = 0; i <assessTarget.getPoint() ; i++) {
+                    arrayList.add("1");
+                }
+                assessTarget.setStarArr(arrayList);
+            }
+            String totalSize = seAssessContentMapper.getseContentTotalSize();
+
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            List<WxTotalAssess.AssessContent> assessContents = seAssessContentMapper.getseContentList();
+            for (WxTotalAssess.AssessContent assessContent : assessContents) {
+                ArrayList arrayList = new ArrayList();
+                for (int i = 0; i <assessContent.getTotalPoint() ; i++) {
+                    arrayList.add("1");
+                }
+                assessContent.setStarArr(arrayList);
+            }
+            pageInfo.setTotal(page.getTotal());
+
+            wxTotalAssess.setTotalAssess(totalPoint);
+            wxTotalAssess.setTotalContentSize(totalSize);
+            wxTotalAssess.setAssessTargets(assessTargets);
+            wxTotalAssess.setAssessContent(assessContents);
+            result.setData(wxTotalAssess, pageInfo);
+
+        } catch (Exception e) {
+            log.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;    }
 }

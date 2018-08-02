@@ -56,8 +56,8 @@ public class AssessController {
     @PostMapping
     @ApiOperation(value = "回复评价")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity addAssess(@RequestBody SeAssessContent seAssessContent) {
-        Result<List<SeAssessContent>> orderCenter = seAssessService.addAssess(seAssessContent);
+    public ResponseEntity addAssess(@RequestBody SeAssessContent seAssessContent,@AuthenticationPrincipal SysUser sysUser) {
+        Result<List<SeAssessContent>> orderCenter = seAssessService.addAssess(seAssessContent,sysUser);
         return ResponseEntity.ok(orderCenter);
     }
 
@@ -66,6 +66,14 @@ public class AssessController {
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
     public ResponseEntity addAssessByWx(@RequestBody SeAssessByWx seAssessByWx, @AuthenticationPrincipal SysUser sysUser) {
         Result result = seAssessService.addAssessByWx(seAssessByWx,sysUser);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/wx/allAssess")
+    @ApiOperation(value = "获取评价")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity getAllAssess( PageInfo pageInfo,@AuthenticationPrincipal SysUser sysUser) {
+        Result result = seAssessService.getAllAssess(pageInfo,sysUser);
         return ResponseEntity.ok(result);
     }
 

@@ -73,59 +73,41 @@
   <view class='evaluete {{tabArr.curHdIndex=="t2"?"":"none"}}'>
     <view class='all-evaluete'>
       <view class='score'>
-        <text class='score-num'>{{all_evaluete.score}}</text>
-        <text class='score-text'>{{all_evaluete.comCount}}条评价</text>
+        <text class='score-num'>{{assess.totalAssess}}</text>
+        <text class='score-text'>{{assess.totalContentSize}}条评价</text>
       </view>
       <view class='stars'>
-        <view class='stars-row'>
-          <text class='stars-text'>设施评分</text>
+        <view class='stars-row'wx:for="{{assess.assessTargets}}" wx:for-item="item" wx:for-index="index">
+          <text class='stars-text'>{{item.target}}</text>
           <view class='stars-star'>
 
-            <block wx:for="{{all_evaluete.ss}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
-              <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+            <block wx:for="{{item.starArr}}" wx:key="key" wx:for-item="itemStar" wx:for-index="idx">
+              <image src="{{itemStar===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
             </block>
           </view>
-          <text class='stars-num'>5.0</text>
-        </view>
-        <view class='stars-row'>
-          <text class='stars-text'>卫生评分</text>
-          <view class='stars-star'>
-            <block wx:for="{{all_evaluete.ws}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
-              <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-            </block>
-          </view>
-          <text class='stars-num'>5.0</text>
-        </view>
-        <view class='stars-row'>
-          <text class='stars-text'>舒适感</text>
-          <view class='stars-star'>
-            <block wx:for="{{all_evaluete.ssg}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
-              <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
-            </block>
-          </view>
-          <text class='stars-num'>5.0</text>
+          <text class='stars-num'>{{item.point}}</text>
         </view>
       </view>
 
     </view>
 
-    <view class='user-evaluete'>
+    <view class='user-evaluete' wx:for="{{assess.assessContent}}" wx:for-item="item" wx:for-index="index">
       <view class='topInfo'>
-        <image class='user-icon' src='{{imgUrl}}/imgs/index/tx.png'></image>
+        <image class='user-icon' src='{{item.avatarUrl}}'></image>
         <view class='user-centent'>
-          <text class='user-phone'>139****1234</text>
-          <text class='user-room'>大牛坊</text>
+          <text class='user-phone'>{{item.userName}}</text>
+          <text class='user-room'>{{item.roomName}}</text>
           <view class='stars-star user-star'>
-            <block wx:for="{{all_evaluete.ssg}}" wx:key="key" wx:for-item="item" wx:for-index="idx">
-              <image src="{{item===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
+            <block wx:for="{{item.starArr}}" wx:key="key" wx:for-item="itemStar" wx:for-index="idx">
+              <image src="{{itemStar===0?imgUrl+'/imgs/index/star-no.png':imgUrl+'/imgs/index/star-chs.png'}}"></image>
             </block>
           </view>
         </view>
-        <text class='user-c-time'>2018-06-21</text>
+        <text class='user-c-time'>{{item.createTime}}</text>
       </view>
 
 
-      <text class='uesr-comment'>弄死的念佛is的念佛isnoin哦i弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦弄死的念佛is的念佛isnoin哦</text>
+      <text class='uesr-comment'>{{item.content}}</text>
     </view>
 
   </view>

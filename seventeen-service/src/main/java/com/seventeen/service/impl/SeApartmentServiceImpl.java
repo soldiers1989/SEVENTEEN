@@ -477,7 +477,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         Result result = new Result<>();
         try {
             seAdvise.setId(IDGenerator.getId());
-            seAdvise.setCreateBy(sysUser.getUsername());
+            seAdvise.setCreateBy(sysUser.getId());
             seAdvise.setCreateTime(DateUtil.now());
             seAdvise.setUserId(sysUser.getId());
             seAdviseMapper.insert(seAdvise);

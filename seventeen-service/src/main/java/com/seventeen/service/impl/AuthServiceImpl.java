@@ -6,6 +6,8 @@ import com.seventeen.filter.JwtAuthenticationTokenFilter;
 import com.seventeen.mapper.SysUserMapper;
 import com.seventeen.service.AuthService;
 import com.seventeen.util.DateUtil;
+import com.seventeen.util.IDGenerator;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,11 +44,15 @@ public class AuthServiceImpl implements AuthService {
 		final String openid = userToAdd.getOpenid();
 		SysUser userDetail=(SysUser)sysUserDetailsServiceImpl.loadUserByOpenId(openid);
 		if(userDetail!=null) {
+			String id = userDetail.getId();
+			BeanUtils.copyProperties(userToAdd,userDetail);
 			userDetail.setLastLoginTime(DateUtil.nowDate());
+			userDetail.setId(id);
 			sysUserService.update(userDetail);
 			return jwtTokenConfig.generateToken(userDetail);
 		}
 
+		userToAdd.setId(IDGenerator.getId());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		final String rawPassword = userToAdd.getPassword();
 		userToAdd.setPassword(encoder.encode(rawPassword));

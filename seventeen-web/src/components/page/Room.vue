@@ -116,6 +116,9 @@
                 <el-form-item label="户型" prop="structure">
                     <el-input v-model="ruleForm.structure" class="handle-input"></el-input>
                 </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input v-model="ruleForm.remark" class="handle-input"></el-input>
+                </el-form-item>
                 <el-form-item label="房间物品" prop="good">
                     <el-checkbox-group v-model="ruleForm.good">
                         <el-checkbox v-for="good in goods" :label="good.id" :key="good.id">{{good.name}}
@@ -362,7 +365,8 @@
                     bed: 0,
                     good: [],
                     id: '',
-                    shopId: ''
+                    shopId: '',
+                    remark:''
                 },
                 goods: [],
                 roomTypes: [],

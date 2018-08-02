@@ -32,6 +32,9 @@ public class SysUser implements UserDetails {
 	@ApiModelProperty(value = "描述")
 	private String description;
 
+	@ApiModelProperty(value = "用户头像")
+	private String avatarUrl;
+
 	@ApiModelProperty(value = "电话")
 	private String phone;
 
@@ -70,6 +73,18 @@ public class SysUser implements UserDetails {
 	@ApiModelProperty(value = "角色列表，修改时不传此参数则维持不变，空列表则清空角色", dataType = "List")
 	@Transient
 	private List<String> roleIds;
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
 
 	public String getId() {
 		return id;
