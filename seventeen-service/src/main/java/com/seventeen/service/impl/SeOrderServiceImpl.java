@@ -364,39 +364,41 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrder seOrder = new SeOrder();
             seOrder.setId(order);
             SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
-            String apId = seOrder1.getApId();
+            if ("3".equals(seOrder1.getStatus())) {
+                String apId = seOrder1.getApId();
+                SeApartment seApartment = new SeApartment();
+                seApartment.setId(apId);
+                seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
 
-            SeApartment seApartment = new SeApartment();
-            seApartment.setId(apId);
-            seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+                String inTime = seOrder1.getInTime().replace(".0", "");
+                String outTime = seOrder1.getOutTime().replace(".0", "");
+                LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+                LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
 
-            String inTime = seOrder1.getInTime().replace(".0","");
-            String outTime = seOrder1.getOutTime().replace(".0","");
-            LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-            LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+                long distance = ChronoUnit.DAYS.between(startDate, endDate);
+                if (distance >= 1) {
+                    Stream.iterate(startDate, d -> {
+                        return d.plusDays(1);
+                    }).limit(distance + 1).forEach(f -> {
+                        list.add(f.toString());
+                    });
+                }
+                for (int i = 0; i < list.size() - 1; i++) {
+                    String date = list.get(i);
+                    SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                    String[] dateArr = date.split("-");
+                    seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                    seOrderCalendar.setYear(dateArr[0]);
+                    seOrderCalendar.setMonth(dateArr[1]);
+                    seOrderCalendar.setDay(dateArr[2]);
 
-            long distance = ChronoUnit.DAYS.between(startDate,endDate);
-            if (distance >= 1) {
-                Stream.iterate(startDate, d -> {
-                    return d.plusDays(1);
-                }).limit(distance + 1).forEach(f -> {
-                    list.add(f.toString());
-                });
+                    seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1);
+                    seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+                }
+                seOrder1.setStatus("4");
+                seOrderMapper.updateByPrimaryKeySelective(seOrder1);
             }
-            for (int i = 0; i <list.size()-1 ; i++) {
-                String date = list.get(i);
-                SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-                String[] dateArr = date.split("-");
-                seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
-                seOrderCalendar.setYear(dateArr[0]);
-                seOrderCalendar.setMonth(dateArr[1]);
-                seOrderCalendar.setDay(dateArr[2]);
-
-                seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
-                seOrderCalendar.setOrders(seOrderCalendar.getOrders()-1);
-                seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
-            }
-            seOrderMapper.updateByPrimaryKeySelective(seOrder1);
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -441,26 +443,26 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Transactional
     @Override
     public Result updateLockPWD(String orderId, SysUser sysUser) {
-        SeOrder se=new SeOrder();
+        SeOrder se = new SeOrder();
         se.setUserId(sysUser.getId());
         se.setId(orderId);
         SeOrder seOrder = seOrderMapper.selectOne(se);
-        if(seOrder==null)
+        if (seOrder == null)
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "查询不到订单");
         seOrder.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 100000)));
 
-        LocalDateTime start=  LocalDateTime.of(
+        LocalDateTime start = LocalDateTime.of(
                 Integer.valueOf(seOrder.getInTime().substring(0, 4)),
                 Integer.valueOf(seOrder.getInTime().substring(5, 7)),
                 Integer.valueOf(seOrder.getInTime().substring(8, 10)),
                 Integer.valueOf(seOrder.getInTime().substring(11, 13)), 0, 0);
-        LocalDateTime out=  LocalDateTime.of(
+        LocalDateTime out = LocalDateTime.of(
                 Integer.valueOf(seOrder.getOutTime().substring(0, 4)),
                 Integer.valueOf(seOrder.getOutTime().substring(5, 7)),
                 Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
                 Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
-        lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+        lockService.updataLockPassWord(seOrder.getApId(), start, out, Integer.valueOf(seOrder.getLockPwd()));
 
         seOrderMapper.updateByPrimaryKey(seOrder);
 
