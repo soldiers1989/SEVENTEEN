@@ -213,24 +213,11 @@
             handleCancel(index, row) {
                 this.idx = index;
                 let that = this;
-                const param = {
-                    "type": 'g'
-                }
-                this.$axios.get(this.OrderUrl + '/tags', {params: param}).then((res) => {
+                this.$axios.put(this.OrderUrl + '/cancel?order='+row.id).then((res) => {
                     if (res.data.resultCode == 200) {
                         that.goods = res.data.data;
                     }
                 })
-
-                this.$axios.get(this.OrderUrl + '/' + row.id + '/detail').then((res) => {
-                    if (res.data.resultCode === 200) {
-                        that.ruleForm = res.data.data.seApartment;
-                    } else {
-                        this.$message.error('编辑失败');
-                        return false;
-                    }
-                })
-                this.visible = true;
             },
             handleEdit(index, row) {
                 this.idx = index;

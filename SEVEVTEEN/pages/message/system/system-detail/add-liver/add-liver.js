@@ -16,7 +16,8 @@ Page({
     }
     return {
       title: '添加入住人',
-      path: '../add-wechatLiver/add-wechatLiver'
+      path: '../add-wechatLiver/add-wechatLiver',
+      imageUrl:"https://www.17inn.com/img/wxApp/imgs/index/brand.jpg"
     }
   },
   inputTap:function(e){

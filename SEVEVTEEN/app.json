@@ -1,9 +1,8 @@
 {
   "pages": [
-        "pages/auth/auth",
-        
-        "pages/index/index",
-        
+    "pages/auth/auth",
+    "pages/my/vip/vip",
+    "pages/index/index",
     "pages/my/rlsb/rlsb",
     "pages/my/my",
     "pages/my/toushu/toushu",
@@ -54,5 +53,5 @@
         "selectedIconPath": "/imgs/tabBar/user_se.png"
       }
     ]
-   }
- }
+  }
+}

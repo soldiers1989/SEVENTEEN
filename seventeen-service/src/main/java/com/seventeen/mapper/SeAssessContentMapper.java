@@ -16,7 +16,7 @@ public interface SeAssessContentMapper extends CoreMapper<SeAssessContent>{
             "s.username createBy\n" +
             "FROM\n" +
             "se_assess_content sac,\n" +
-            "sys_user s" +
+            "sys_user s\n" +
             "WHERE\n" +
             "\tsac.assess_id =#{assessId} \n" +
             "\t and (parent_id is null or parent_id='') and sac.create_by = s.id\n" +
@@ -27,7 +27,7 @@ public interface SeAssessContentMapper extends CoreMapper<SeAssessContent>{
             "s.username createBy\n" +
             "FROM\n" +
             "se_assess_content sac,\n" +
-            "sys_user s" +
+            "sys_user s\n" +
             "WHERE\n" +
             "\tsac.parent_id = #{assessId} and sac.create_by = s.id")
     List<SeAssessContent> getseAssessContent(@Param("assessId") String assessId);
@@ -46,6 +46,7 @@ public interface SeAssessContentMapper extends CoreMapper<SeAssessContent>{
             "AND sac.parent_id IS NULL\n" +
             "and sac.assess_id = sa.content_id\n" +
             "And sa.order_id = so.id\n" +
+            "And sa.status !='0'\n" +
             "and so.ap_id = sapm.id\n" +
             "and sapm.room_type = st.id")
     String getseContentTotalSize();
@@ -72,6 +73,7 @@ public interface SeAssessContentMapper extends CoreMapper<SeAssessContent>{
             "and sac.assess_id = sa.content_id\n" +
             "AND sa.assess_point_id = sap.id\n" +
             "And sa.order_id = so.id\n" +
+            "and sa.status!='0'\n"+
             "and so.ap_id = sapm.id\n" +
             "and sapm.room_type = st.id\n" +
             "\n")

@@ -25,11 +25,22 @@ Page({
       wx.navigateTo({
         url: '/pages/order/order',
       })
+    }else{
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '入住该房间后才能申请续住'
+      })
     }
 
   },
   wifiTap: function (event) {
     if (this.data.orderStatus === 2) {
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '入住该房间后才能获取wifi'
+      })
       return;
     }
     wx.showModal({
@@ -66,6 +77,11 @@ Page({
   },
   replyToTap: function (e) {
     if (this.data.orderStatus === 0) {
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '订单完成后才能评价'
+      })
       return;
     }
     wx.navigateTo({
@@ -74,6 +90,11 @@ Page({
   },
   openDoorTap: function (event) {
     if (this.data.orderStatus != 1) {
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '办理入住手续后才能开门'
+      })
       return;
     }
     wx.showModal({
@@ -90,6 +111,11 @@ Page({
   },
   cleanTap: function (event) {
     if (this.data.orderStatus != 1) {
+      wx.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '入住期间才能申请清洁'
+      })
       return;
     }
     wx.showModal({

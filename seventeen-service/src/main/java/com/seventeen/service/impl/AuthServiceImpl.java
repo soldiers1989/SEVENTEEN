@@ -1,8 +1,12 @@
 package com.seventeen.service.impl;
 
+import com.seventeen.bean.SeCoupon;
+import com.seventeen.bean.SeUserCoupon;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.config.JwtTokenConfig;
 import com.seventeen.filter.JwtAuthenticationTokenFilter;
+import com.seventeen.mapper.SeCouponMapper;
+import com.seventeen.mapper.SeUserCouponMapper;
 import com.seventeen.mapper.SysUserMapper;
 import com.seventeen.service.AuthService;
 import com.seventeen.util.DateUtil;
@@ -22,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -30,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private SeUserCouponMapper seUserCouponMapper;
+	@Autowired
+	private SeCouponMapper seCouponMapper;
 	@Autowired
 	private JwtTokenConfig jwtTokenConfig;
 	@Autowired
@@ -59,6 +68,19 @@ public class AuthServiceImpl implements AuthService {
 		userToAdd.setLastPasswordResetDate(new Date());
 		userToAdd.setLastLoginTime(DateUtil.nowDate());
 		userToAdd.setRoleIds(Arrays.asList("20170802115412744304269"));
+
+		List<String> couponIds = seCouponMapper.getNewClientCoupon();
+		for (String couponId : couponIds) {
+			SeUserCoupon seUserCoupon = new SeUserCoupon();
+			seUserCoupon.setCouponId(couponId);
+			seUserCoupon.setUserId(userToAdd.getId());
+			seUserCoupon.setStatus("1");
+			seUserCoupon.setCreateTime(DateUtil.now());
+			seUserCoupon.setCreateBy(userToAdd.getId());
+			seUserCoupon.setUpdateTime(DateUtil.now());
+			seUserCoupon.setId(IDGenerator.getId());
+			seUserCouponMapper.insert(seUserCoupon);
+		}
 		sysUserService.insert(userToAdd);
 		return jwtTokenConfig.generateToken(userToAdd);
 	}

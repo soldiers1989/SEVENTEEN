@@ -210,12 +210,12 @@ public class SeCouponServiceImpl implements SeCouponService {
     }
 
     @Override
-    public Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo) {
+    public Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo, SysUser sysUser) {
         Result<List<SeCoupon>> result = new Result<>();
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-            ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status);
+            ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status,sysUser.getId());
             pageInfo.setTotal(page.getTotal());
             result.setData(seCoupons, pageInfo);
         } catch (Exception e) {
@@ -230,11 +230,11 @@ public class SeCouponServiceImpl implements SeCouponService {
         Result<String> result = new Result<>();
         try {
             SeCoupon seCoupon = new SeCoupon().setId(id).setStatus("1");
+
             List<SeCoupon> seCoupons = SeCouponMapper.select(seCoupon);
             if(!seCoupons.isEmpty()){
                 SeUserCoupon seUserCoupon = new SeUserCoupon();
                 seUserCoupon.setCouponId(id);
-                seUserCoupon.setStatus("1");
                 seUserCoupon.setUserId(sysUser.getId());
                 List<SeUserCoupon> seUserCoupons = seUserCouponMapper.select(seUserCoupon);
                 if(seUserCoupons.isEmpty()){
@@ -242,6 +242,7 @@ public class SeCouponServiceImpl implements SeCouponService {
                     seUserCoupon.setUpdateTime(DateUtil.now());
                     seUserCoupon.setCreateBy(sysUser.getId());
                     seUserCoupon.setCreateTime(DateUtil.now());
+                    seUserCoupon.setStatus("1");
                     seUserCouponMapper.insert(seUserCoupon);
                 }
             }

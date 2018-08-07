@@ -89,14 +89,22 @@ public class OrderController {
 		Result<OrderCenter> orderCenter = seOrderService.getOrderDetail(orderId);
 		return ResponseEntity.ok(orderCenter);
 	}
-    @PostMapping("/wx/setOrder")
-    @ApiOperation(value = "获取订单详细信息")
+
+    @PutMapping("/wx/cancel")
+    @ApiOperation(value = "退订")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity setOrder(@AuthenticationPrincipal SysUser sysUser, @RequestBody OrderInfo orderInfo) {
-        System.out.println(orderInfo);
-        ResponseEntity entity= seOrderService.setOrder(sysUser,orderInfo);
-        return entity;
+    public ResponseEntity<Result> cancelOrder(String order) {
+		Result result  = seOrderService.cancelOrder(order);
+        return ResponseEntity.ok(result);
     }
+
+	@PutMapping("/cancel")
+	@ApiOperation(value = "平台确认退订")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity<Result> cancelOrderConfirm(@RequestParam String order) {
+		Result result  = seOrderService.cancelOrderConfirm(order);
+		return ResponseEntity.ok(result);
+	}
 
 	@GetMapping("/wx/getOrderDate")
 	@ApiOperation(value = "获取订单满房时间")

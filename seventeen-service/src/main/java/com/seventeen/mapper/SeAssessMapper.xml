@@ -41,7 +41,7 @@
         left JOIN se_tag st on sap.room_type = st.id
         where
         sa.user_id = su.id
-        and sa.ap_id = sap.id
+        and so.ap_id = sap.id
         and sa.order_id = so.id
         and sa.assess_point_id = sao.id
         and sa.status!=0
@@ -93,7 +93,7 @@
 		se_apartment sap
 		where
 		sa.user_id = su.id
-		and sa.ap_id = sap.id
+		and so.ap_id = sap.id
 		and sa.order_id = so.id
 		and sa.assess_point_id = sao.id
 		and sap.shop_id =ss.id
@@ -131,6 +131,7 @@
         sa.user_id = su.id
         and sa.ap_id = sap.id
         and sa.order_id = so.id
+        and sa.status!='0'
         and sa.assess_point_id = sao.id
         and sap.shop_id =ss.id
         and sa.user_id =#{userId}

@@ -18,8 +18,6 @@ import com.seventeen.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,8 +68,9 @@ public class SeAssessServiceImpl implements SeAssessService {
         try {
             SeAssessPoint seAssessPoint = new SeAssessPoint();
             seAssessPoint.setId(assessId);
+            SeAssess seAssess = seAssessMapper.selectByPrimaryKey(seAssessPoint);
             AssessPoint assessPoints = seAssessMapper.getAssessDetail(assessId);
-            List<SeAssessPoint> seAssessPoints = seAssessPointMapper.getseAssessPoint(assessId);
+            List<SeAssessPoint> seAssessPoints = seAssessPointMapper.getseAssessPoint(seAssess.getAssessPointId());
             List<SeAssessContent> seAssessContents = seAssessContentMapper.getseAssessContent(assessPoints.getContentId());
             assessPoints.setSeAssessPoints(seAssessPoints);
             assessPoints.setSeAssessContents(seAssessContents);
@@ -246,6 +245,9 @@ public class SeAssessServiceImpl implements SeAssessService {
                     pageInfo.getPageSize(), true);
             List<WxTotalAssess.AssessContent> assessContents = seAssessContentMapper.getseContentList();
             for (WxTotalAssess.AssessContent assessContent : assessContents) {
+                if(assessContent==null){
+                    continue;
+                }
                 ArrayList arrayList = new ArrayList();
                 for (int i = 0; i <assessContent.getTotalPoint() ; i++) {
                     arrayList.add("1");

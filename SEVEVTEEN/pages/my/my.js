@@ -46,7 +46,7 @@ Page({
 
       {
         name: '会员权益',
-        url: '/pages/Course/course',
+        url: '/pages/my/vip/vip',
         icon: '/imgs/my/huiyqy.png',
         code: '10',
         flag: true

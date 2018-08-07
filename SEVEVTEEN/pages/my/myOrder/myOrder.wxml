@@ -20,7 +20,8 @@
       <text>订单号:\t {{item.id}}</text>
     </view>
     <view class='order_time'>
-      <text decode="{{true}}">入&nbsp;&nbsp;&nbsp;&nbsp;住:\t{{item.liveTime}}</text>
+      <text decode="{{true}}">入&nbsp;&nbsp;&nbsp;&nbsp;住:&nbsp;</text>
+      <text>{{item.liveTime}}</text>
     </view>
     <view>
       <text decode="{{true}}">房&nbsp;&nbsp;&nbsp;&nbsp;型:\t{{item.roomType}}</text>

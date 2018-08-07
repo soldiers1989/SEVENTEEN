@@ -17,6 +17,8 @@
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="password" property="lock_pwd" jdbcType="VARCHAR" />
+
   </resultMap>
 
   <resultMap id="OrderCenter" type="com.seventeen.bean.OrderCenter">
@@ -36,6 +38,8 @@
     <result column="orderTime" property="orderTime" jdbcType="VARCHAR"/>
     <result column="price" property="price" jdbcType="VARCHAR"/>
     <result column="type" property="type" jdbcType="VARCHAR"/>
+    <result column="password" property="password" jdbcType="VARCHAR"/>
+
     <collection property="livers" ofType="com.seventeen.bean.OrderLiver"
                 resultMap="OrderLiver"/>
   </resultMap>
@@ -107,7 +111,7 @@
     <if test="endTime != null and endTime  != ''">
       AND so.create_time  &lt;= #{endTime}
     </if>
-    ORDER BY so.create_time desc
+    ORDER BY case when so.status=3 then 1 end desc, so.create_time desc
   </select>
 
 
@@ -236,7 +240,8 @@
     so.create_time orderTime,
     sol.liver ,
     sol.phone,
-    sol.id_card idCard
+    sol.id_card idCard,
+    so.lock_pwd password
     FROM
     sys_user su,
     se_apartment sa

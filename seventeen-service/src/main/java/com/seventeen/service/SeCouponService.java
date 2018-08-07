@@ -66,7 +66,7 @@ public interface SeCouponService {
      */
     Result<List<CouponLog>> getCouponLog(String status, String remark, String startTime, String endTime, PageInfo pageInfo);
 
-    Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo);
+    Result<List<SeCoupon>> couponListWx(String status, PageInfo pageInfo, SysUser sysUser);
 
     /**
      *

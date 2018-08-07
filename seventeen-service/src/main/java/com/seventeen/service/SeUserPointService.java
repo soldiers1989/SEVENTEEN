@@ -1,5 +1,6 @@
 package com.seventeen.service;
 
+import com.seventeen.bean.SeUserPointLog;
 import com.seventeen.bean.UserPoint;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
@@ -28,5 +29,12 @@ public interface SeUserPointService {
      * @return
      */
     Result<UserPoint> getSeUserPointDetail(String id);
+
+    /**
+     *
+     * @param seUserPointLog
+     * @return
+     */
+    Result addPoint(SeUserPointLog seUserPointLog);
 
 }

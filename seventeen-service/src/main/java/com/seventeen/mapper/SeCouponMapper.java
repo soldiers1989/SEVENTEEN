@@ -14,7 +14,6 @@ import java.util.List;
 public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     /**
-     *
      * @param status
      * @param remark
      * @return
@@ -31,7 +30,10 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
     @Select("select * from  se_coupon where end_time < #{date} and status ='1'")
     List<SeCoupon> selectCouponEveryDay(@Param("date") String date);
 
-    ArrayList<CouponLog> getCouponLog(@Param("status")String status, @Param("remark")String remark,@Param("startTime") String startTime, @Param("endTime")String endTime);
+    ArrayList<CouponLog> getCouponLog(@Param("status") String status, @Param("remark") String remark, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    ArrayList<SeCoupon> couponListWx(@Param("status") String status);
+    ArrayList<SeCoupon> couponListWx(@Param("status") String status, @Param("userId") String userID);
+
+    @Select("select sc.id from se_coupon sc where sc.status ='1' and sc.send_type like '%新用户%'")
+    List<String> getNewClientCoupon();
 }

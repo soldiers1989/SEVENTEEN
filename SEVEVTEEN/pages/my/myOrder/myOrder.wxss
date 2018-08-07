@@ -102,9 +102,10 @@ page {
 }
 .order_time{
   display: flex;
+  flex-direction: row;
 }
 .order_time text{
-   flex:1;
+   /* flex:1; */
 }
 .order_pay{
   display: flex;

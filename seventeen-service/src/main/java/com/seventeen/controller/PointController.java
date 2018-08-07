@@ -1,6 +1,7 @@
 package com.seventeen.controller;
 
 
+import com.seventeen.bean.SeUserPointLog;
 import com.seventeen.bean.UserPoint;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeUserPointService;
@@ -11,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +40,14 @@ public class PointController {
 	public ResponseEntity getSeUserPointDetail(@PathVariable String id) {
 		Result<UserPoint> userPoint = seUserPointService.getSeUserPointDetail(id);
 		return ResponseEntity.ok(userPoint);
+	}
+
+	@PostMapping
+	@ApiOperation(value = "获取用户积分列表信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addPoint(@RequestBody  SeUserPointLog seUserPointLog) {
+		Result result = seUserPointService.addPoint(seUserPointLog);
+		return ResponseEntity.ok(result);
 	}
 
 

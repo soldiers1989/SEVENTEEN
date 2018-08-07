@@ -8,7 +8,10 @@
       <text class="title-text" wx:if="{{orderStatus==2}}">已离店</text>
 
       <text class="title-detail" wx:if="{{orderStatus==0}}">到店后请在一楼刷身份证即可获得房间门锁密码</text>
-      <text class="title-detail" wx:if="{{orderStatus==1}}">开门密码</text>
+      <view class='password-container'>
+        <text class="title-detail" wx:if="{{orderStatus==1}}">开门密码：</text>
+        <text class="title-detail" wx:if="{{orderStatus==1}}">{{systemDetail.password}}</text>
+      </view>
 
       <text class="text" wx:if="{{orderStatus==0}}">为了你和大家的入住安全，请每位入住的客人都务必进行身份证实名登记，我们诚心为大家提供一个安全舒适的入住环境。</text>
       <text class="text" wx:if="{{orderStatus==1}}">请按密码键盘上任意键，灯亮起后输入开门密码，听到机械开门声后，尽快扭动把手，3-4秒后，门锁会自动锁上。</text>
@@ -25,7 +28,7 @@
           <text class='address-name'>{{systemDetail.shopName}}</text>
           <text class='address'>{{systemDetail.shopAddress}}</text>
         </view>
-        <image class='detail-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
+        <!-- <image class='detail-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image> -->
       </view>
 
       <view class='text'>
@@ -47,7 +50,7 @@
         </view>
         <view class='address-text'>
           <text>入住时间：</text>
-          <text>{{systemDetail.liveTime}}</text>
+          <text class='live-time'>{{systemDetail.liveTime}}</text>
         </view>
         <view class='address-text'>
           <text decode="{{true}}">入住人&nbsp;&nbsp;&nbsp;&nbsp;：</text>
@@ -65,7 +68,7 @@
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/countineLive.png'> </image>
       <text class='img-text'>办理续住</text>
     </view>
-    <view class='img-detail-container'  bindtap='cancelTap'>
+    <view class='img-detail-container' bindtap='cancelTap'>
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/tuiding.png'> </image>
       <text class='img-text'>房间退订</text>
     </view>
@@ -89,7 +92,8 @@
   <view class='text-container'>
     <view class='text-content'>
       <text>
-      <text class='text-ties'>取消政策：</text>预付房费后，在<text style='color:red;'>2018年04月10日18点</text>前可取消订单/申请退款，之后不可取消/退款
+      <text class='text-ties'>取消政策：</text>预付房费后，在
+      <text style='color:red;'>2018年04月10日18点</text>前可取消订单/申请退款，之后不可取消/退款
       </text>
       <text>
       <text class='text-ties'>温馨提示：</text>公寓于住店当天<text style='color:red;'>14:00后</text>办理入住，离店当天<text style='color:red;'>12:00前</text>办理退房，<text style='color:red;'>入离日期以当地时间为准</text>。如您在<text style='color:red;'>14:00前</text>到达，可能需要等待方能入住。若超过房间最多入住人数，则可能需要补差或拒绝入住，具体以拾柒Inn安排为准。
@@ -97,18 +101,18 @@
     </view>
   </view>
 </view>
-<view >
+<view>
   <view class='client-container'>
     <view class='client-message-container' bindtap='callClientTap'>
       <image class='img-client' src='https://www.17inn.com/img/wxApp/phone.png'> </image>
       <text class='img-client-text'>致电客服</text>
     </view>
-    <view  class='client-message-container'>
+    <view class='client-message-container'>
       <image class='img-client' src='https://www.17inn.com/img/wxApp/client.png'> </image>
       <text class='img-client-text'>在线客服</text>
     </view>
   </view>
-</view> 
+</view>
 <view class="nav-tabs" bindtap='addLiverTap' data-orderid='{{systemDetail.id}}'>
   <text>添加入住人</text>
-</view> 
+</view>

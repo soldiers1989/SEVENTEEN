@@ -1,7 +1,6 @@
 //app.js
 const wxApiInterceptors = require('/utils/wxApiInterceptors');
 
-
 wxApiInterceptors({
   request: {
     response(res) {
@@ -26,14 +25,7 @@ wxApiInterceptors({
 App({
   globalData: {
     // baseUrl:"https://www.17inn.com/seventeen",
-    baseUrl:"http://172.16.14.26",
-    ImgUrl:"https://www.17inn.com/img/wxApp",
-    userVip: {
-      level: "1",
-      discount: "1",
-    }
+    baseUrl:"http://localhost",
+    ImgUrl:"https://www.17inn.com/img/wxApp"
   }
-  
-
-
 })

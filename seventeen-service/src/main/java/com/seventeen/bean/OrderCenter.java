@@ -24,6 +24,15 @@ public class OrderCenter {
     private String type;
     private String mixRoomImg;
     private String remark;
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getMixRoomImg() {
         return mixRoomImg;

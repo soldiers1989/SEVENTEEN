@@ -35,6 +35,7 @@ public class SeUserVipServiceImpl implements SeUserVipService {
         if(select==null){
             se.setId(IDGenerator.getId());
             se.setStratdate(DateUtil.toDate(now));
+            se.setLevel("1");
             seUserVipMapper.insert(se);
             select=se;
         }else{

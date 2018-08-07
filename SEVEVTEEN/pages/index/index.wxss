@@ -282,12 +282,12 @@
 }
 
 .stars-text {
-  width: 29%;
+  width: 50%;
   text-align: left;
 }
 
 .stars-star {
-  width: 65%;
+  width: 80%;
 }
 
 .stars-num {
@@ -348,7 +348,7 @@
 
 .user-evaluete .user-c-time {
   margin-top: 10px;
-  width: 70px;
+  width: 300rpx;
   color: #797979;
 }
 

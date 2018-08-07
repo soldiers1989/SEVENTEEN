@@ -107,6 +107,8 @@
         WHERE
         suc.coupon_id = sc.id
         AND suc.user_id = su.id
+        and suc.user_id =#{userId}
+
         <if test="status != null and status  != ''">
             <choose>
                 <when test="status ==1 ">

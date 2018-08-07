@@ -320,7 +320,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         Result result = new Result();
 
         try {
-            ArrayList seApartments= seApartmentMapper.getCanUseApartments(roomType);
+            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
             seApartments.size();
             SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
             seOrderCalendar.setRoomTypeId(roomType);
@@ -333,6 +333,73 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
         return result;
     }
+
+    @Override
+    public Result cancelOrder(String order) {
+        Result result = new Result();
+        try {
+            SeOrder seOrder = new SeOrder();
+            seOrder.setId(order);
+            SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
+            seOrder1.setStatus("3");
+            seOrderMapper.updateByPrimaryKeySelective(seOrder1);
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result cancelOrderConfirm(String order) {
+        Result result = new Result();
+        try {
+            List<String> list = new ArrayList();
+            List<SeOrderCalendar> addList = new ArrayList();
+
+            SeOrder seOrder = new SeOrder();
+            seOrder.setId(order);
+            SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
+            String apId = seOrder1.getApId();
+
+            SeApartment seApartment = new SeApartment();
+            seApartment.setId(apId);
+            seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+
+            String inTime = seOrder1.getInTime().replace(".0","");
+            String outTime = seOrder1.getOutTime().replace(".0","");
+            LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+            LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+
+            long distance = ChronoUnit.DAYS.between(startDate,endDate);
+            if (distance >= 1) {
+                Stream.iterate(startDate, d -> {
+                    return d.plusDays(1);
+                }).limit(distance + 1).forEach(f -> {
+                    list.add(f.toString());
+                });
+            }
+            for (int i = 0; i <list.size()-1 ; i++) {
+                String date = list.get(i);
+                SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                String[] dateArr = date.split("-");
+                seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                seOrderCalendar.setYear(dateArr[0]);
+                seOrderCalendar.setMonth(dateArr[1]);
+                seOrderCalendar.setDay(dateArr[2]);
+
+                seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                seOrderCalendar.setOrders(seOrderCalendar.getOrders()-1);
+                seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+            }
+            seOrderMapper.updateByPrimaryKeySelective(seOrder1);
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     public void addThreeMonthCalendar(String id, Date inDate, Date outDate) {
