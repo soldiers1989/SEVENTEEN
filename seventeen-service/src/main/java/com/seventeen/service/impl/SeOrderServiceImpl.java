@@ -51,6 +51,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeTagMapper seTagMapper;
     @Autowired
     private SeApartmentMapper seApartmentMapper;
+    @Autowired
+    private LockService lockService;
 
     @Autowired
     private LockService lockService;
@@ -476,8 +478,36 @@ public class SeOrderServiceImpl implements SeOrderService {
         try {
             String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 12:00:00";
             SeOrder seOrder = seOrderMapper.getCheckOut(date);
-            seOrder.setStatus("2");
-            seOrderMapper.updateByPrimaryKeySelective(seOrder);
+            if(seOrder!=null){
+                seOrder.setStatus("5");
+                seOrderMapper.updateByPrimaryKeySelective(seOrder);
+
+                String apId = seOrder.getApId();
+                SeApartment seApartment= new SeApartment();
+                seApartment.setId(apId);
+                seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+                seApartment.setStatus("2");
+                seApartmentMapper.updateByPrimaryKeySelective(seApartment);
+            }
+        } catch (Exception e) {
+            logger.error("error",e);
+        }
+    }
+
+    @Override
+    public void upgradeLockCron() {
+        try {
+            String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 14:00:00";
+            SeOrder seOrder = seOrderMapper.upgradeLockCron(date);
+            String inTime = seOrder.getInTime();
+            String outTime = seOrder.getOutTime();
+            LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+            LocalDateTime endTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+
+            if(seOrder!=null){
+                String password= seOrder.getLockPwd();
+                lockService.updataLockPassWord(seOrder.getApId(),startTime,endTime,Integer.valueOf(password));
+            }
         } catch (Exception e) {
             logger.error("error",e);
         }

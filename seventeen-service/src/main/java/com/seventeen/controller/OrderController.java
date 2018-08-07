@@ -132,6 +132,15 @@ public class OrderController {
 		seOrderService.checkOut();
 	}
 
+
+	/**
+	 * 每天13：00激活房间锁密码
+	 */
+	@Scheduled(cron = "0 30 13 * * ? *")
+	public void upgradeLockCron() {
+		seOrderService.upgradeLockCron();
+	}
+
     @GetMapping("/wx/updateLockPWD")
     @ApiOperation(value = "修改房间密码")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

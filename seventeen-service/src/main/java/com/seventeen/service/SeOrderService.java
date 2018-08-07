@@ -76,4 +76,6 @@ public interface SeOrderService {
     void checkOut();
 
 
+    void upgradeLockCron();
+
 }
