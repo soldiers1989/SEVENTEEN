@@ -1,0 +1,43 @@
+<text class='title'>会员等级及折扣</text>
+
+<view class="table">
+  <view class="tr bg-w">
+    <view class="th">会员等级</view>
+    <view class="th">会员有效期</view>
+    <view class="th">升级要求</view>
+    <view class="th">保级要求</view>
+    <view class="th">会员折扣</view>
+  </view>
+  <block wx:for="{{listData}}" wx:key="{{code}}">
+    <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+      <view class="td">
+        <image class='img' src='{{item.level}}'></image>
+      </view>
+      <view class="td">{{item.useDate}}</view>
+      <view class="td">{{item.upgrade}}</view>
+      <view class="td">{{item.relegation}}</view>
+      <view class="td">{{item.discount}}</view>
+    </view>
+    <view class="tr" wx:else>
+      <view class="td">
+        <image class='img' src='{{item.level}}'></image>
+      </view>
+      <view class="td">{{item.useDate}}</view>
+      <view class="td">{{item.upgrade}}</view>
+      <view class="td">{{item.relegation}}</view>
+      <view class="td">{{item.discount}}</view>
+    </view>
+  </block>
+</view>
+<view class='remark-view'>
+  <text class='remark'>
+  备注:
+
+  1.会员本人通过拾柒小程序预订入住可累计房晚和享受以上会员折扣
+  2.会员本人在拾柒小程序预订入住的消费、以及参与指定活动可累计
+  积分值
+  3.积分值根据消费金额计算，1元=1积分值；
+  4.满足升级条件后次日升级，升级后升级房晚清零；
+  以上规则自2018年8月1日起实施，最终解释权归17INN所有。
+  </text>
+</view>

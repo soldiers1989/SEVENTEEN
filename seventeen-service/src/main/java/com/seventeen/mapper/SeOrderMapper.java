@@ -30,4 +30,7 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
     @Update("update se_order so set so.status ='0' where so.id = #{id} ")
     void deleteByid(@Param("id") String id);
 
+    @Select("select * from se_order so where so.out_time  = DATE_FORMAT(#{date},'%Y-%m-%d %H:%i:%s') and so.`status` ='1'")
+    SeOrder getCheckOut(@Param("date") String date);
+
 }

@@ -72,4 +72,8 @@ public interface SeOrderService {
     Result cancelOrderConfirm(String order);
 
     Result updateLockPWD(String orderId, SysUser sysUser);
+
+    void checkOut();
+
+
 }

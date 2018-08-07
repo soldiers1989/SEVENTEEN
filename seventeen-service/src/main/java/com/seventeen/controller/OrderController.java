@@ -122,6 +122,16 @@ public class OrderController {
 		seOrderService.addOrderCalendar();
 	}
 
+
+	/**
+	 * 每天11：50更改房间状态，改成空房
+	 */
+//	@Scheduled(cron = "0 50 11 * * ? *")
+	@Scheduled(cron = "20 * * * * ? ")
+	public void checkOutTimerCron() {
+		seOrderService.checkOut();
+	}
+
     @GetMapping("/wx/updateLockPWD")
     @ApiOperation(value = "修改房间密码")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")

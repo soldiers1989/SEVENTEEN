@@ -355,6 +355,7 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result cancelOrderConfirm(String order) {
         Result result = new Result();
         try {
@@ -469,4 +470,17 @@ public class SeOrderServiceImpl implements SeOrderService {
 
         return new Result(seOrder.getLockPwd());
     }
+
+    @Override
+    public void checkOut() {
+        try {
+            String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 12:00:00";
+            SeOrder seOrder = seOrderMapper.getCheckOut(date);
+            seOrder.setStatus("2");
+            seOrderMapper.updateByPrimaryKeySelective(seOrder);
+        } catch (Exception e) {
+            logger.error("error",e);
+        }
+    }
+
 }

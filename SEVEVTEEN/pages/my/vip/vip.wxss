@@ -1,0 +1,52 @@
+.table {
+  margin: 50rpx 20rpx 0rpx;
+}
+
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 3rem; 
+  align-items: center;
+}
+
+.title {
+  margin-top: 80rpx;
+  margin-left: 10rpx;
+}
+
+.td {
+  width: 40%;
+  justify-content: center;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.bg-w {
+  background: #f0f0f0;
+  font-size: 30rpx;
+}
+
+.bg-g {
+  background: #CCFFFF;
+}
+
+.th {
+  width: 40%;
+  justify-content: center;
+  display: flex;
+  height: 2rem;
+  align-items: center;
+}
+.img{
+  height: 60rpx;
+  width: 60rpx;
+}
+.remark-view {
+  margin-top: 10rpx;
+  margin-left: 20rpx;
+}
+
+.remark {
+  font-size: 30rpx;
+}
