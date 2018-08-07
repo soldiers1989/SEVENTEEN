@@ -25,7 +25,9 @@ public class Test1 {
     @Test
     public void name() throws Exception {
 
-            lockService.updataLockPassWord("20180725230836716205288", LocalDateTime.now(),LocalDateTime.now().plusDays(1));
+//            lockService.updataLockPassWord("20180725230836716205288", LocalDateTime.now(),LocalDateTime.now().plusDays(1));
 
     }
+
+
 }

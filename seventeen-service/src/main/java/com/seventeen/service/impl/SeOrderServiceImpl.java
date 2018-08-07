@@ -11,6 +11,7 @@ import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.*;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
+import com.seventeen.service.LockService;
 import com.seventeen.service.SeOrderService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
@@ -50,6 +51,9 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeTagMapper seTagMapper;
     @Autowired
     private SeApartmentMapper seApartmentMapper;
+
+    @Autowired
+    private LockService lockService;
 
     /**
      * @param status
@@ -180,7 +184,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             se.setCreatorPhone(orderInfo.getPhone());
             se.setStatus("-1");
             se.setIsReply("0");
-            se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 10000000)));
+            se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 100000)));
 
             seOrderMapper.insert(se);
 
@@ -365,5 +369,35 @@ public class SeOrderServiceImpl implements SeOrderService {
             seOrderCalendarMapper.addSeOrderCalendarList(addList);
         }
         return;
+    }
+
+    @Transactional
+    @Override
+    public Result updateLockPWD(String orderId, SysUser sysUser) {
+        SeOrder se=new SeOrder();
+        se.setUserId(sysUser.getId());
+        se.setId(orderId);
+        SeOrder seOrder = seOrderMapper.selectOne(se);
+        if(seOrder==null)
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "查询不到订单");
+        seOrder.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 100000)));
+
+        LocalDateTime start=  LocalDateTime.of(
+                Integer.valueOf(seOrder.getInTime().substring(0, 4)),
+                Integer.valueOf(seOrder.getInTime().substring(5, 7)),
+                Integer.valueOf(seOrder.getInTime().substring(8, 10)),
+                Integer.valueOf(seOrder.getInTime().substring(11, 13)), 0, 0);
+        LocalDateTime out=  LocalDateTime.of(
+                Integer.valueOf(seOrder.getOutTime().substring(0, 4)),
+                Integer.valueOf(seOrder.getOutTime().substring(5, 7)),
+                Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
+                Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
+
+        lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+
+        seOrderMapper.updateByPrimaryKey(seOrder);
+
+
+        return new Result(seOrder.getLockPwd());
     }
 }

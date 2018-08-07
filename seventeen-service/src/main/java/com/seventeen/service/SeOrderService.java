@@ -67,4 +67,5 @@ public interface SeOrderService {
 
     Result getOrderDate(String roomType, SysUser sysUser);
 
+    Result updateLockPWD(String orderId, SysUser sysUser);
 }
