@@ -122,4 +122,13 @@ public class OrderController {
 		seOrderService.addOrderCalendar();
 	}
 
+    @GetMapping("/wx/updateLockPWD")
+    @ApiOperation(value = "修改房间密码")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity updateLockPWD(@AuthenticationPrincipal SysUser sysUser,String orderId) {
+        Result result= seOrderService.updateLockPWD(orderId,sysUser);
+        return ResponseEntity.ok(result);
+    }
+
+
 }

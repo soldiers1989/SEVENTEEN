@@ -11,6 +11,7 @@ import com.seventeen.service.SeOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 小程序支付回调接口
@@ -43,6 +41,9 @@ public class WXConntroller  {
     @Autowired
     private LockService lockService;
 
+
+
+    @Transactional
     @RequestMapping(produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String payNotifyUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -86,7 +87,9 @@ public class WXConntroller  {
                         Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
                         Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
-               lockService.updataLockPassWord(seOrder.getApId(),start,out);
+               lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+
+
 
             }
 
@@ -111,7 +114,8 @@ public class WXConntroller  {
                 Integer.valueOf(s.substring(8, 10)),
                 Integer.valueOf(s.substring(11, 13)), 0, 0);
         System.out.println(of);
-
+        System.out.println(System.currentTimeMillis());
+        System.out.println();
     }
 
     private boolean checkSign(String xmlString) {

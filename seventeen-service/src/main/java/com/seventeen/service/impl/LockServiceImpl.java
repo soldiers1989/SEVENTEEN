@@ -44,7 +44,7 @@ public class LockServiceImpl implements LockService {
 
 
     @Override
-    public void updataLockPassWord(String apId, LocalDateTime startTime, LocalDateTime endTime) {
+    public void updataLockPassWord(String apId, LocalDateTime startTime, LocalDateTime endTime,int pwd) {
         SeApartment seApartment=new SeApartment();
         seApartment.setId(apId);
         seApartment= seApartmentMapper.selectOne(seApartment);
@@ -57,7 +57,7 @@ public class LockServiceImpl implements LockService {
         map.put("accessToken",token);
         map.put("lockId",seApartment.getLockId());
         map.put("keyboardPwdId",seApartment.getLockPwdId());
-        map.put("newKeyboardPwd","98765432");
+        map.put("newKeyboardPwd",pwd);
         map.put("startDate",start);
         map.put("endDate",end);
         map.put("changeType","2");
