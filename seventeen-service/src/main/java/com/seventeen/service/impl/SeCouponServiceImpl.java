@@ -26,10 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Author: csk
@@ -269,15 +272,36 @@ public class SeCouponServiceImpl implements SeCouponService {
         return result;
     }
 
+
     @Override
     public Result<List<SeCoupon>> getCouponByOrderCanUse(SysUser sysUser, String roomType, String startTime, String endTime) {
         Result<List<SeCoupon>> result = new Result<>();
         try {
+            int containWeekEnd = 1;
+            ArrayList list = new ArrayList();
+            /**
+             * yyyy-MM-dd
+             */
+            LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(startTime, DateUtil.DEFAULT_DATE_PATTERN));
+            LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(endTime, DateUtil.DEFAULT_DATE_PATTERN));
 
-            int count = SeCouponMapper.getCouponByRoomType(roomType);
-            if (count == 0) {
-                throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "没有可用优惠券");
+            long distance = ChronoUnit.DAYS.between(startDate, endDate);
+            if (distance >= 1) {
+                Stream.iterate(startDate, d -> {
+                    return d.plusDays(1);
+                }).limit(distance + 1).forEach(f -> {
+                    int value = f.getDayOfWeek().getValue();
+                    if (value == 6 || value == 7 || value == 5) {
+                        list.add("1");
+                    }
+                });
             }
+            if(list.size()>0){
+                containWeekEnd = 2;
+            }
+
+            ArrayList<SeCoupon> seCoupons= SeCouponMapper.getCouponByOrderCanUse(sysUser.getId(),roomType,containWeekEnd);
+            result.setData(seCoupons);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());

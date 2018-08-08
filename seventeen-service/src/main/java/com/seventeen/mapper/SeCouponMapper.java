@@ -39,4 +39,7 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     @Select("select count(1) from se_coupon sc ,se_coupon_price_type scp where sc.id = scp.coupon_id and scp.tag_id =#{roomType} and sc.`status`='1'")
     int getCouponByRoomType(@Param("roomType") String roomType);
+
+    ArrayList<SeCoupon> getCouponByOrderCanUse(@Param("userId") String id, @Param("roomType") String roomType, @Param("containWeekEnd") int containWeekEnd);
+
 }

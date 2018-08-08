@@ -127,4 +127,23 @@
         </if>
         ORDER BY sc.id ASC
     </select>
+
+    <select id="getCouponByOrderCanUse" resultMap="BaseResultMap">
+        SELECT
+        sc.*
+        FROM
+        se_coupon sc,
+        se_user_coupon suc,
+        se_coupon_price_type scp
+        WHERE
+        sc.id = scp.coupon_id
+        AND suc.coupon_id = sc.id
+        AND suc.user_id =#{userId}
+        AND suc.`status` ='1'
+        AND sc.use_type in (#{containWeekEnd},'3')
+        AND scp.tag_id = #{roomType}
+        AND sc.`status` = '1'
+    </select>
+
+
 </mapper>
