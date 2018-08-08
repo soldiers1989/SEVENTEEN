@@ -76,4 +76,7 @@ public interface SeCouponService {
      */
     Result<String> exchangeCoupon(String id, SysUser sysUser);
 
+    Result<List<SeCoupon>> getCouponByRoomType(String roomType);
+
+    Result<List<SeCoupon>> getCouponByOrderCanUse(SysUser sysUser, String roomType, String startTime, String endTime);
 }

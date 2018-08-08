@@ -79,6 +79,22 @@ public class CouponController {
 		return ResponseEntity.ok(couponDetail);
 	}
 
+	@GetMapping("/wx/{roomType}")
+	@ApiOperation(value = "根据房间类型查看可用")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getCouponByRoomType(@PathVariable String roomType) {
+		Result result= seCouponService.getCouponByRoomType(roomType);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/wx/getCouponByOrderCanUse")
+	@ApiOperation(value = "下订单时获取可用优惠券")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getCouponByOrderCanUse( @AuthenticationPrincipal SysUser sysUser,String roomType,String startTime,String endTime) {
+		Result<List<SeCoupon>> coupons= seCouponService.getCouponByOrderCanUse(sysUser,roomType,startTime,endTime);
+		return ResponseEntity.ok(coupons);
+	}
+
 
 	@PostMapping("update")
 	@ApiOperation(value = "更新优惠卷")

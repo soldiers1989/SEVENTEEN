@@ -54,9 +54,6 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Autowired
     private LockService lockService;
 
-    @Autowired
-    private LockService lockService;
-
     /**
      * @param status
      * @param remark
@@ -477,20 +474,22 @@ public class SeOrderServiceImpl implements SeOrderService {
     public void checkOut() {
         try {
             String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 12:00:00";
-            SeOrder seOrder = seOrderMapper.getCheckOut(date);
-            if(seOrder!=null){
-                seOrder.setStatus("5");
-                seOrderMapper.updateByPrimaryKeySelective(seOrder);
+            List<SeOrder> seOrders = seOrderMapper.getCheckOut(date);
+            for (SeOrder seOrder : seOrders) {
+                if (seOrder != null) {
+                    seOrder.setStatus("5");
+                    seOrderMapper.updateByPrimaryKeySelective(seOrder);
 
-                String apId = seOrder.getApId();
-                SeApartment seApartment= new SeApartment();
-                seApartment.setId(apId);
-                seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
-                seApartment.setStatus("2");
-                seApartmentMapper.updateByPrimaryKeySelective(seApartment);
+                    String apId = seOrder.getApId();
+                    SeApartment seApartment = new SeApartment();
+                    seApartment.setId(apId);
+                    seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+                    seApartment.setStatus("2");
+                    seApartmentMapper.updateByPrimaryKeySelective(seApartment);
+                }
             }
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
         }
     }
 
@@ -498,18 +497,20 @@ public class SeOrderServiceImpl implements SeOrderService {
     public void upgradeLockCron() {
         try {
             String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 14:00:00";
-            SeOrder seOrder = seOrderMapper.upgradeLockCron(date);
-            String inTime = seOrder.getInTime();
-            String outTime = seOrder.getOutTime();
-            LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-            LocalDateTime endTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+            List<SeOrder> seOrders = seOrderMapper.upgradeLockCron(date);
+            for (SeOrder seOrder : seOrders) {
+                String inTime = seOrder.getInTime();
+                String outTime = seOrder.getOutTime();
+                LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+                LocalDateTime endTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
 
-            if(seOrder!=null){
-                String password= seOrder.getLockPwd();
-                lockService.updataLockPassWord(seOrder.getApId(),startTime,endTime,Integer.valueOf(password));
+                if (seOrder != null) {
+                    String password = seOrder.getLockPwd();
+                    lockService.updataLockPassWord(seOrder.getApId(), startTime, endTime, Integer.valueOf(password));
+                }
             }
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
         }
     }
 

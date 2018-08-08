@@ -31,8 +31,8 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
     void deleteByid(@Param("id") String id);
 
     @Select("select * from se_order so where so.out_time  = DATE_FORMAT(#{date},'%Y-%m-%d %H:%i:%s') and so.`status` in('2')")
-    SeOrder getCheckOut(@Param("date") String date);
+    List<SeOrder> getCheckOut(@Param("date") String date);
 
     @Select("select * from se_order so where so.out_time  = DATE_FORMAT(#{date},'%Y-%m-%d %H:%i:%s') and so.`status` in('1','2')")
-    SeOrder upgradeLockCron(String date);
+    List<SeOrder> upgradeLockCron(String date);
 }

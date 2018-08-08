@@ -36,4 +36,7 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     @Select("select sc.id from se_coupon sc where sc.status ='1' and sc.send_type like '%新用户%'")
     List<String> getNewClientCoupon();
+
+    @Select("select count(1) from se_coupon sc ,se_coupon_price_type scp where sc.id = scp.coupon_id and scp.tag_id =#{roomType} and sc.`status`='1'")
+    int getCouponByRoomType(@Param("roomType") String roomType);
 }

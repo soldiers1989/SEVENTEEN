@@ -126,8 +126,7 @@ public class OrderController {
 	/**
 	 * 每天11：50更改房间状态，改成空房
 	 */
-//	@Scheduled(cron = "0 50 11 * * ? *")
-	@Scheduled(cron = "20 * * * * ? ")
+	@Scheduled(cron = "0 50 11 * * ? ")
 	public void checkOutTimerCron() {
 		seOrderService.checkOut();
 	}
@@ -136,7 +135,7 @@ public class OrderController {
 	/**
 	 * 每天13：00激活房间锁密码
 	 */
-	@Scheduled(cron = "0 30 13 * * ? *")
+	@Scheduled(cron = "0 0 13 * * ? ")
 	public void upgradeLockCron() {
 		seOrderService.upgradeLockCron();
 	}

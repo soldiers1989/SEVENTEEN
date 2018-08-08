@@ -144,9 +144,9 @@ public class SeCouponServiceImpl implements SeCouponService {
             LocalDate startTime = DateUtil.parseDate(seCoupon.getStartTime(), "yyyy-MM-dd");
             LocalDate endTime = DateUtil.parseDate(seCoupon.getEndTime(), "yyyy-MM-dd");
             boolean flag = DateUtil.betweenDate(startTime, endTime);
-            if(flag){
+            if (flag) {
                 seCoupon.setStatus("1");
-            }else{
+            } else {
                 seCoupon.setStatus("2");
             }
             seCoupon.setSendType(String.join(",", seCoupon.getSendTypeArr()));
@@ -203,7 +203,7 @@ public class SeCouponServiceImpl implements SeCouponService {
             pageInfo.setTotal(page.getTotal());
             result.setData(couponLogs, pageInfo);
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
@@ -215,7 +215,7 @@ public class SeCouponServiceImpl implements SeCouponService {
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-            ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status,sysUser.getId());
+            ArrayList<SeCoupon> seCoupons = SeCouponMapper.couponListWx(status, sysUser.getId());
             pageInfo.setTotal(page.getTotal());
             result.setData(seCoupons, pageInfo);
         } catch (Exception e) {
@@ -232,12 +232,12 @@ public class SeCouponServiceImpl implements SeCouponService {
             SeCoupon seCoupon = new SeCoupon().setId(id).setStatus("1");
 
             List<SeCoupon> seCoupons = SeCouponMapper.select(seCoupon);
-            if(!seCoupons.isEmpty()){
+            if (!seCoupons.isEmpty()) {
                 SeUserCoupon seUserCoupon = new SeUserCoupon();
                 seUserCoupon.setCouponId(id);
                 seUserCoupon.setUserId(sysUser.getId());
                 List<SeUserCoupon> seUserCoupons = seUserCouponMapper.select(seUserCoupon);
-                if(seUserCoupons.isEmpty()){
+                if (seUserCoupons.isEmpty()) {
                     seUserCoupon.setId(IDGenerator.getId());
                     seUserCoupon.setUpdateTime(DateUtil.now());
                     seUserCoupon.setCreateBy(sysUser.getId());
@@ -252,4 +252,37 @@ public class SeCouponServiceImpl implements SeCouponService {
         }
         return result;
     }
+
+    @Override
+    public Result<List<SeCoupon>> getCouponByRoomType(String roomType) {
+        Result<List<SeCoupon>> result = new Result<>();
+        try {
+
+            int count = SeCouponMapper.getCouponByRoomType(roomType);
+            if (count == 0) {
+                throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "没有可用优惠券");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<SeCoupon>> getCouponByOrderCanUse(SysUser sysUser, String roomType, String startTime, String endTime) {
+        Result<List<SeCoupon>> result = new Result<>();
+        try {
+
+            int count = SeCouponMapper.getCouponByRoomType(roomType);
+            if (count == 0) {
+                throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "没有可用优惠券");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
 }
