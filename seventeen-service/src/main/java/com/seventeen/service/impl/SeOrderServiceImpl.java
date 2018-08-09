@@ -312,12 +312,18 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateOrderStatus(String orderId) {
-
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         SeOrderPay sep = new SeOrderPay();
         sep.setId(orderId);
-        sep = seOrderPayMapper.selectOne(sep);
-        sep.setStatus(1);
-        seOrderPayMapper.updateByPrimaryKey(sep);
+        List<SeOrderPay> slist= seOrderPayMapper.select(sep);
+        for (SeOrderPay orderPay : slist) {
+            orderPay.setStatus(1);
+            orderPay.setPayTime(LocalDateTime.now().format(dateTimeFormatter));
+            orderPay.setUpdateTime(LocalDateTime.now().format(dateTimeFormatter));
+            seOrderPayMapper.updateByPrimaryKey(orderPay);
+        }
+
+
     }
 
     @Override
