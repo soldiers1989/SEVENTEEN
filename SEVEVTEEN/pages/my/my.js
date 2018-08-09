@@ -105,9 +105,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    wx.getUserInfo({
+      success: function (res) {
+        that.setData({
+          userInfo: res.userInfo
+        })
+      }
+    })
     var that = this;
     var token = wx.getStorageSync('token');
-    this.getUserInfo();
+    // this.getUserInfo();
+
     wx.request({
       url: app.globalData.baseUrl + "/rlsb/isVerify",
       method: "GET",
@@ -115,17 +123,14 @@ Page({
         "Authorization": "Bearer " + token
       },
       success: function(res) {
-        console.log(res.data.data);
 
         var _obj = that.data.routers;
         _obj[3].flag = res.data.data == true ? false : true;
         that.setData({
           routers: _obj
         })
-        console.log(_obj);
       }
     })
-    // console.log(data);
   },
 
   /**

@@ -3,7 +3,7 @@
   <text class='time'>{{item.orderTime}}</text>
   <view class='message-container'>
     <text class='message-title'>{{item.status}}</text>
-    <text class='message'>恭喜支付成功，你的房间将为你保留整晚</text>
+    <text class='message'>{{item.remark}}</text>
     <text class='message'>订单金额: {{item.price}}元</text>
     <text class='message'>入住时间: {{item.liveTime}}</text>
     <text class='message'>入住房型: {{item.roomType}}</text>

@@ -92,4 +92,29 @@ public interface SeApartmentService{
     Result<List<RoomTypePirce>> getTypePiece(String typeCode);
 
     Result getApartmentByTime(String startTime, String endTime, String roomType);
+
+    /**
+     *
+     * @param seApartmentClean
+     * @param sysUser
+     * @return
+     */
+    Result addClean(SeApartmentClean seApartmentClean, SysUser sysUser);
+
+    /**
+     *
+     * @param seApartmentClean
+     * @param sysUser
+     * @return
+     */
+    Result updateCleanStatus(SeApartmentClean seApartmentClean, SysUser sysUser);
+
+    /**
+     *
+     * @param apNum
+     * @param pageInfo
+     * @return
+     */
+    Result<List<ApartmentClean>> getClean(String apNum, PageInfo pageInfo);
+
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public interface SeCouponService {
 
     /**
-     * @param status
+     * @param statusk
      * @param remark
      * @param pageInfo
      * @return

@@ -80,6 +80,20 @@
     ELSE
     '订单完成'
     END as `status` ,
+    CASE so.`status`
+    WHEN -1 THEN
+    '支付过程出现某些原因导致支付失败'
+    WHEN 1 THEN
+    '恭喜支付成功，你的房间将为你保留整晚'
+    WHEN 2 THEN
+    '恭喜入住成功'
+    WHEN 3 THEN
+    '正在申请退订中，请等待'
+    WHEN 4 THEN
+    '退订成功，感谢使用'
+    ELSE
+    '订单完成，感谢使用'
+    END as remark ,
     if(so.coupon_id is null,'无',sc.`name`) couponName,
     so.price ,
     CONCAT_WS('至',so.in_time,so.out_time) liveTime,

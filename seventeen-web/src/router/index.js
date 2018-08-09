@@ -25,6 +25,11 @@ const router = new Router({
                     meta: {requiresAuth: true}
                 },
                 {
+                    path: '/clean',
+                        component: resolve => require(['../components/page/Clean.vue'], resolve),
+                    meta: {requiresAuth: true}
+                },
+                {
                     path: '/user',
                         component: resolve => require(['../components/page/User.vue'], resolve),
                     meta: {requiresAuth: true}
@@ -47,6 +52,11 @@ const router = new Router({
                 {
                     path: '/point',
                         component: resolve => require(['../components/page/Point.vue'], resolve),
+                    meta: {requiresAuth: true}
+                },
+                {
+                    path: '/pointExchange',
+                        component: resolve => require(['../components/page/PointExchange.vue'], resolve),
                     meta: {requiresAuth: true}
                 },
                 {

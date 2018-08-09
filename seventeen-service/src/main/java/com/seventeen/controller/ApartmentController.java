@@ -10,6 +10,7 @@ import com.seventeen.util.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,31 @@ public class ApartmentController {
 		Result seApartments = seApartmentService.addTags(seTag);
 		return ResponseEntity.ok(seApartments);
 	}
+
+	@GetMapping("/clean")
+	@ApiOperation(value = "获取清洁列表")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getClean(String apNum,PageInfo pageInfo) {
+		Result<List<ApartmentClean>> result = seApartmentService.getClean(apNum,pageInfo);
+		return ResponseEntity.ok(result);
+	}
+
+	@PostMapping("/clean")
+	@ApiOperation(value = "提交清洁申请")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity addClean(@RequestBody SeApartmentClean seApartmentClean,@AuthenticationPrincipal SysUser sysUser) {
+		Result result = seApartmentService.addClean(seApartmentClean,sysUser);
+		return ResponseEntity.ok(result);
+	}
+
+	@PutMapping("/clean")
+	@ApiOperation(value = "清洁房间")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity updateCleanStatus(@RequestBody SeApartmentClean seApartmentClean,@AuthenticationPrincipal SysUser sysUser) {
+		Result result = seApartmentService.updateCleanStatus(seApartmentClean,sysUser);
+		return ResponseEntity.ok(result);
+	}
+
 	@DeleteMapping("/tags")
 	@ApiOperation(value = "删除tag")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -110,10 +136,8 @@ public class ApartmentController {
 		return ResponseEntity.ok(seApartments);
 	}
 
-
-
 	@PostMapping("/priceType")
-	@ApiOperation(value = "插入房间价格类型信息")
+	@ApiOperation(value = "提交价格类型")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity addPriceType(@RequestBody ApartmentPriceRoom ruleRoomForm) {
 		Result result = seApartmentService.addPriceType(ruleRoomForm);
@@ -121,7 +145,7 @@ public class ApartmentController {
 	}
 
 	@GetMapping("/priceType")
-	@ApiOperation(value = "获取房间价格类型信息")
+	@ApiOperation(value = "获取价格类型")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getPriceType() {
 		Result result = seApartmentService.getPriceType();
@@ -129,7 +153,7 @@ public class ApartmentController {
 	}
 
 	@GetMapping("/priceType/{roomTypeId}/detail")
-	@ApiOperation(value = "获取房间价格类型信息")
+	@ApiOperation(value = "获取价格细节")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getPriceTypeDetail(@PathVariable String roomTypeId) {
 		Result result = seApartmentService.getPriceTypeDetail(roomTypeId);

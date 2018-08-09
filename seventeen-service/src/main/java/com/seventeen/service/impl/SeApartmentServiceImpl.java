@@ -9,6 +9,7 @@ import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.*;
+import com.seventeen.mapper.SeApartmentCleanMapper;
 import com.seventeen.service.SeApartmentService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +46,9 @@ public class SeApartmentServiceImpl implements SeApartmentService {
 
     @Autowired
     private SeTagMapper seTagMapper;
+
+    @Autowired
+    private SeApartmentCleanMapper seApartmentCleanMapper;
 
     @Autowired
     private SeAdviseMapper seAdviseMapper;
@@ -185,8 +190,8 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             SeApartment seApartment = seApartmentMapper.selectByPrimaryKey(apNum);
             List<SeApartmentImg> seApartmentImgs = seApartmentImgMapper.selectByApids(apNum);
             for (SeApartmentImg seApartmentImg : seApartmentImgs) {
-                seApartmentImg.setUrl(StringUtils.isBlank(seApartmentImg.getUrl())==true?"":imgUrl + seApartmentImg.getUrl());
-                seApartmentImg.setMixUrl(StringUtils.isBlank(seApartmentImg.getMixUrl())==true?"":imgUrl + seApartmentImg.getMixUrl());
+                seApartmentImg.setUrl(StringUtils.isBlank(seApartmentImg.getUrl()) == true ? "" : imgUrl + seApartmentImg.getUrl());
+                seApartmentImg.setMixUrl(StringUtils.isBlank(seApartmentImg.getMixUrl()) == true ? "" : imgUrl + seApartmentImg.getMixUrl());
             }
             List<SeApartmentGood> seApartmentGoods = seApartmentGoodMapper.selectByApids(apNum);
 
@@ -527,13 +532,70 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     public Result getApartmentByTime(String startTime, String endTime, String roomType) {
         Result result = new Result<>();
         try {
-            startTime = startTime+" 14:00:00";
-            endTime = endTime+" 12:00:00";
+            startTime = startTime + " 14:00:00";
+            endTime = endTime + " 12:00:00";
 
             ArrayList<String> seApartments = seApartmentMapper.getApartmentByTime(startTime, endTime, roomType);
             result.setData(seApartments);
         } catch (Exception e) {
             logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result addClean(SeApartmentClean seApartmentClean, SysUser sysUser) {
+        Result result = new Result<>();
+        try {
+
+            seApartmentClean.setIsCleaned("0");
+            List<SeApartmentClean> select = seApartmentCleanMapper.select(seApartmentClean);
+            if(select.isEmpty()){
+                seApartmentClean.setCreateBy(sysUser.getId());
+                seApartmentClean.setCreateTime(DateUtil.now());
+                seApartmentClean.setUpdateBy(sysUser.getId());
+                seApartmentClean.setUpdateTime(DateUtil.now());
+                seApartmentClean.setId(IDGenerator.getId());
+                seApartmentCleanMapper.insert(seApartmentClean);
+            }
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result updateCleanStatus(SeApartmentClean seApartmentClean, SysUser sysUser) {
+        Result result = new Result<>();
+        try {
+            seApartmentClean.setIsCleaned("0");
+            seApartmentClean = seApartmentCleanMapper.selectOne(seApartmentClean);
+            if(seApartmentClean!=null){
+                seApartmentClean.setIsCleaned("1");
+                seApartmentClean.setUpdateTime(DateUtil.now());
+                seApartmentClean.setUpdateBy(sysUser.getId());
+                seApartmentCleanMapper.updateByPrimaryKeySelective(seApartmentClean);
+            }
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<ApartmentClean>> getClean(String apNum, PageInfo pageInfo) {
+        Result<List<ApartmentClean>> result = new Result<>();
+        try {
+            Page page = PageHelper.startPage(pageInfo.getPageNum(),
+                    pageInfo.getPageSize(), true);
+            ArrayList<ApartmentClean> apartmentCleans= seApartmentCleanMapper.getClean(apNum);
+            pageInfo.setTotal(page.getTotal());
+            result.setData(apartmentCleans, pageInfo);
+        } catch (Exception e) {
+            logger.error("error",e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

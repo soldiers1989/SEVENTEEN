@@ -78,7 +78,7 @@
     </view>
     <view class='img-detail-container' bindtap='openDoorTap'>
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/openDoor.png'> </image>
-      <text class='img-text'>远程开门</text>
+      <text class='img-text'>重置密码</text>
     </view>
     <view class='img-detail-container' bindtap='wifiTap'>
       <image class='img-detail' src='https://www.17inn.com/img/wxApp/wifi.png'> </image>

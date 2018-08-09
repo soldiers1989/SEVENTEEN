@@ -45,7 +45,12 @@
                         title: '房间列表'
                     },
                     {
-                        icon: 'el-icon-goods',
+                        icon: 'el-icon-setting',
+                        index: 'clean',
+                        title: '清洁列表'
+                    },
+                    {
+                        icon: 'el-icon-info',
                         index: 'user',
                         title: '用户管理'
                     },
@@ -58,6 +63,12 @@
                         icon: 'el-icon-news',
                         index: 'point',
                         title: '积分管理'
+                    }
+                    ,
+                    {
+                        icon: 'el-icon-goods',
+                        index: 'pointExchange',
+                        title: '积分兑换'
                     }
                     ,
                     {
