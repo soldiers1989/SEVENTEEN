@@ -321,6 +321,13 @@ public class SeOrderServiceImpl implements SeOrderService {
             orderPay.setPayTime(LocalDateTime.now().format(dateTimeFormatter));
             orderPay.setUpdateTime(LocalDateTime.now().format(dateTimeFormatter));
             seOrderPayMapper.updateByPrimaryKey(orderPay);
+
+
+            SeOrder order=new SeOrder();
+            order.setId(orderPay.getSeOrderId());
+            order=seOrderMapper.selectOne(order);
+            order.setStatus("1");
+            seOrderMapper.updateByPrimaryKey(order);
         }
 
 
