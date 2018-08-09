@@ -90,6 +90,9 @@ public class OrderController {
 		return ResponseEntity.ok(orderCenter);
 	}
 
+
+
+
     @PutMapping("/wx/cancel")
     @ApiOperation(value = "退订")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -117,54 +120,9 @@ public class OrderController {
 	@PostMapping("/wx/setOrder")
 	@ApiOperation(value = "获取订单详细信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity setOrder(@AuthenticationPrincipal SysUser sysUser, @RequestParam String roomId, @RequestParam String fee) {
-		Result result=new Result();
-		//本系统业务下单生产订单ID
-		String orderId = RandomStringUtils.randomAlphanumeric(24);
-		System.out.println("订单号:" + orderId);
-		//本次订单随机串
-		String nonceStr = RandomStringUtils.randomAlphanumeric(32);
-		try {
-			MyConfig config = new MyConfig();
+	public ResponseEntity setOrder(@AuthenticationPrincipal SysUser sysUser,@RequestBody OrderInfo orderInfo) {
 
-			WXPay wxpay = new WXPay(config);
-
-			Map<String, String> data = new HashMap<>();
-			data.put("fee_type", "CNY");
-			data.put("body", "17inn订房");//商品描述
-			data.put("nonce_str", nonceStr);//随机字符串
-			data.put("notify_url", "https://www.17inn.com/order/wx/payCallback");//异步回调api
-			data.put("spbill_create_ip", "39.107.111.100");//支付ip
-			data.put("out_trade_no", orderId);//商品订单号
-			data.put("total_fee", fee);//真实金额
-			data.put("trade_type", "JSAPI");//JSAPI、h5调用
-			data.put("openid", sysUser.getOpenid());//支付用户openid
-
-
-			Map<String, String> resp = wxpay.unifiedOrder(data);
-			System.out.println("---预订单返回--\n"+resp);
-			//处理加密返回给前端
-			String timeStamp = String.valueOf(System.currentTimeMillis());
-			String paySign="appId="+resp.get("appid")+"&nonceStr="+resp.get("nonce_str")+"&package=prepay_id="+resp.get("prepay_id")+"&signType=MD5&timeStamp="+timeStamp+"&key=1TZt37EvkxJW8ctbVT9IPZQnYpISsgLy";
-			System.out.println(paySign);
-			paySign= MD5.MD5Encode(paySign,"UTF-8");
-
-			Map<String,String > resMap=new HashMap<>();
-			resMap.put("appId",resp.get("appid"));
-			resMap.put("nonceStr",resp.get("nonce_str"));
-			resMap.put("package","prepay_id="+resp.get("prepay_id"));
-			resMap.put("paySign",paySign);
-			resMap.put("timeStamp",timeStamp);
-
-
-			result.setData(resMap);
-			System.out.println(resMap);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return ResponseEntity.ok(result);
+        return seOrderService.setOrder(sysUser, orderInfo);
 	}
 
 	/**

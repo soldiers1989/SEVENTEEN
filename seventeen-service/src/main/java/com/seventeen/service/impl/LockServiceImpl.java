@@ -63,8 +63,6 @@ public class LockServiceImpl implements LockService {
         map.put("changeType","2");
         map.put("date",System.currentTimeMillis());
 
-
-
         String s = HttpUtil.postData("https://api.sciener.cn/v3/keyboardPwd/change", mapToDataString(map),"application/x-www-form-urlencoded");
         System.out.println(s);
 

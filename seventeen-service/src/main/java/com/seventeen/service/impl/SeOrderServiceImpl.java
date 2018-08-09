@@ -51,8 +51,12 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeTagMapper seTagMapper;
     @Autowired
     private SeApartmentMapper seApartmentMapper;
+
     @Autowired
     private LockService lockService;
+    @Autowired
+    private SeOrderPayMapper seOrderPayMapper;
+
 
     /**
      * @param status
@@ -157,18 +161,64 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Transactional
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
         String orderId = IDGenerator.getId();//RandomStringUtils.randomAlphanumeric(23);
-        System.out.println("订单号:" + orderId);
+//        System.out.println("订单号:" + orderId);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.println(LocalDateTime.now().format(dateTimeFormatter));
+//        System.out.println(LocalDateTime.now().format(dateTimeFormatter));
         Result result = new Result();
-        //List<SeOrder> seList=new ArrayList<>();
+        SeOrderPay orderPay = new SeOrderPay();
+        orderPay.setId(orderId);
+        orderPay.setCreatTime(LocalDateTime.now().format(dateTimeFormatter));
+        orderPay.setStatus(0);
+
+
         if (!orderInfo.getRoomNum().equals("1")) {//多间时候需要拆分订单
-            List<SeOrder> seList = new ArrayList<>();
+
+            String[] idArr = orderInfo.getRoomId().split(",");
+            for (String rid : idArr) {
+
+                SeOrder se = new SeOrder();
+                se.setId(IDGenerator.getId());
+                se.setApId(rid);
+                se.setArriveTime(orderInfo.getPlanTime());
+                se.setOrderTime(LocalDateTime.now().format(dateTimeFormatter));
+                se.setCreateTime(LocalDateTime.now().format(dateTimeFormatter));
+                se.setCouponId(orderInfo.getCouponId());
+                se.setInTime(orderInfo.getStartTime());
+                se.setOutTime(orderInfo.getEndTime());
+                se.setUserId(sysUser.getId());
+                se.setPriceTagId(orderInfo.getTagId());
+                se.setPrice(orderInfo.getPrice());
+                se.setCreateBy(orderInfo.gettName());
+                se.setCreatorPhone(orderInfo.getPhone());
+                se.setStatus("-1");
+                se.setIsReply("0");
+                se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 100000)));
+
+                seOrderMapper.insert(se);
+
+                orderPay.setSeOrderId(se.getId());
+                seOrderPayMapper.insert(orderPay);
+
+                SeOrderLiver ol = new SeOrderLiver();
+                ol.setId(IDGenerator.getId());
+                ol.setOrderId(se.getId());
+                ol.setCreateBy(se.getCreateBy());
+                ol.setCreateTime(se.getCreateTime());
+                ol.setPhone(se.getCreatorPhone());
+                ol.setLiver(se.getCreateBy());
+                ol.setUpdateTime(LocalDateTime.now().format(dateTimeFormatter));
+                SeUserAttestation su = new SeUserAttestation();
+                su.setUserId(sysUser.getId());
+                SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(su);
+                ol.setIdCard(seUserAttestation.getIdCode());
+                seOrderLiverMapper.insert(ol);
+
+            }
 
 
         } else {
             SeOrder se = new SeOrder();
-            se.setId(orderId);
+            se.setId( IDGenerator.getId());
             se.setApId(orderInfo.getRoomId());
             se.setArriveTime(orderInfo.getPlanTime());
             se.setOrderTime(LocalDateTime.now().format(dateTimeFormatter));
@@ -186,6 +236,10 @@ public class SeOrderServiceImpl implements SeOrderService {
             se.setLockPwd(String.valueOf((int) ((Math.random() * 9 + 1) * 100000)));
 
             seOrderMapper.insert(se);
+
+
+            orderPay.setSeOrderId(se.getId());
+            seOrderPayMapper.insert(orderPay);
 
             SeOrderLiver ol = new SeOrderLiver();
             ol.setId(IDGenerator.getId());
@@ -259,11 +313,11 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Transactional(rollbackFor = Exception.class)
     public void updateOrderStatus(String orderId) {
 
-        SeOrder se = new SeOrder();
-        se.setId(orderId);
-        se = seOrderMapper.selectOne(se);
-        se.setStatus("1");
-        seOrderMapper.updateByPrimaryKey(se);
+        SeOrderPay sep = new SeOrderPay();
+        sep.setId(orderId);
+        sep = seOrderPayMapper.selectOne(sep);
+        sep.setStatus(1);
+        seOrderPayMapper.updateByPrimaryKey(sep);
     }
 
     @Override
