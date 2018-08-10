@@ -14,7 +14,9 @@
           <view wx:else>
             <text>获得{{items.price}}积分</text>
           </view>
+          <view wx:if="{{items.isCoupon==200}}">
           <image src='/imgs/index/quan.png'></image>
+          </view>
         </view>
       </view>
       <view class='roomPay-text-money'>
@@ -26,42 +28,9 @@
         </view>
         <!-- <text class='roomPay-text-money-t2'>¥100减20</text> -->
       </view>
-      <view class='btn-ding' data-id='{{roomTypeCode}}' data-money="{{items.name=='会员价'?items.price*userVip.discount:items.price}}" data-tagId='{{items.tagId}}' catchtap='setOrder'>订</view>
+      <view class='btn-ding' data-id='{{roomTypeCode}}' data-money="{{items.name=='会员价'?items.price*userVip.discount:items.price}}" data-tagId='{{items.tagId}}' data-roomName='{{items.name}}'  catchtap='setOrder'>订</view>
     </view>
   </view>
 
-  <!-- <view class='roomPay' bindtap='showPopup'>
-    <view class='roomPay-text'>
-      <view class='roomPay-text-t1'>
-        <text >会员价</text>
-        <image class='roomPay-text-t1-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
-      </view>
-      <view class='roomPay-text-t2'>
-        <text >获得100积分</text>
-        <image  src='/imgs/index/quan.png'></image>
-      </view>
-    </view>
-    <view class='roomPay-text-money'>
-      <text class='roomPay-text-money-t1'>¥ 100</text>
-      <text class='roomPay-text-money-t2'>¥100减20</text>
-    </view>
-    <view class='btn-ding'>订</view>
-  </view>
-  <view class='roomPay' bindtap='showPopup'>
-    <view class='roomPay-text'>
-      <view class='roomPay-text-t1'>
-        <text >特惠价</text>
-        <image class='roomPay-text-t1-img' src='{{imgUrl}}/imgs/index/right-arr.png'></image>
-      </view>
-      <view class='roomPay-text-t2'>
-        <text >获得100积分</text>
-        <image  src='/imgs/index/quan.png'></image>
-      </view>
-    </view>
-    <view class='roomPay-text-money'>
-      <text class='roomPay-text-money-t1'>¥ 100</text>
-      <text class='roomPay-text-money-t2'>¥100减20</text>
-    </view>
-    <view class='btn-ding'>订</view>
-  </view> -->
+ 
 </template>

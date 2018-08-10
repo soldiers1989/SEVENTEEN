@@ -6,20 +6,21 @@ Page({
    */
   data: {
     roomId: "",
-    price:0,
+    price: 0,
     index: 0,
     index1: 0,
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl,
 
-    
-    userInfo:{
+
+    userInfo: {
       isVerify: false,
-      tName:""
-      
+      tName: ""
+
     },
     phone: "",
-    tagId:"",
+    tagId: "",
+    roomName: "",
 
     // orderInfo:{
     //   startTime:"",
@@ -95,47 +96,53 @@ Page({
       '1',
       '2',
       '3'
-    ]
+    ],
 
-
-   
+    year: '',
+    month: '',
+    day: '',
+    days: '',
+    outday: '',
+    outmonth: '',
+    outyear: '',
+    couponIndex:0
 
   },
   choseLiveDateTap: function(e) {
     //日历模态框
     var chooseDate = this.data.chooseDate;
-    var time="";
+    var time = "";
 
-    if (chooseDate!=null){
-       time = this.data.chooseDate.time;
+    if (chooseDate != null) {
+      time = this.data.chooseDate.time;
     }
     var url
     if (chooseDate && chooseDate.end) {
-      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start.date + "-" + this.data.chooseDate.end.date + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate + "&&time=" + time+"&&roomType=" +"20180730212605678983465"
+      url = '/pages/dates/date?chooseDate=' + this.data.chooseDate.start.date + "-" + this.data.chooseDate.end.date + "&&eDate=" + this.data.chooseDate.eDate + "&&sDate=" + this.data.chooseDate.sDate + "&&time=" + time + "&&roomType=" + this.data.roomId
     } else {
-      url = "/pages/dates/date?roomType=" + "20180730212605678983465";
+      url = "/pages/dates/date?roomType=" + this.data.roomId;
     }
     wx.getLocation({
       type: 'wgs84',
-      success: function (res) {
+      success: function(res) {
         wx.navigateTo({
           url: url
         })
       },
-      fail:function(){
+      fail: function() {
         wx.getSetting({
           success: (res) => {
-            if (res.authSetting['scope.userLocation'] != undefined) {//非初始化进入该页面,且未授权
+            if (res.authSetting['scope.userLocation'] != undefined) { //非初始化进入该页面,且未授权
               wx.showModal({
                 title: '警告',
                 content: '需要获取您的地理位置，请确认授权，否则天气功能将无法使用',
-                success: function (res) {
+                success: function(res) {
                   if (res.cancel) {
                     console.info("授权失败返回数据");
                   } else if (res.confirm) {
                     //village_LBS(that);
                     wx.openSetting({
-                      success: function (data) {
+                      success: function(data) {
                         console.log(data);
                         if (data.authSetting["scope.userLocation"] == true) {
                           wx.showToast({
@@ -168,17 +175,33 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    var date = new Date();
 
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    date.setDate(day + 1);
+    var outday = date.getDate();
+    // console.log(outday)
+    var outmonth = date.getMonth() + 1;
+    var outyear = date.getFullYear();
 
     this.setData({
       roomId: options.roomId,
-      price : options.price,
-      tagId: options.tagId
+      price: options.price,
+      tagId: options.tagId,
+      roomName: options.roomName,
+      year: year,
+      month: month,
+      day: day,
+      outday: outday,
+      outmonth: outmonth,
+      outyear: outyear
     })
 
     //获取用户是否已经做了实名制
     var token = wx.getStorageSync('token');
-    getIsVerify(this,token);
+    getIsVerify(this, token);
     //获取是否还有房间
 
 
@@ -198,7 +221,48 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    // console.log("shohohsodhfosdhfo")
+    var rl = this.data.roomList;
+    if (rl != null) {
+      if (rl.length <= 3) {
+        var array1 = new Array();
+        for (var i = 0; i < rl.lenght; i++) {
+          array1[i] = i + 1;
+        }
+        this.setData({
+          array1: array1
+        })
+      }
+    }
 
+    var that=this;
+    var cda = this.data.chooseDate;
+   
+    if (cda != null) {
+      console.log(typeof cda.start.month)
+      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
+      var edate = "" + cda.end.year + "-" + ("" +cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
+      wx.request({
+        url: this.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
+        data: {
+          roomType: this.data.tagId,
+          startTime: sdate,
+          endTime: edate
+        },
+        header: {
+          "Authorization": "Bearer " + wx.getStorageSync('token')
+          // "Content-Type": "application/json"
+        },
+        method: 'GET',
+        // responseType: 'json',
+        success: function(res) {
+          console.log(res)
+          that.setData({
+            coupon: res.data.data
+          })
+        }
+      })
+    }
   },
 
   /**
@@ -252,43 +316,100 @@ Page({
     //赋值
     console.log(this.data.array1[this.data.index1]);
   },
-  getPhone: function (e) {
+  bindPickerChangeCoupon: function (e) {
+    // console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      couponIndex: e.detail.value
+    })
+    //赋值
+    console.log(this.data.array1[this.data.index1]);
+  },
+
+  getPhone: function(e) {
     var val = e.detail.value;
     this.setData({
-      phone:val
+      phone: val
     });
   },
 
   //支付
   toPay: function() {
     console.log("支付开始")
-    
-    if (this.data.userInfo.isVerify==false) {
+
+    if (this.data.userInfo.isVerify == false) {
       wx.showToast({
         title: '您还没通过实名认证',
         icon: 'none'
       })
-      wx.redirectTo({//关闭当前页面，跳转到应用内的某个页面
+      wx.redirectTo({ //关闭当前页面，跳转到应用内的某个页面
         url: '/pages/my/rlsb/rlsb'
       })
       return;
     }
 
-    var roomNum=this.data.array1[this.data.index1];
-    var price =this.data.price;
+    var roomId = "";
+    var rlist = this.data.roomList;
+
+    var roomNum = this.data.array1[this.data.index1];
+    if (rlist == null) {
+      wx.showToast({
+        title: '请先选择日期',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
+    if (rlist.length > 0) {
+      if (roomNum == 1) {
+        roomId = rlist[0];
+      } else {
+        for (var i = 1; i <= roomNum; i++) {
+          roomId += rlist[i - 1];
+          if (i < roomNum) {
+            roomId += ",";
+          }
+        }
+      }
+    } else {
+      wx.showToast({
+        title: '房间已被订满了',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
+    if (roomId == "") {
+      wx.showToast({
+        title: '房间已满,请稍后重试',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
+    var couponid ="0";
+    if (this.data.coupon!=null){
+      couponid = this.data.coupon[this.data.couponIndex].id;     
+    }
+
+
+
+    var price = this.data.price;
     var planTime = this.data.array[this.data.index];
     var userInfo = this.data.userInfo;
-    var phone=this.data.phone;
-    if(phone==""){
+    var phone = this.data.phone;
+    var startTime = this.data.chooseDate.start.re + " 14:00:00"
+    var endTime = this.data.chooseDate.end.re + " 12:00:00"
+
+    if (phone == "") {
       wx.showToast({
         title: '手机号不能为空',
-        icon:'none'
+        icon: 'none'
       })
       return;
     }
 
-    
-      
+
+
 
     var token = wx.getStorageSync('token');
 
@@ -296,17 +417,18 @@ Page({
       url: this.data.baseUrl + '/order/wx/setOrder',
 
       data: {
-        roomId: "20180725230836716205288",
+        roomId: roomId,
         fee: price,
-        startTime: "2018-7-20 ",
-        endTime: "2018-7-30",
+        startTime: startTime,
+        endTime: endTime,
         tName: userInfo.tName,
         phone: phone,
         planTime: planTime,
-        couponId: "",
+        couponId: couponid,
         price: price,
         roomNum: roomNum,
         tagId: this.data.tagId
+        // apId: apId
       },
       header: {
         "Authorization": "Bearer " + token,
@@ -318,7 +440,7 @@ Page({
       success: function(res) {
         console.log(res)
         if (res.statusCode == 200) {
-          var dd=res.data.data;
+          var dd = res.data.data;
           console.log()
           wx.requestPayment({
             timeStamp: dd.timeStamp,
@@ -343,15 +465,15 @@ Page({
   }
 })
 
-function getIsVerify(that,  token) {
+function getIsVerify(that, token) {
   wx.request({
     url: that.data.baseUrl + "/rlsb/isVerify",
     method: 'GET',
     header: {
       Authorization: 'Bearer ' + token
     },
-    success: function (res) {
-       console.log(res.data.data)
+    success: function(res) {
+      console.log(res.data.data)
       that.setData({
         userInfo: res.data.data
       })

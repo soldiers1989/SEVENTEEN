@@ -53,9 +53,22 @@ Page({
         end = date[enddate[0]][enddate[1]];
         start = date[startdate[0]][startdate[1]];
         time = this.data.startDate + "-" + this.data.endDate
-        day = end.date - start.date;
+       
         sDate = start.date;
         eDate = end.date;
+       
+        // var ssDate = new Date(2018, 8, 21)
+        var start_date = new Date(start.re.replace(/-/g, "/"));
+        var end_date = new Date(end.re.replace(/-/g, "/"));
+        var days = end_date.getTime() - start_date.getTime();
+        day = parseInt(days / (1000 * 60 * 60 * 24));
+        // day = end.date - start.date;
+        // if (day > 0) {
+        //   this.setData({
+        //     num: day
+        //   })
+        // }
+
       }
       var chooseDate = {
         time: time,
@@ -64,6 +77,7 @@ Page({
         end: end,
         eDate: eDate,
         day: day
+      
       }
 
       wx.request({
@@ -76,6 +90,7 @@ Page({
         success: function (data) {
           if (data.data.resultCode === 200) {
             //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+
             prevPage.setData({
               chooseDate: chooseDate,
               roomList:data.data.data

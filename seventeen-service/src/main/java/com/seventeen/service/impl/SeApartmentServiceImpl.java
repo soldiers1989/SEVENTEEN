@@ -510,6 +510,10 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     public Result<List<TypeRoom>> getTypeRooms(String shop) {
         Result result = new Result<>();
         List<TypeRoom> typeRooms = seAdviseMapper.getTypeRooms(shop);
+        for (TypeRoom typeRoom : typeRooms) {
+            typeRoom.setImgUrl(imgUrl+typeRoom.getImgUrl());
+        }
+
         result.setData(typeRooms);
         return result;
     }

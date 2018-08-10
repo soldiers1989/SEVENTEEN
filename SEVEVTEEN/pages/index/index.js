@@ -33,18 +33,12 @@ Page({
 
     popupShow: false, //弹窗是否显示
 
-    popupIconList: [{
-        icon: '/imgs/timg.jpg',
-        name: '无线WIFI覆盖'
-      },
-      {
-        icon: '/imgs/timg.jpg',
-        name: '书桌'
-      },
-      {
-        icon: '/imgs/timg.jpg',
-        name: '电脑'
-      }
+    popupIconList: [
+    // {
+    //     icon: '/imgs/timg.jpg',
+    //     name: '无线WIFI覆盖'
+    //   }
+     
     ],
 
     Shops: [{
@@ -78,11 +72,11 @@ Page({
       name: "",
       Price: '',
       tagId: "",
-      name:"",
-      Price:''
+      name: ""
+
     }],
 
-    userVip:{},
+    userVip: {},
 
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl
@@ -130,8 +124,9 @@ Page({
     var _datasetId = e.target.dataset.id;
     var money = e.target.dataset.money;
     var tagId = e.target.dataset.tagid;
+    var roomName = e.target.dataset.roomname;
     wx.navigateTo({
-      url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money + "&tagId=" + tagId,
+      url: '/pages/order/order?roomId=' + _datasetId + "&price=" + money + "&tagId=" + tagId + "&roomName=" + roomName,
     })
   },
   getTotalAssess: function(pageNum) {
@@ -260,7 +255,7 @@ Page({
       header: {
         Authorization: 'Bearer ' + token
       },
-      success: function (res) {
+      success: function(res) {
         //console.log(res.data)
         wx.setStorageSync('userVip', res.data.data)
         that.setData({
@@ -268,7 +263,7 @@ Page({
         })
       }
     });
-   
+
   },
   onReachBottom: function() {
     if (this.data.tabArr.curHdIndex == "t2") {
@@ -309,6 +304,7 @@ Page({
     if (curObj.showId == "") { //初始状态
       curObj.showId = _datasetId;
       curObj.flag = true;
+
     } else if (curObj.showId == _datasetId) {
       if (curObj.flag == true) { //还原所有状态
         curObj.flag = false;
@@ -324,6 +320,45 @@ Page({
   }
 })
 
+function getCouponByRoomType(that, token) {
+  var anys = that.data.roomTypePrice;
+  var arys = new Array();
+  for (var i = 0; i < anys.length; i++) {
+    var _obj = new Object();
+    // console.log(anys[i])
+    _obj.name = anys[i].name;
+    _obj.tagId = anys[i].tagId;
+    _obj.price = anys[i].price;
+    if(i/2==0)
+      _obj.isCoupon = 500;
+    else
+      _obj.isCoupon = 200;
+    arys[i] = _obj
+  }
+  // wx.request({
+  //   url: that.data.baseUrl + "/coupon/wx/" + anys[i].tagId,
+  //   method: 'GET',
+  //   header: {
+  //     Authorization: 'Bearer ' + token
+  //   },
+  //   success: function (res) {
+  //     _obj.isCoupon = res.data.resultCode;
+  //     // console.log()
+
+  //   },
+  //   fail: function (res) {
+  //     console.log(res)
+  //   }
+  // })
+
+  // console.log("------------")
+  // console.log(arys)
+  // console.log("------------")
+  that.setData({
+    roomTypePrice: arys
+  })
+
+}
 
 function getRoomTypePrice(that, typeCode, token) {
   wx.request({
@@ -340,6 +375,7 @@ function getRoomTypePrice(that, typeCode, token) {
       that.setData({
         roomTypePrice: res.data.data
       })
+      getCouponByRoomType(that, token);
     }
   })
 }
@@ -363,5 +399,3 @@ function getRoomTypes(that, shopId, token) {
     }
   })
 }
-
-

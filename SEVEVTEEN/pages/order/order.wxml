@@ -6,27 +6,53 @@
     <text>大床房</text>
     <text>可住2人</text>
   </view>
-</view>
-<view class='ioDate' data-room-type-id='20180725135132361976689' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
-  <view class='ioDate-title'>
-    <text>入住日期</text>
-    <text>1晚</text>
-    <text>入住日期</text>
+</view> 
+
+<view wx:if="{{roomName=='钟点房3小时'}}">
+  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' >
+    <view class='ioDate-title'>
+      <text>入住日期</text>
+      <text>1日</text>
+      <text>离店日期</text>
+    </view>
+    <view class='ioDate-date'>
+      <view class='ioDate-date-d'>
+        <text>星期四</text>
+        <text>{{month}}月{{day}}日</text>
+      </view>
+      <view class='ioDate-date-d'>
+        <view class='line-shu'></view>
+      </view>
+      <view class='ioDate-date-d'>
+        <text>星期四</text>
+        <text>{{month}}月{{day}}日</text>
+      </view>
+    </view>
   </view>
-  <view class='ioDate-date'>
-    <view class='ioDate-date-d'>
-      <text>星期四</text>
-      <text>03月19日</text>
+</view>
+<view wx:else>
+ <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
+    <view class='ioDate-title'>
+      <text>入住日期</text>
+      <text>{{chooseDate==null?1:chooseDate.day}}晚</text>
+      <text>离店日期</text>
     </view>
-    <view class='ioDate-date-d'>
-      <view class='line-shu'></view>
-    </view>
-    <view class='ioDate-date-d'>
-      <text>星期四</text>
-      <text>03月19日</text>
+    <view class='ioDate-date'>
+      <view class='ioDate-date-d'>
+        <text>星期四</text>
+        <text>{{chooseDate==null?"-":chooseDate.start.month}}月{{chooseDate==null?"-":chooseDate.start.day}}日</text>
+      </view>
+      <view class='ioDate-date-d'>
+        <view class='line-shu'></view>
+      </view>
+      <view class='ioDate-date-d'>
+        <text>星期四</text>
+        <text>{{chooseDate==null?"-":chooseDate.end.month}}月{{chooseDate==null?"-":chooseDate.end.day}}日</text>
+      </view>
     </view>
   </view>
 </view>
+
 <view class='sum-room'>
   <text class='sum-room-title'>房间数量</text>
 
@@ -74,8 +100,12 @@
 
   <view class='user-info-floor'>
     <text style='width:90px;'>优惠券</text>
-    <text style='flex:1'>20元优惠券</text>
-
+    <!-- <text style='flex:1'>20元优惠券</text> -->
+      <picker bindchange="bindPickerChangeCoupon" value="{{index}}" range="{{coupon}}" range-key="name" style='flex:1'>
+        <!-- <text > -->
+          {{coupon[index].name}}
+        <!-- </text> -->
+      </picker>
     <image src='/imgs/common/arr-dwom.png'></image>
 
   </view>
@@ -83,11 +113,11 @@
 
 <view class='warn-text'>
   <view class='warn'>
-     <text>
+    <text>
       预定须知:\n
       >\t订单确认并支付成功后,不可取消及退款,房间降整晚保留,请及时入住。\n
       >\t入住人姓名需填写真实姓名,到店需刷身份证验证入住
-    </text> 
+    </text>
   </view>
 </view>
 
