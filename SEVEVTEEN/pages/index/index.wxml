@@ -40,7 +40,7 @@
       <view class='info'>
         <view class='info-centent'>
           <view class='info-box'>
-            <image class='info-box-icon' src='{{items.imgUrl}}'></image>
+            <image class='info-box-icon' src='{{items.imgUrl}}'data-room-type="{{items.roomType}}"  bindtap="showImgs"></image>
           </view>
           <view class='checkRoom' data-id="{{items.roomType}}" bindtap="showPay">
             <view class='info-msg'>

@@ -12,6 +12,8 @@ Page({
     pageTotal: 0,
     hasMoreData: true,
     assessUrl: app.globalData.baseUrl + '/assess',
+    roomUrl: app.globalData.baseUrl + '/room',
+
     tabArr: {
       curHdIndex: "t1"
       //  curBdIndex: 0 
@@ -167,6 +169,39 @@ Page({
         }
       },
       fail: function() {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+  showImgs: function (e) {
+    var roomType = e.currentTarget.dataset.roomType;
+
+    let that = this;
+    wx.request({
+      url: this.data.roomUrl + "/wx/img?roomType=" + roomType,
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      success: function (data) {
+        if (data.data.resultCode === 200) {
+          wx.previewImage({
+            current: data.data.data[0], // 当前显示图片的http链接
+            urls: data.data.data // 需要预览的图片http链接列表
+          })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function () {
         wx.showToast({
           title: '网络异常',
           icon: 'none',

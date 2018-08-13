@@ -154,7 +154,7 @@ Page({
     }
     wx.showModal({
       title: '提示',
-      content: '房间清洁时间于每天的12: 00~14:00 是否需要清洁您的房间?',
+      content: '申请时间仅限于当天10点前，房间清洁时间于每天的12: 00~14:00 是否需要清洁您的房间?',
       success: function(res) {
         if (res.confirm) {
           wx.request({
@@ -171,9 +171,9 @@ Page({
 
               } else {
                 wx.showToast({
-                  title: '系统异常',
+                  title: data.data.message,
                   icon: 'none',
-                  duration: 2000
+                  duration: 3000
                 })
               }
             },

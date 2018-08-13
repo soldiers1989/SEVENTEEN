@@ -96,6 +96,15 @@ public class ApartmentController {
 		return ResponseEntity.ok(seApartments);
 	}
 
+	@GetMapping("/goods")
+	@ApiOperation(value = "获取tag信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getGoods(String roomType) {
+		Result<List<SeTag>> seApartments = seApartmentService.getGoods(roomType);
+		seApartments.setMessage(IDGenerator.getId());
+		return ResponseEntity.ok(seApartments);
+	}
+
 	@PostMapping("/tags")
 	@ApiOperation(value = "插入tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -109,6 +118,14 @@ public class ApartmentController {
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity getClean(String apNum,PageInfo pageInfo) {
 		Result<List<ApartmentClean>> result = seApartmentService.getClean(apNum,pageInfo);
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/clean/cleanToday")
+	@ApiOperation(value = "获取清洁列表")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getCleanToday() {
+		Result<List<ApartmentClean>> result = seApartmentService.getCleanToday();
 		return ResponseEntity.ok(result);
 	}
 
@@ -190,5 +207,13 @@ public class ApartmentController {
 	public ResponseEntity addAdvise(@RequestBody  SeAdvise seAdvise,@AuthenticationPrincipal SysUser sysUser) {
 		Result result = seApartmentService.addAdvise(seAdvise,sysUser);
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/wx/img")
+	@ApiOperation(value = "获取房间图片列表")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getAapartmentImgs(String roomType) {
+		Result<List<String>> seApartments = seApartmentService.getAapartmentImgs(roomType);
+		return ResponseEntity.ok(seApartments);
 	}
 }

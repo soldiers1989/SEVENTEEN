@@ -117,4 +117,25 @@ public interface SeApartmentService{
      */
     Result<List<ApartmentClean>> getClean(String apNum, PageInfo pageInfo);
 
+    /**
+     *
+     * @return
+     */
+    Result<List<ApartmentClean>> getCleanToday();
+
+    /**
+     *
+     * @param roomType
+     * @return
+     */
+    Result<List<String>> getAapartmentImgs(String roomType);
+
+
+    /**
+     *
+     * @param roomType
+     * @return
+     */
+    Result<List<SeTag>> getGoods(String roomType);
+
 }

@@ -24,9 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -511,7 +509,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         Result result = new Result<>();
         List<TypeRoom> typeRooms = seAdviseMapper.getTypeRooms(shop);
         for (TypeRoom typeRoom : typeRooms) {
-            typeRoom.setImgUrl(imgUrl+typeRoom.getImgUrl());
+            typeRoom.setImgUrl(imgUrl + typeRoom.getImgUrl());
         }
 
         result.setData(typeRooms);
@@ -552,17 +550,26 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     public Result addClean(SeApartmentClean seApartmentClean, SysUser sysUser) {
         Result result = new Result<>();
         try {
+            Calendar instance = Calendar.getInstance();
+            Calendar instance2 = Calendar.getInstance();
+            instance.set(Calendar.HOUR, 10);
 
-            seApartmentClean.setIsCleaned("0");
-            List<SeApartmentClean> select = seApartmentCleanMapper.select(seApartmentClean);
-            if(select.isEmpty()){
-                seApartmentClean.setCreateBy(sysUser.getId());
-                seApartmentClean.setCreateTime(DateUtil.now());
-                seApartmentClean.setUpdateBy(sysUser.getId());
-                seApartmentClean.setUpdateTime(DateUtil.now());
-                seApartmentClean.setId(IDGenerator.getId());
-                seApartmentCleanMapper.insert(seApartmentClean);
+            int i = instance.compareTo(instance2);
+            if (i == -1) {
+                return result.setResultCode(500).setMessage("申请清洁时间仅限当天10点前");
+            } else {
+                seApartmentClean.setIsCleaned("0");
+                List<SeApartmentClean> select = seApartmentCleanMapper.select(seApartmentClean);
+                if (select.isEmpty()) {
+                    seApartmentClean.setCreateBy(sysUser.getId());
+                    seApartmentClean.setCreateTime(DateUtil.now());
+                    seApartmentClean.setUpdateBy(sysUser.getId());
+                    seApartmentClean.setUpdateTime(DateUtil.now());
+                    seApartmentClean.setId(IDGenerator.getId());
+                    seApartmentCleanMapper.insert(seApartmentClean);
+                }
             }
+
         } catch (Exception e) {
             logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -576,7 +583,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         try {
             seApartmentClean.setIsCleaned("0");
             seApartmentClean = seApartmentCleanMapper.selectOne(seApartmentClean);
-            if(seApartmentClean!=null){
+            if (seApartmentClean != null) {
                 seApartmentClean.setIsCleaned("1");
                 seApartmentClean.setUpdateTime(DateUtil.now());
                 seApartmentClean.setUpdateBy(sysUser.getId());
@@ -595,11 +602,55 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         try {
             Page page = PageHelper.startPage(pageInfo.getPageNum(),
                     pageInfo.getPageSize(), true);
-            ArrayList<ApartmentClean> apartmentCleans= seApartmentCleanMapper.getClean(apNum);
+            ArrayList<ApartmentClean> apartmentCleans = seApartmentCleanMapper.getClean(apNum);
             pageInfo.setTotal(page.getTotal());
             result.setData(apartmentCleans, pageInfo);
         } catch (Exception e) {
-            logger.error("error",e);
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<ApartmentClean>> getCleanToday() {
+        Result<List<ApartmentClean>> result = new Result<>();
+        try {
+            ArrayList<ApartmentClean> apartmentCleans = seApartmentCleanMapper.getCleanToday();
+            result.setData(apartmentCleans);
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<String>> getAapartmentImgs(String roomType) {
+        Result<List<String>> result = new Result<>();
+        try {
+            ArrayList<String> imgs = new ArrayList<>();
+            ArrayList<String> apartmentCleans = seApartmentCleanMapper.getAapartmentImgs(roomType);
+            for (String apartmentClean : apartmentCleans) {
+                apartmentClean= imgUrl + apartmentClean;
+                imgs.add(apartmentClean);
+            }
+            result.setData(imgs);
+        } catch (Exception e) {
+            logger.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<List<SeTag>> getGoods(String roomType) {
+        Result<List<SeTag>> result = new Result<>();
+        try {
+            ArrayList<SeTag> seTags = seApartmentGoodMapper.getGoods(roomType);
+            result.setData(seTags);
+        } catch (Exception e) {
+            logger.error("error", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;

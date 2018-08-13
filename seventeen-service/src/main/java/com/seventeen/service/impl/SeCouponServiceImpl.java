@@ -27,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -257,14 +254,16 @@ public class SeCouponServiceImpl implements SeCouponService {
     }
 
     @Override
-    public Result<List<SeCoupon>> getCouponByRoomType(String roomType) {
-        Result<List<SeCoupon>> result = new Result<>();
+    public Result<Map> getCouponByRoomType(String priceType) {
+        Result<Map> result = new Result<>();
+        HashMap<String, Integer> hashMap = new HashMap();
         try {
-
-            int count = SeCouponMapper.getCouponByRoomType(roomType);
-            if (count == 0) {
-                throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, "没有可用优惠券");
+            String[] priceTypes = priceType.split(",");
+            for (String type : priceTypes) {
+                int count = SeCouponMapper.getCouponByRoomType(type);
+                hashMap.put(type,count==0?0:1);
             }
+            result.setData(hashMap);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -308,5 +307,20 @@ public class SeCouponServiceImpl implements SeCouponService {
         }
         return result;
     }
+
+    @Override
+    public Result<Map> getCanUseByPriceType(String priceType) {
+        Result<Map> result = new Result<>();
+        try {
+            String[] priceTypes = priceType.split(",");
+            for (String type : priceTypes) {
+
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;    }
 
 }

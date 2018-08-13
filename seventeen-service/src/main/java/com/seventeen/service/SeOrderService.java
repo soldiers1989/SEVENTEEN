@@ -78,4 +78,6 @@ public interface SeOrderService {
 
     void upgradeLockCron();
 
+    void upgradeCleanRoom();
+
 }

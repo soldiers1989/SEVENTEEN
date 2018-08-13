@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/coupon")
@@ -80,11 +81,11 @@ public class CouponController {
 		return ResponseEntity.ok(couponDetail);
 	}
 
-	@GetMapping("/wx/{roomType}")
+	@GetMapping("/wx/{priceType}")
 	@ApiOperation(value = "根据房间类型查看可用")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-	public ResponseEntity getCouponByRoomType(@PathVariable String roomType) {
-		Result result= seCouponService.getCouponByRoomType(roomType);
+	public ResponseEntity getCouponByRoomType(@PathVariable String priceType) {
+		Result result= seCouponService.getCouponByRoomType(priceType);
 		return ResponseEntity.ok(result);
 	}
 
@@ -111,6 +112,14 @@ public class CouponController {
 	public ResponseEntity getCouponLog(String status,String remark,String startTime,String endTime,PageInfo pageInfo) {
 		Result<List<CouponLog>> couponLogs = seCouponService.getCouponLog(status,remark,startTime,endTime,pageInfo);
 		return ResponseEntity.ok(couponLogs);
+	}
+
+	@GetMapping("canUseByPriceType")
+	@ApiOperation(value = "根据价格类型获取判断是否有优惠券")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getCanUseByPriceType(String priceType) {
+		Result<Map> canUseByPriceTypes = seCouponService.getCanUseByPriceType(priceType);
+		return ResponseEntity.ok(canUseByPriceTypes);
 	}
 
 	/**

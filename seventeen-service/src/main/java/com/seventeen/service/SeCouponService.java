@@ -7,6 +7,7 @@ import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: csk
@@ -76,7 +77,10 @@ public interface SeCouponService {
      */
     Result<String> exchangeCoupon(String id, SysUser sysUser);
 
-    Result<List<SeCoupon>> getCouponByRoomType(String roomType);
+    Result<Map> getCouponByRoomType(String roomType);
 
     Result<List<SeCoupon>> getCouponByOrderCanUse(SysUser sysUser, String roomType, String startTime, String endTime);
+
+    Result<Map> getCanUseByPriceType(String priceType);
+
 }

@@ -51,7 +51,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeTagMapper seTagMapper;
     @Autowired
     private SeApartmentMapper seApartmentMapper;
-
+    @Autowired
+    private SeApartmentCleanMapper seApartmentCleanMapper;
     @Autowired
     private LockService lockService;
     @Autowired
@@ -576,6 +577,15 @@ public class SeOrderServiceImpl implements SeOrderService {
                     lockService.updataLockPassWord(seOrder.getApId(), startTime, endTime, Integer.valueOf(password));
                 }
             }
+        } catch (Exception e) {
+            logger.error("error", e);
+        }
+    }
+
+    @Override
+    public void upgradeCleanRoom() {
+        try {
+            seApartmentCleanMapper.upgradeCleanRoom();
         } catch (Exception e) {
             logger.error("error", e);
         }
