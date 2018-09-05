@@ -632,7 +632,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             ArrayList<String> imgs = new ArrayList<>();
             ArrayList<String> apartmentCleans = seApartmentCleanMapper.getAapartmentImgs(roomType);
             for (String apartmentClean : apartmentCleans) {
-                apartmentClean= imgUrl + apartmentClean;
+                apartmentClean = imgUrl + apartmentClean;
                 imgs.add(apartmentClean);
             }
             result.setData(imgs);
@@ -655,4 +655,46 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         }
         return result;
     }
+
+    @Override
+    public Result getTag(String id) {
+        Result<SeTag> result = new Result<>();
+        try {
+            SeTag seTag = new SeTag();
+            seTag.setId(id);
+            seTag.setStatus("1");
+            seTag = seTagMapper.selectOne(seTag);
+            result.setData(seTag);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result updateTags(SeTag seTag) {
+        Result<SeTag> result = new Result<>();
+        try {
+            SeTag seTag1 = new SeTag();
+            seTag1.setName(seTag.getName());
+            seTag1.setStatus("1");
+            seTag1.setRemark(seTag.getRemark());
+            List<SeTag> seTags = seTagMapper.select(seTag1);
+            if (seTags.size() > 0) {
+                return new Result(500, "该类型数据重复");
+            }
+            seTag1= new SeTag();
+            seTag1.setId(seTag.getId());
+            seTag1 = seTagMapper.selectOne(seTag1);
+            seTag1.setName(seTag.getName());
+            seTag1.setRemark(seTag.getRemark());
+
+            seTagMapper.updateByPrimaryKeySelective(seTag1);
+            result.setData(seTag);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;    }
 }
