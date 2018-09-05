@@ -40,15 +40,29 @@
                         title: '门店管理'
                     },
                     {
-                        icon: 'el-icon-star-off',
-                        index: 'room',
-                        title: '房间列表'
+                        icon: 'el-icon-view',
+                        title: '房间管理',
+                        index:"",
+                        subs: [
+                            {
+                                index: 'room',
+                                title: '房间列表'
+                            },
+                            {
+                                index: 'roomStatus',
+                                title: '房间状态'
+                            },
+                            {
+                                index: 'price',
+                                title: '价格管理'
+                            },
+                            {
+                                index: 'clean',
+                                title: '清洁列表'
+                            },
+                        ]
                     },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'clean',
-                        title: '清洁列表'
-                    },
+
                     {
                         icon: 'el-icon-info',
                         index: 'user',

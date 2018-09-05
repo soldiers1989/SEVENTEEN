@@ -138,4 +138,8 @@ public interface SeApartmentService{
      */
     Result<List<SeTag>> getGoods(String roomType);
 
+    Result getTag(String id);
+
+    Result updateTags(SeTag seTag);
+
 }

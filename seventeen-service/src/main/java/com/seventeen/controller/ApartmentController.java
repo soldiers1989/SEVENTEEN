@@ -96,6 +96,14 @@ public class ApartmentController {
 		return ResponseEntity.ok(seApartments);
 	}
 
+	@GetMapping("/tag")
+	@ApiOperation(value = "获取tag详细信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity getTag(String id) {
+		Result result = seApartmentService.getTag(id);
+		return ResponseEntity.ok(result);
+	}
+
 	@GetMapping("/goods")
 	@ApiOperation(value = "获取tag信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -111,6 +119,14 @@ public class ApartmentController {
 	public ResponseEntity addTags(@RequestBody SeTag seTag) {
 		Result seApartments = seApartmentService.addTags(seTag);
 		return ResponseEntity.ok(seApartments);
+	}
+
+	@PostMapping("/tags/update")
+	@ApiOperation(value = "插入tag信息")
+	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+	public ResponseEntity updateTags(@RequestBody SeTag seTag) {
+		Result result = seApartmentService.updateTags(seTag);
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/clean")

@@ -25,6 +25,16 @@ const router = new Router({
                     meta: {requiresAuth: true}
                 },
                 {
+                    path: '/roomStatus',
+                    component: resolve => require(['../components/page/RoomStatus.vue'], resolve),
+                    meta: {requiresAuth: true}
+                },
+                {
+                    path: '/price',
+                    component: resolve => require(['../components/page/Price.vue'], resolve),
+                    meta: {requiresAuth: true}
+                },
+                {
                     path: '/clean',
                         component: resolve => require(['../components/page/Clean.vue'], resolve),
                     meta: {requiresAuth: true}
