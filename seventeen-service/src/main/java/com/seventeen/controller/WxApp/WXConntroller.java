@@ -2,8 +2,10 @@ package com.seventeen.controller.WxApp;
 
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.SeOrder;
+import com.seventeen.bean.SeOrderPay;
 import com.seventeen.core.Result;
 import com.seventeen.mapper.SeOrderMapper;
+import com.seventeen.mapper.SeOrderPayMapper;
 import com.seventeen.pay.wx.util.PayCommonUtil;
 import com.seventeen.pay.wx.util.XMLUtil;
 import com.seventeen.service.LockService;
@@ -37,6 +39,8 @@ public class WXConntroller  {
     @Autowired
     private SeOrderMapper seOrderMapper;
 
+    @Autowired
+    private SeOrderPayMapper seOrderPayMapper;
 
     @Autowired
     private LockService lockService;
@@ -73,21 +77,26 @@ public class WXConntroller  {
             if(result_code.equals("SUCCESS")) {
                 seOrderService.updateOrderStatus(out_trade_no);
 
-                SeOrder seOrder=new SeOrder();
-                seOrder.setId(out_trade_no);
-                seOrder = seOrderMapper.selectOne(seOrder);
-                LocalDateTime start=  LocalDateTime.of(
-                        Integer.valueOf(seOrder.getInTime().substring(0, 4)),
-                        Integer.valueOf(seOrder.getInTime().substring(5, 7)),
-                        Integer.valueOf(seOrder.getInTime().substring(8, 10)),
-                        Integer.valueOf(seOrder.getInTime().substring(11, 13)), 0, 0);
-                LocalDateTime out=  LocalDateTime.of(
-                        Integer.valueOf(seOrder.getOutTime().substring(0, 4)),
-                        Integer.valueOf(seOrder.getOutTime().substring(5, 7)),
-                        Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
-                        Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
+                SeOrderPay seOrderPay=new SeOrderPay();
+                seOrderPay.setId(out_trade_no);
+                List<SeOrderPay> list = seOrderPayMapper.select(seOrderPay);
+                for (SeOrderPay orderPay : list) {
+                    SeOrder seOrder=new SeOrder();
+                    seOrder.setId(orderPay.getSeOrderId());
+                    seOrder = seOrderMapper.selectOne(seOrder);
+                    LocalDateTime start=  LocalDateTime.of(
+                            Integer.valueOf(seOrder.getInTime().substring(0, 4)),
+                            Integer.valueOf(seOrder.getInTime().substring(5, 7)),
+                            Integer.valueOf(seOrder.getInTime().substring(8, 10)),
+                            Integer.valueOf(seOrder.getInTime().substring(11, 13)), 0, 0);
+                    LocalDateTime out=  LocalDateTime.of(
+                            Integer.valueOf(seOrder.getOutTime().substring(0, 4)),
+                            Integer.valueOf(seOrder.getOutTime().substring(5, 7)),
+                            Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
+                            Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
-               lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+                    lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+                }
 
 
 

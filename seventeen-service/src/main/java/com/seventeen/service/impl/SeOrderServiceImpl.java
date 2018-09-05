@@ -9,6 +9,8 @@ import com.seventeen.core.Result;
 import com.seventeen.core.ResultCode;
 import com.seventeen.exception.ServiceException;
 import com.seventeen.mapper.*;
+
+import com.seventeen.pay.wx.service.WxPay;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.LockService;
@@ -58,6 +60,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Autowired
     private SeOrderPayMapper seOrderPayMapper;
 
+    @Autowired
+    private WxPay wxPay;
 
     /**
      * @param status
@@ -405,15 +409,35 @@ public class SeOrderServiceImpl implements SeOrderService {
         return result;
     }
 
+    @Transactional
     @Override
     public Result cancelOrder(String order) {
         Result result = new Result();
         try {
-            SeOrder seOrder = new SeOrder();
-            seOrder.setId(order);
-            SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
-            seOrder1.setStatus("3");
-            seOrderMapper.updateByPrimaryKeySelective(seOrder1);
+            SeOrderPay so=new SeOrderPay();
+            so.setSeOrderId(order);
+            SeOrderPay orderPay = seOrderPayMapper.selectOne(so);
+            String result_code = wxPay.cancelOrder(orderPay.getId());
+            if(result_code.equals("SUCCESS")){
+                seOrderPayMapper.updateCancel(orderPay.getId());
+
+                SeOrderPay so2=new SeOrderPay();
+                so2.setId(orderPay.getId());
+                List<SeOrderPay> select = seOrderPayMapper.select(so2);
+
+                for (SeOrderPay seOrderPay : select) {
+                    SeOrder seOrder = new SeOrder();
+                    seOrder.setId(seOrderPay.getSeOrderId());
+                    SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
+                    seOrder1.setStatus("4");
+                    seOrderMapper.updateByPrimaryKeySelective(seOrder1);
+                }
+
+            }else{
+                throw new Exception("退款失败");
+            }
+
+
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
