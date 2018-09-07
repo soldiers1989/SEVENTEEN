@@ -17,14 +17,14 @@ Page({
     return {
       title: '添加入住人',
       path: '../add-wechatLiver/add-wechatLiver',
-      imageUrl:"https://www.17inn.com/img/wxApp/imgs/index/brand.jpg"
+      imageUrl: "https://www.17inn.com/img/wxApp/imgs/index/brand.jpg"
     }
   },
-  inputTap:function(e){
+  inputTap: function (e) {
     let id = e.currentTarget.dataset.id;
-    let val= e.detail.value;
+    let val = e.detail.value;
     for (var index in this.data.livers) {
-      if (index == id){
+      if (index == id) {
         let liver = {
           liver: val
         }
@@ -63,10 +63,43 @@ Page({
       // data: { pageInfo: pageInfo  },
       success: function (data) {
         if (data.data.resultCode === 200) {
-          
+
           that.setData({
             livers: data.data.data.livers,
           })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function () {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+  addLiverTap: function () {
+    let that = this;
+    wx.request({
+      url: this.data.systemUrl+"/wx/addLiver",
+      method: 'post',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      data: { addLiver: that.data.livers },
+      success: function (data) {
+        if (data.data.resultCode === 200) {
+
+          that.setData({
+            livers: data.data.data.livers,
+          })
+
         } else {
           wx.showToast({
             title: '系统异常',

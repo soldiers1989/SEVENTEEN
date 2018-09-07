@@ -2,6 +2,7 @@ package com.seventeen.controller;
 
 
 import com.github.wxpay.sdk.WXPay;
+import com.seventeen.bean.AddLiver;
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.OrderInfo;
 import com.seventeen.bean.core.SysUser;
@@ -109,6 +110,14 @@ public class OrderController {
 		return ResponseEntity.ok(result);
 	}
 
+    @PostMapping("/wx/addLiver")
+    @ApiOperation(value = "微信添加入住人")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity<Result> addLiver(@AuthenticationPrincipal SysUser sysUser,@RequestBody AddLiver addLiver) {
+        Result result = seOrderService.addLiver(sysUser,addLiver);
+        return ResponseEntity.ok(result);
+    }
+
 	@GetMapping("/wx/getOrderDate")
 	@ApiOperation(value = "获取订单满房时间")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -121,7 +130,6 @@ public class OrderController {
 	@ApiOperation(value = "获取订单详细信息")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity setOrder(@AuthenticationPrincipal SysUser sysUser,@RequestBody OrderInfo orderInfo) {
-
         return seOrderService.setOrder(sysUser, orderInfo);
 	}
 
@@ -142,17 +150,8 @@ public class OrderController {
 		seOrderService.checkOut();
 	}
 
-
 	/**
-	 * 每天13：00激活房间锁密码
-	 */
-	@Scheduled(cron = "0 0 13 * * ? ")
-	public void upgradeLockCron() {
-		seOrderService.upgradeLockCron();
-	}
-
-	/**
-	 * 每天14：00激活房间锁密码
+	 * 每天14：00更改房间清洁状态
 	 */
 	@Scheduled(cron = "0 0 14 * * ? ")
 	public void upgradeCleanRoom() {

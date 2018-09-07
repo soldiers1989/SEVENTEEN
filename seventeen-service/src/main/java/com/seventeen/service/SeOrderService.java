@@ -1,6 +1,7 @@
 package com.seventeen.service;
 
 
+import com.seventeen.bean.AddLiver;
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.OrderInfo;
 import com.seventeen.bean.SeOrder;
@@ -75,9 +76,8 @@ public interface SeOrderService {
 
     void checkOut();
 
-
-    void upgradeLockCron();
-
     void upgradeCleanRoom();
+
+    Result addLiver(SysUser sysUser,AddLiver addLiver);
 
 }

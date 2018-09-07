@@ -585,11 +585,12 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
     }
 
-    @Override
-    public void upgradeLockCron() {
+    /**
+     * 门禁开门激活房间锁密码
+     */
+    public void upgradeLockCron(String cardNo) {
         try {
-            String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 14:00:00";
-            List<SeOrder> seOrders = seOrderMapper.upgradeLockCron(date);
+            List<SeOrder> seOrders = seOrderMapper.getOrderByidCard(cardNo);
             for (SeOrder seOrder : seOrders) {
                 String inTime = seOrder.getInTime();
                 String outTime = seOrder.getOutTime();
@@ -600,6 +601,9 @@ public class SeOrderServiceImpl implements SeOrderService {
                     String password = seOrder.getLockPwd();
                     lockService.updataLockPassWord(seOrder.getApId(), startTime, endTime, Integer.valueOf(password));
                 }
+                seOrder.setStatus("2");
+                seOrder.setUpdateTime(DateUtil.now());
+                seOrderMapper.updateByPrimaryKeySelective(seOrder);
             }
         } catch (Exception e) {
             logger.error("error", e);
@@ -613,6 +617,43 @@ public class SeOrderServiceImpl implements SeOrderService {
         } catch (Exception e) {
             logger.error("error", e);
         }
+    }
+
+    @Override
+    public Result addLiver(SysUser sysUser,AddLiver addLiver) {
+        Result result = new Result();
+        try {
+            String orderid = addLiver.getOrderid();
+
+            for (SeOrderLiver seOrderLiver : addLiver.getAddLiver()) {
+                String liver = seOrderLiver.getLiver();
+
+                SeOrderLiver seOrderLiver1 = seOrderLiverMapper.selectByOrderIs(orderid,liver);
+                if(seOrderLiver1!=null){
+                    seOrderLiver1.setIdCard(seOrderLiver.getIdCard());
+                    seOrderLiver1.setLiver(seOrderLiver.getLiver());
+                    seOrderLiver1.setPhone(seOrderLiver.getPhone());
+                    seOrderLiverMapper.updateByPrimaryKeySelective(seOrderLiver1);
+                }else{
+                    seOrderLiver1 = new SeOrderLiver();
+                    seOrderLiver1.setId(IDGenerator.getId());
+                    seOrderLiver1.setOrderId(orderid);
+                    seOrderLiver1.setCreateBy(sysUser.getId());
+                    seOrderLiver1.setCreateTime(DateUtil.now());
+                    seOrderLiver1.setPhone(seOrderLiver.getPhone());
+                    seOrderLiver1.setLiver(seOrderLiver.getLiver());
+                    seOrderLiver1.setUpdateTime(DateUtil.now());
+                    seOrderLiver1.setIdCard(seOrderLiver.getIdCard());
+                    seOrderLiverMapper.insert(seOrderLiver1);
+                }
+
+            }
+
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
     }
 
 }
