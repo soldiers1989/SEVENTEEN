@@ -11,5 +11,5 @@ public interface SeOrderLiverMapper extends CoreMapper<SeOrderLiver>{
 
     @Select("select * from se_order_liver sol where sol.order_id =#{orderid} and liver like CONCAT('%',#{liver},'%' )'")
     SeOrderLiver selectByOrderIs(@Param("orderid") String orderid,@Param("liver") String liver);
-aa
+
 }
