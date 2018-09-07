@@ -81,6 +81,7 @@ info:
 file:
   upload:
     url: https://www.17inn.com/jar/
+    rootImgurl: /opt/www/www.17Inn.com/jar/
 
 wx:
   app:

@@ -95,7 +95,7 @@ public class WXConntroller  {
                             Integer.valueOf(seOrder.getOutTime().substring(8, 10)),
                             Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
-                    lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+//                    lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
                 }
 
 

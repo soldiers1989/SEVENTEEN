@@ -2,18 +2,21 @@ package com.seventeen.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.qcloud.image.ImageClient;
-import com.qcloud.image.demo.Demo;
 import com.qcloud.image.request.FaceIdCardCompareRequest;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
+
 
 
 public class TxSingUtil {
+    private final Logger logger = LoggerFactory.getLogger(TxSingUtil.class);
+
     private static final Long appId=1257058026l;
     private static final  String secretId="AKIDIZaZYPWcyP1VpLErpcEffppdH0WPmjJi";
     private static final  String secretKey="PdfZLulSyIQhpsmV4MXWLRSItNgnjy63";
@@ -141,7 +144,7 @@ public class TxSingUtil {
 
 
 
-        faceIdCardCompare("","凌梓恒","440112199311181210","");
+        faceIdCardCompare("","凌梓恒","440112199311181210","C:\\Users\\dell\\Desktop\\1536048991663.jpg");
     }
 
 
@@ -254,6 +257,7 @@ public class TxSingUtil {
      * 身份证识别对比接口
      */
     public static String faceIdCardCompare( String bucketName,String trueName,String IdCode,String imgUrl ) {
+        final Logger logger = LoggerFactory.getLogger(TxSingUtil.class);
         ImageClient imageClient = new ImageClient(appId.toString(), secretId, secretKey, ImageClient.NEW_DOMAIN_recognition_image_myqcloud_com/*根据文档说明选择域名*/);
         String ret;
 
@@ -263,16 +267,18 @@ public class TxSingUtil {
         File idcardCompareImage = null;
         try {
             String[] split = imgUrl.split("/");
-            idcardCompareName = split[split.length];
+            idcardCompareName = split[split.length-1];
             idcardCompareImage = new File(imgUrl);
 //
 //            idcardCompareName = "37.jpg";
 //            idcardCompareImage = new File("C:\\Users\\dell\\Desktop\\37.jpg");
+//            idcardCompareImage = "C:\\Users\\dell\\Desktop\\37.jpg";
         } catch (Exception ex) {
-            System.out.println(ex);
+            logger.error("",ex);
         }
         FaceIdCardCompareRequest idCardCompareReq = new FaceIdCardCompareRequest(bucketName,IdCode , trueName, idcardCompareName, idcardCompareImage,"");
         ret = imageClient.faceIdCardCompare(idCardCompareReq);
+        logger.debug("face idCard Compare ret:" + ret);
         System.out.println("face idCard Compare ret:" + ret);
         return ret;
     }

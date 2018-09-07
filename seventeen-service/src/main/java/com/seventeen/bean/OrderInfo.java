@@ -13,6 +13,7 @@ public class OrderInfo {
     private String price;
     private String roomNum;
     private String tagId;
+    private String roomType;
 
     @Override
     public String toString() {
@@ -28,6 +29,14 @@ public class OrderInfo {
                 ", price='" + price + '\'' +
                 ", roomNum='" + roomNum + '\'' +
                 '}';
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 
     public String getTagId() {

@@ -1,8 +1,7 @@
 package com.seventeen.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.qcloud.image.ImageClient;
+
 import com.seventeen.bean.HttpBean.ResTxFace;
 import com.seventeen.bean.HttpBean.ResTxIdCard;
 import com.seventeen.bean.HttpBean.ResTxIdCrad0;
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public class UserVerifyImpl implements UserVerify {
     @Autowired
     private SeUserAttestationMapper seUserAttestationMapper;
 
-    @Value("rootImgurl")
+    @Value("${file.upload.rootImgurl}")
     private String rootImgurl;
 
     @Override
@@ -140,7 +139,7 @@ public class UserVerifyImpl implements UserVerify {
         SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(se);
         if(seUserAttestation!=null){
             map.put("tName",seUserAttestation.getTrueName());
-            if(seUserAttestation.getIsPass()==1)
+            if(seUserAttestation!=null&&seUserAttestation.getIsPass()==1)
             map.put("isVerify",true);
         }
         result.setData(map);
