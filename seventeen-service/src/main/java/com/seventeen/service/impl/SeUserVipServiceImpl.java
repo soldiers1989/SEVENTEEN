@@ -21,6 +21,9 @@ public class SeUserVipServiceImpl implements SeUserVipService {
     private SeUserVipMapper seUserVipMapper;
 
 
+    public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
+    }
 
 
     @Transactional
@@ -36,6 +39,8 @@ public class SeUserVipServiceImpl implements SeUserVipService {
             se.setId(IDGenerator.getId());
             se.setStratdate(DateUtil.toDate(now));
             se.setLevel("1");
+            se.setDiscount("1");
+            se.setRoomNum(0);
             seUserVipMapper.insert(se);
             select=se;
         }else{

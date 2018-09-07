@@ -77,6 +77,7 @@
     <select id="getApartmentByTime" resultType="java.lang.String">
         select sa.id from se_apartment sa where
         sa.`status` !='0'
+        AND sa.room_type = #{roomType}
         and
         sa.id not in (
         SELECT

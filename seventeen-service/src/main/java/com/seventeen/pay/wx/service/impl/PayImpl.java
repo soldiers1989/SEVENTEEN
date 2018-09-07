@@ -9,6 +9,7 @@ import com.seventeen.pay.wx.util.MyConfig;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +27,10 @@ public class PayImpl implements WxPay {
         return null;
     }
 
+
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public String cancelOrder(String orderId) throws Exception {
         String nonceStr = RandomStringUtils.randomAlphanumeric(32);

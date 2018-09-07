@@ -32,6 +32,8 @@ public class LockServiceImpl implements LockService {
 
     private static String token = "";
 
+
+
     /**
      * 构造获取 token
      */

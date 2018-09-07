@@ -1,7 +1,7 @@
 package com.seventeen.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
 import com.seventeen.bean.HttpBean.ResTxFace;
 import com.seventeen.bean.HttpBean.ResTxIdCard;
 import com.seventeen.bean.HttpBean.ResTxIdCrad0;
@@ -16,10 +16,11 @@ import com.seventeen.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public class UserVerifyImpl implements UserVerify {
     @Autowired
     private SeUserAttestationMapper seUserAttestationMapper;
 
+    @Value("${file.upload.rootImgurl}")
+    private String rootImgurl;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -49,7 +52,7 @@ public class UserVerifyImpl implements UserVerify {
         }
         //识别身份证上的信息
         try {
-            String idCradMsg = TxSingUtil.getIdCradMsg(seUserAttestation.getIdcard0(), 0);
+            String idCradMsg = TxSingUtil.getIdCradMsg( "https://www.17inn.com/seventeen/"+ seUserAttestation.getIdcard0(), 0);
             ResTxIdCrad0 idCrad0 = JSON.parseObject(idCradMsg, ResTxIdCrad0.class);
             if (idCrad0 == null)
                 throw new Exception("识别idCrad0出错");
@@ -64,7 +67,7 @@ public class UserVerifyImpl implements UserVerify {
                     seUserAttestation.setBirth(idCrad0.getResult_list().get(0).getData().getBirth());
 
                     //获取背面
-                    String idCrad1Msg = TxSingUtil.getIdCradMsg(seUserAttestation.getIdcard1(), 1);
+                    String idCrad1Msg = TxSingUtil.getIdCradMsg("https://www.17inn.com/seventeen/"+seUserAttestation.getIdcard1(), 1);
                     System.out.println(idCrad1Msg);
                     ResTxIdCrad1 idCrad1 = JSON.parseObject(idCrad1Msg, ResTxIdCrad1.class);
                     if (idCrad1 == null)
@@ -92,7 +95,10 @@ public class UserVerifyImpl implements UserVerify {
 
                         //人脸识别
                         if(idCradVerify.getCode()==0){
-                            String resString=TxSingUtil.verifyFace(seUserAttestation.getTrueName(), seUserAttestation.getIdCode(),seUserAttestation.getUserPhoto());
+                            String resString=TxSingUtil.faceIdCardCompare("",seUserAttestation.getTrueName(),seUserAttestation.getIdCode(),rootImgurl+seUserAttestation.getUserPhoto());
+//                            String resString=TxSingUtil.faceIdCardCompare("",seUserAttestation.getTrueName(),seUserAttestation.getIdCode(),rootImgurl+seUserAttestation.getUserPhoto());
+
+//                            String resString=TxSingUtil.verifyFace(seUserAttestation.getTrueName(), seUserAttestation.getIdCode(),"https://www.17inn.com/seventeen/"+seUserAttestation.getUserPhoto());
                             ResTxFace face = JSON.parseObject(resString, ResTxFace.class);
                             if(face!=null){
                                 seUserAttestation.setFaceCode(face.getCode());
@@ -133,7 +139,7 @@ public class UserVerifyImpl implements UserVerify {
         SeUserAttestation seUserAttestation = seUserAttestationMapper.selectOne(se);
         if(seUserAttestation!=null){
             map.put("tName",seUserAttestation.getTrueName());
-            if(seUserAttestation.getIsPass()==1)
+            if(seUserAttestation!=null&&seUserAttestation.getIsPass()==1)
             map.put("isVerify",true);
         }
         result.setData(map);
