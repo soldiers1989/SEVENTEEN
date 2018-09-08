@@ -1,6 +1,7 @@
 package com.seventeen.TCP;
 
 import com.seventeen.service.impl.SeOrderServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Date;
  * @author 凌虚风
  * @Time 2016-12-31 21:04:01
  */
-
+@Slf4j
 public class SocketServer {
 
 	public static final int PORT = 50001;//要监听的端口
@@ -35,7 +36,8 @@ public class SocketServer {
 	public void run() throws IOException {
 		
 		ServerSocket ss = new ServerSocket(PORT);
-		InetAddress ia = InetAddress.getByName(null);
+
+		InetAddress ia = InetAddress.getByName("192.168.1.100");
 		System.out.println("服务端@" + ia + " 已启动!");
 		
 		try {

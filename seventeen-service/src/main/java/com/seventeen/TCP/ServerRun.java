@@ -1,16 +1,21 @@
 package com.seventeen.TCP;
 
-import java.io.IOException;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 /**
  * @Description
- * @function 执行该类的main函数可启动Socket服务端
- * @author 凌虚风
- * @Time 2016-12-31 21:04:01
+ * @function
+ * @author 陈绍康
+ * @Time 2018-12-31 21:04:01
  */
-public class ServerRun {
+@Component
+public class ServerRun  implements CommandLineRunner {
 
-	public static void main(String[] args) throws IOException {
+	@Override
+	public void run(String... strings) throws Exception {
 		new SocketServer().run();
 	}
 }
+
+
