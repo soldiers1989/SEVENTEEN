@@ -13,7 +13,8 @@ public class MyConfig implements WXPayConfig
     private byte[] certData;
 
     public MyConfig() throws Exception {
-        String certPath = "C:/Users/dell/Desktop/apiclient_cert.p12";
+//        String certPath = "C:/Users/dell/Desktop/apiclient_cert.p12";
+        String certPath = "/usr/zs/apiclient_cert.p12";
         File file = new File(certPath);
         InputStream certStream = new FileInputStream(file);
         this.certData = new byte[(int) file.length()];
