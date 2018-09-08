@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @Author: csk
  * @Date: 2018/6/5 18:07
  */
-@ActiveProfiles("dev")
+@ActiveProfiles("prod")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class Test1 {
@@ -25,7 +25,7 @@ public class Test1 {
     @Test
     public void name() throws Exception {
 
-//            lockService.updataLockPassWord("20180725230836716205288", LocalDateTime.now(),LocalDateTime.now().plusDays(1));
+            lockService.updataLockPassWord("20180904193355444737613", LocalDateTime.now(),LocalDateTime.now().plusDays(1),428920);
 
     }
 
