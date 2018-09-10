@@ -92,8 +92,7 @@
   <view class='text-container'>
     <view class='text-content'>
       <text>
-      <text class='text-ties'>取消政策：</text>预付房费后，在
-      <text style='color:red;'>2018年04月10日18点</text>前可取消订单/申请退款，之后不可取消/退款
+      <text class='text-ties'>取消政策：</text>预付房费后，在<text style='color:red;'>入住当天18点</text>前可取消订单/申请退款，之后不可取消/退款
       </text>
       <text>
       <text class='text-ties'>温馨提示：</text>公寓于住店当天<text style='color:red;'>14:00后</text>办理入住，离店当天<text style='color:red;'>12:00前</text>办理退房，<text style='color:red;'>入离日期以当地时间为准</text>。如您在<text style='color:red;'>14:00前</text>到达，可能需要等待方能入住。若超过房间最多入住人数，则可能需要补差或拒绝入住，具体以拾柒Inn安排为准。

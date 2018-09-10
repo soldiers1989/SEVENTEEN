@@ -19,5 +19,4 @@ public interface SeApartmentMapper extends CoreMapper<SeApartment>{
     ArrayList<SeApartment> getCanUseApartments(String roomType);
 
     ArrayList<String> getApartmentByTime(@Param("inTime") String startTime, @Param("outTime") String endTime,@Param("roomType")  String roomType);
-
 }

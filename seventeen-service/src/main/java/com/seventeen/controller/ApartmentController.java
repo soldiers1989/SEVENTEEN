@@ -205,6 +205,8 @@ public class ApartmentController {
 	@ApiOperation(value = "获取时间段内可用房间")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity updatePriceType(String startTime,String endTime,String roomType) {
+        startTime = startTime + " 14:00:00";
+        endTime = endTime + " 12:00:00";
 		Result result = seApartmentService.getApartmentByTime(startTime,endTime,roomType);
 		return ResponseEntity.ok(result);
 	}

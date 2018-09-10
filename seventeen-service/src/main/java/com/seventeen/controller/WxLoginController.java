@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,7 @@ public class WxLoginController {
     @PostMapping("/decodeUserInfo")
     @ResponseBody
     @CacheEvict(value = "sysUserList", allEntries = true)
+    @Cacheable(value = "wxLogin")
     public ResponseEntity decodeUserInfo(String encryptedData, String iv, String code, String phone) {
         //登录凭证不能为空
         if (code == null || code.length() == 0) {

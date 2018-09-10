@@ -6,6 +6,7 @@ import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.util.PageInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**

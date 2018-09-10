@@ -74,7 +74,7 @@ public interface SeOrderService {
 
     Result updateLockPWD(String orderId, SysUser sysUser);
 
-    void checkOut();
+    void checkOut(String date);
 
     void upgradeCleanRoom();
 

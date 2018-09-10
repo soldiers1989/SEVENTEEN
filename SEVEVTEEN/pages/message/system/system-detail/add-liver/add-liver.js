@@ -6,7 +6,7 @@ Page({
     }
     ],
     systemUrl: app.globalData.baseUrl + '/order',
-
+    orderid:"",
     imgUrl: app.globalData.ImgUrl
   },
   onShareAppMessage: function (res) {
@@ -92,13 +92,10 @@ Page({
       header: {
         'Authorization': 'Bearer ' + wx.getStorageSync('token'),
       },
-      data: { addLiver: that.data.livers },
+      data: { addLiver: that.data.livers,
+        orderid: that.data.orderid },
       success: function (data) {
         if (data.data.resultCode === 200) {
-
-          that.setData({
-            livers: data.data.data.livers,
-          })
 
         } else {
           wx.showToast({
@@ -122,7 +119,12 @@ Page({
  */
   onLoad: function (options) {
     let orderid = options.orderid;
+    
     this.getData(orderid);
+
+    this.setData({
+      orderid: options.orderid
+    })
   },
 
 })

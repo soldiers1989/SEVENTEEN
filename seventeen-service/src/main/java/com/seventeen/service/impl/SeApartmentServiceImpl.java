@@ -534,9 +534,6 @@ public class SeApartmentServiceImpl implements SeApartmentService {
     public Result getApartmentByTime(String startTime, String endTime, String roomType) {
         Result result = new Result<>();
         try {
-            startTime = startTime + " 14:00:00";
-            endTime = endTime + " 12:00:00";
-
             ArrayList<String> seApartments = seApartmentMapper.getApartmentByTime(startTime, endTime, roomType);
             result.setData(seApartments);
         } catch (Exception e) {

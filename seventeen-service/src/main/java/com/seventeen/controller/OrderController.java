@@ -11,6 +11,7 @@ import com.seventeen.pay.wx.service.WxPay;
 import com.seventeen.pay.wx.util.MD5;
 import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.SeOrderService;
+import com.seventeen.util.DateUtil;
 import com.seventeen.util.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -91,9 +92,6 @@ public class OrderController {
 		return ResponseEntity.ok(orderCenter);
 	}
 
-
-
-
     @PutMapping("/wx/cancel")
     @ApiOperation(value = "退订")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
@@ -147,7 +145,8 @@ public class OrderController {
 	 */
 	@Scheduled(cron = "0 50 11 * * ? ")
 	public void checkOutTimerCron() {
-		seOrderService.checkOut();
+        String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 12:00:00";
+        seOrderService.checkOut(date);
 	}
 
 	/**

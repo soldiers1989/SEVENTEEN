@@ -18,6 +18,7 @@ import com.seventeen.service.SeApartmentService;
 import com.seventeen.service.SeOrderService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
+import com.seventeen.util.MyTimer;
 import com.seventeen.util.PageInfo;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
@@ -63,7 +64,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeOrderPayMapper seOrderPayMapper;
     @Autowired
     private SeApartmentService seApartmentService;
-
+    @Autowired
+    private SeOrderService seOrderService;
 
 
     @Autowired
@@ -174,21 +176,28 @@ public class SeOrderServiceImpl implements SeOrderService {
         String orderId = IDGenerator.getId();//RandomStringUtils.randomAlphanumeric(23);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        if(orderInfo.getRoomId().equals("")){
-
-
+        if (orderInfo.getRoomId().equals("")) {
             LocalDate now = LocalDate.now();
-            Result apartmentByTime = seApartmentService.getApartmentByTime(now.format(dateTimeFormatter2), now.format(dateTimeFormatter2), orderInfo.getRoomType());
-            ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
-            orderInfo.setRoomId(data.get(0));
+            Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(), sysUser);
+            ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
+            for (String date : orderDates) {
+                if (!date.equals(DateUtil.nowDate())) {
+                    Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
+                    ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
+                    orderInfo.setRoomId(data.get(0));
 //            System.out.println(apartmentByTime);
-            String[] split = orderInfo.getPlanTime().split("~");
+                    String[] split = orderInfo.getPlanTime().split("~");
 //            String[] split1 = split[0].split(":");
 //            String[] split2 = split[1].split(":");
-            orderInfo.setStartTime(now+" "+split[0].trim()+":00");
-            orderInfo.setEndTime(now+" "+split[1].trim()+":00");
+                    orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
+                    orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
-
+                    MyTimer timer = new MyTimer();
+                    timer.schedule(() -> {
+                        this.checkOut();
+                    }, 1000);
+                }
+            }
         }
 
 //        System.out.println("订单号:" + orderId);
@@ -199,8 +208,6 @@ public class SeOrderServiceImpl implements SeOrderService {
         orderPay.setId(orderId);
         orderPay.setCreatTime(LocalDateTime.now().format(dateTimeFormatter));
         orderPay.setStatus(0);
-
-
 
 
         if (!orderInfo.getRoomNum().equals("1")) {//多间时候需要拆分订单
@@ -250,7 +257,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
         } else {
             SeOrder se = new SeOrder();
-            se.setId( IDGenerator.getId());
+            se.setId(IDGenerator.getId());
             se.setApId(orderInfo.getRoomId());
             se.setArriveTime(orderInfo.getPlanTime());
             se.setOrderTime(LocalDateTime.now().format(dateTimeFormatter));
@@ -347,7 +354,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         SeOrderPay sep = new SeOrderPay();
         sep.setId(orderId);
-        List<SeOrderPay> slist= seOrderPayMapper.select(sep);
+        List<SeOrderPay> slist = seOrderPayMapper.select(sep);
         for (SeOrderPay orderPay : slist) {
             orderPay.setStatus(1);
             orderPay.setPayTime(LocalDateTime.now().format(dateTimeFormatter));
@@ -355,9 +362,9 @@ public class SeOrderServiceImpl implements SeOrderService {
             seOrderPayMapper.updateByPrimaryKey(orderPay);
 
 
-            SeOrder order=new SeOrder();
+            SeOrder order = new SeOrder();
             order.setId(orderPay.getSeOrderId());
-            order=seOrderMapper.selectOne(order);
+            order = seOrderMapper.selectOne(order);
             order.setStatus("1");
             seOrderMapper.updateByPrimaryKey(order);
         }
@@ -441,14 +448,14 @@ public class SeOrderServiceImpl implements SeOrderService {
     public Result cancelOrder(String order) {
         Result result = new Result();
         try {
-            SeOrderPay so=new SeOrderPay();
+            SeOrderPay so = new SeOrderPay();
             so.setSeOrderId(order);
             SeOrderPay orderPay = seOrderPayMapper.selectOne(so);
             String result_code = wxPay.cancelOrder(orderPay.getId());
-            if(result_code.equals("SUCCESS")){
+            if (result_code.equals("SUCCESS")) {
                 seOrderPayMapper.updateCancel(orderPay.getId());
 
-                SeOrderPay so2=new SeOrderPay();
+                SeOrderPay so2 = new SeOrderPay();
                 so2.setId(orderPay.getId());
                 List<SeOrderPay> select = seOrderPayMapper.select(so2);
 
@@ -460,7 +467,7 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seOrderMapper.updateByPrimaryKeySelective(seOrder1);
                 }
 
-            }else{
+            } else {
                 throw new Exception("退款失败");
             }
 
@@ -590,9 +597,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     @Override
-    public void checkOut() {
+    public void checkOut(String date) {
         try {
-            String date = DateUtil.now(DateUtil.DEFAULT_DATE_PATTERN) + " 12:00:00";
             List<SeOrder> seOrders = seOrderMapper.getCheckOut(date);
             for (SeOrder seOrder : seOrders) {
                 if (seOrder != null) {
@@ -647,7 +653,7 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     @Override
-    public Result addLiver(SysUser sysUser,AddLiver addLiver) {
+    public Result addLiver(SysUser sysUser, AddLiver addLiver) {
         Result result = new Result();
         try {
             String orderid = addLiver.getOrderid();
@@ -655,13 +661,13 @@ public class SeOrderServiceImpl implements SeOrderService {
             for (SeOrderLiver seOrderLiver : addLiver.getAddLiver()) {
                 String liver = seOrderLiver.getLiver();
 
-                SeOrderLiver seOrderLiver1 = seOrderLiverMapper.selectByOrderIs(orderid,liver);
-                if(seOrderLiver1!=null){
+                SeOrderLiver seOrderLiver1 = seOrderLiverMapper.selectByOrderIs(orderid, liver);
+                if (seOrderLiver1 != null) {
                     seOrderLiver1.setIdCard(seOrderLiver.getIdCard());
                     seOrderLiver1.setLiver(seOrderLiver.getLiver());
                     seOrderLiver1.setPhone(seOrderLiver.getPhone());
                     seOrderLiverMapper.updateByPrimaryKeySelective(seOrderLiver1);
-                }else{
+                } else {
                     seOrderLiver1 = new SeOrderLiver();
                     seOrderLiver1.setId(IDGenerator.getId());
                     seOrderLiver1.setOrderId(orderid);

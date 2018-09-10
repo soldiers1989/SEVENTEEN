@@ -240,8 +240,8 @@ Page({
    
     if (cda != null) {
       console.log(typeof cda.start.month)
-      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
-      var edate = "" + cda.end.year + "-" + ("" +cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
+      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + (cda.start.day.toString().length == 1 ? "0" + cda.start.day : cda.start.day);
+      var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + ("" + cda.end.day.toString().length == 1 ? "0" + cda.end.day : cda.end.day)
       wx.request({
         url: this.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
         data: {
