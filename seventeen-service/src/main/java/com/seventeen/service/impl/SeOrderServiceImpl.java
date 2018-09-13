@@ -182,7 +182,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
             for (String date : orderDates) {
                 if (!date.equals(DateUtil.nowDate())) {
-                    Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
+                    Result apartmentByTime = seApartmentService.getApartmentByTime("123", "123", orderInfo.getRoomType());
                     ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
                     orderInfo.setRoomId(data.get(0));
 //            System.out.println(apartmentByTime);
@@ -192,10 +192,10 @@ public class SeOrderServiceImpl implements SeOrderService {
                     orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
                     orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
-                    MyTimer timer = new MyTimer();
-                    timer.schedule(() -> {
-                        this.checkOut();
-                    }, 1000);
+//                    MyTimer timer = new MyTimer();
+//                    timer.schedule(() -> {
+//                        this.checkOut();
+//                    }, 1000);
                 }
             }
         }
@@ -451,7 +451,8 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrderPay so = new SeOrderPay();
             so.setSeOrderId(order);
             SeOrderPay orderPay = seOrderPayMapper.selectOne(so);
-            String result_code = wxPay.cancelOrder(orderPay.getId());
+            String result_code="SUCCESS";
+//            String result_code = wxPay.cancelOrder(orderPay.getId());
             if (result_code.equals("SUCCESS")) {
                 seOrderPayMapper.updateCancel(orderPay.getId());
 
@@ -465,18 +466,145 @@ public class SeOrderServiceImpl implements SeOrderService {
                     SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
                     seOrder1.setStatus("4");
                     seOrderMapper.updateByPrimaryKeySelective(seOrder1);
-                }
 
+                }
+                setOrderCalendarReduce(orderPay.getId());
             } else {
                 throw new Exception("退款失败");
             }
-
 
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void setOrderCalendarReduce(String payId) {
+        List<SeOrder> seOrders = seOrderPayMapper.getOrder(payId);
+        for (SeOrder seOrder : seOrders) {
+            List<String> list = new ArrayList();
+            List<SeOrderCalendar> addList = new ArrayList();
+            /**
+             * 房间日历表-1
+             */
+            String apId = seOrder.getApId();
+            SeApartment seApartment = new SeApartment();
+            seApartment.setId(apId);
+            seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+
+            String inTime = seOrder.getInTime().replace(".0", "");
+            String outTime = seOrder.getOutTime().replace(".0", "");
+
+            LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+            LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+
+            long distance = ChronoUnit.DAYS.between(startDate, endDate);
+            if (distance >= 1) {
+                Stream.iterate(startDate, d -> {
+                    return d.plusDays(1);
+                }).limit(distance + 1).forEach(f -> {
+                    list.add(f.toString());
+                });
+                for (int i = 0; i < list.size() - 1; i++) {
+                    String date = list.get(i);
+                    SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                    String[] dateArr = date.split("-");
+                    seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                    seOrderCalendar.setYear(dateArr[0]);
+                    seOrderCalendar.setMonth(dateArr[1]);
+                    seOrderCalendar.setDay(dateArr[2]);
+
+                    seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1<0?0:seOrderCalendar.getOrders() - 1);
+                    seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+                }
+            }else{
+                SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                String time  = DateUtil.format(startDate,DateUtil.DEFAULT_DATE_PATTERN);
+                String[] dateArr = time.split("-");
+                seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                seOrderCalendar.setYear(dateArr[0]);
+                seOrderCalendar.setMonth(dateArr[1]);
+                seOrderCalendar.setDay(dateArr[2]);
+
+                seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1<0?0:seOrderCalendar.getOrders() - 1);
+                seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String inTime = "2018-09-13 09:00:00";
+        String outTime = "2018-09-13 19:00:00";
+        LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+        LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+        List<String> list = new ArrayList();
+
+        long distance = ChronoUnit.DAYS.between(startDate, endDate);
+        if (distance >= 1) {
+            Stream.iterate(startDate, d -> {
+                return d.plusDays(1);
+            }).limit(distance + 1).forEach(f -> {
+                list.add(f.toString());
+            });
+        }
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void setOrderCalendarAdd(String payId) {
+        List<SeOrder> seOrders = seOrderPayMapper.getOrder(payId);
+        for (SeOrder seOrder : seOrders) {
+            List<String> list = new ArrayList();
+            List<SeOrderCalendar> addList = new ArrayList();
+            /**
+             * 房间日历表+1
+             */
+            String apId = seOrder.getApId();
+            SeApartment seApartment = new SeApartment();
+            seApartment.setId(apId);
+            seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+
+            String inTime = seOrder.getInTime().replace(".0", "");
+            String outTime = seOrder.getOutTime().replace(".0", "");
+            LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+            LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+
+            long distance = ChronoUnit.DAYS.between(startDate, endDate);
+            if (distance >= 1) {
+                Stream.iterate(startDate, d -> {
+                    return d.plusDays(1);
+                }).limit(distance + 1).forEach(f -> {
+                    list.add(f.toString());
+                });
+                for (int i = 0; i < list.size() - 1; i++) {
+                    String date = list.get(i);
+                    SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                    String[] dateArr = date.split("-");
+                    seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                    seOrderCalendar.setYear(dateArr[0]);
+                    seOrderCalendar.setMonth(dateArr[1]);
+                    seOrderCalendar.setDay(dateArr[2]);
+
+                    seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() + 1);
+                    seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+                }
+            }else{
+                SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                String time  = DateUtil.format(startDate,DateUtil.DEFAULT_DATE_PATTERN);
+                String[] dateArr = time.split("-");
+                seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                seOrderCalendar.setYear(dateArr[0]);
+                seOrderCalendar.setMonth(dateArr[1]);
+                seOrderCalendar.setDay(dateArr[2]);
+
+                seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                seOrderCalendar.setOrders(seOrderCalendar.getOrders() + 1);
+                seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+            }
+        }
     }
 
     @Override
@@ -490,41 +618,9 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrder seOrder = new SeOrder();
             seOrder.setId(order);
             SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
-            if ("3".equals(seOrder1.getStatus())) {
-                String apId = seOrder1.getApId();
-                SeApartment seApartment = new SeApartment();
-                seApartment.setId(apId);
-                seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+            seOrder1.setStatus("3");
+            seOrderMapper.updateByPrimaryKeySelective(seOrder1);
 
-                String inTime = seOrder1.getInTime().replace(".0", "");
-                String outTime = seOrder1.getOutTime().replace(".0", "");
-                LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-                LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-
-                long distance = ChronoUnit.DAYS.between(startDate, endDate);
-                if (distance >= 1) {
-                    Stream.iterate(startDate, d -> {
-                        return d.plusDays(1);
-                    }).limit(distance + 1).forEach(f -> {
-                        list.add(f.toString());
-                    });
-                }
-                for (int i = 0; i < list.size() - 1; i++) {
-                    String date = list.get(i);
-                    SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-                    String[] dateArr = date.split("-");
-                    seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
-                    seOrderCalendar.setYear(dateArr[0]);
-                    seOrderCalendar.setMonth(dateArr[1]);
-                    seOrderCalendar.setDay(dateArr[2]);
-
-                    seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
-                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1);
-                    seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
-                }
-                seOrder1.setStatus("4");
-                seOrderMapper.updateByPrimaryKeySelective(seOrder1);
-            }
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -589,10 +685,7 @@ public class SeOrderServiceImpl implements SeOrderService {
                 Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
         lockService.updataLockPassWord(seOrder.getApId(), start, out, Integer.valueOf(seOrder.getLockPwd()));
-
         seOrderMapper.updateByPrimaryKey(seOrder);
-
-
         return new Result(seOrder.getLockPwd());
     }
 
@@ -682,6 +775,19 @@ public class SeOrderServiceImpl implements SeOrderService {
 
             }
 
+        } catch (Exception e) {
+            logger.error("e", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result<String> getWifi(SysUser sysUser, String orderId) {
+        Result result = new Result();
+        try {
+            String wifi = seOrderMapper.getWifi(orderId);
+            result.setData(wifi);
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());

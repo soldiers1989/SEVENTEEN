@@ -1,15 +1,12 @@
 package com.seventeen.controller;
 
 
-import com.github.wxpay.sdk.WXPay;
 import com.seventeen.bean.AddLiver;
 import com.seventeen.bean.OrderCenter;
 import com.seventeen.bean.OrderInfo;
 import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.pay.wx.service.WxPay;
-import com.seventeen.pay.wx.util.MD5;
-import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.SeOrderService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.PageInfo;
@@ -17,16 +14,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -92,11 +86,11 @@ public class OrderController {
 		return ResponseEntity.ok(orderCenter);
 	}
 
-    @PutMapping("/wx/cancel")
+    @PostMapping("/wx/cancel")
     @ApiOperation(value = "退订")
     @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
-    public ResponseEntity<Result> cancelOrder(String order) {
-		Result result  = seOrderService.cancelOrder(order);
+    public ResponseEntity<Result> cancelOrder(@RequestBody String order) {
+        Result result  = seOrderService.cancelOrderConfirm(order);
         return ResponseEntity.ok(result);
     }
 
@@ -104,8 +98,8 @@ public class OrderController {
 	@ApiOperation(value = "平台确认退订")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
 	public ResponseEntity<Result> cancelOrderConfirm(@RequestParam String order) {
-		Result result  = seOrderService.cancelOrderConfirm(order);
-		return ResponseEntity.ok(result);
+        Result result  = seOrderService.cancelOrder(order);
+        return ResponseEntity.ok(result);
 	}
 
     @PostMapping("/wx/addLiver")
@@ -134,7 +128,9 @@ public class OrderController {
 	/**
 	 * 每月1号凌晨插入月历数据
 	 */
-	@Scheduled(cron = "0 0 0 1 * ? ")
+
+
+    @Scheduled(cron = "0 0 0 1 * ? ")
 	public void timerCron() {
 		seOrderService.addOrderCalendar();
 	}
@@ -163,6 +159,15 @@ public class OrderController {
     public ResponseEntity updateLockPWD(@AuthenticationPrincipal SysUser sysUser,String orderId) {
         Result result= seOrderService.updateLockPWD(orderId,sysUser);
         return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping(value = "/wx/getWifi")
+    @ApiOperation(value = "获取wifi密码")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity getWifi(String orderId,@AuthenticationPrincipal SysUser sysUser) {
+        Result<String> wifi = seOrderService.getWifi(sysUser,orderId);
+        return ResponseEntity.ok(wifi);
     }
 
 

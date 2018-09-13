@@ -80,4 +80,6 @@ public interface SeOrderService {
 
     Result addLiver(SysUser sysUser,AddLiver addLiver);
 
+    Result<String> getWifi(SysUser sysUser, String orderId);
+
 }

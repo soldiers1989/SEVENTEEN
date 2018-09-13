@@ -213,11 +213,14 @@
             handleCancel(index, row) {
                 this.idx = index;
                 let that = this;
-                this.$axios.put(this.OrderUrl + '/cancel?order='+row.id).then((res) => {
-                    if (res.data.resultCode == 200) {
-                        that.goods = res.data.data;
-                    }
-                })
+                if(row.status=="退订中"){
+                    this.$axios.put(this.OrderUrl + '/cancel?order='+row.id).then((res) => {
+                        if (res.data.resultCode == 200) {
+                            that.goods = res.data.data;
+                        }
+                    })
+                }
+
             },
             handleEdit(index, row) {
                 this.idx = index;

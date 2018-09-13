@@ -7,6 +7,6 @@ server:
 
 jwt:
   secret: ryQ5asE$pQ#@ueg%HcPVc*8OkhBgIfFp
-  expiration: 36000
+  expiration: 86400
 
 

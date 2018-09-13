@@ -82,6 +82,7 @@ info:
 file:
   upload:
     url: http://localhost:80/
+    rootImgurl: /opt/www/www.17Inn.com/jar/
 
 wx:
   app:

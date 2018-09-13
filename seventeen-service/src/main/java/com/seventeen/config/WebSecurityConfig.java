@@ -64,6 +64,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/**/shutdown").hasAuthority("sys_role")
 
+//                // 微信主页允许访问接口
+//                .antMatchers(HttpMethod.GET, "/app/index/getShops", "/sys/users/userVip", "/app/index/getTypeRooms*").permitAll()
+
                 // 允许对于网站静态资源的无授权访问
                 .antMatchers(HttpMethod.GET, "/**/*swagger*/**", "/**/health", "/**/api-docs", "/", "/*.html",
                         "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.gif").permitAll()

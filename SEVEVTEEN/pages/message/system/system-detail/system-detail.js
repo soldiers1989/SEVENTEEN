@@ -41,6 +41,7 @@ Page({
 
   },
   wifiTap: function(event) {
+    let that = this;
     if (this.data.orderStatus === 2) {
       wx.showModal({
         title: '提示',
@@ -49,32 +50,83 @@ Page({
       })
       return;
     }
-    wx.showModal({
-      title: '提示',
-      showCancel: false,
-      content: 'wifi密码：1123546X23'
+    wx.request({
+      url: that.data.orderUrl + '/wx/getWifi?orderId=' + that.data.systemDetail.id,
+      method: 'get',
+      header: {
+        'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+      },
+      success: function (data) {
+        if (data.data.resultCode === 200) {
+          wx.showModal({
+            title: '提示',
+            showCancel: false,
+            content: 'wifi密码：' + data.data.data
+          })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function () {
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   cancelTap: function(event) {
-    if (this.data.systemDetail.remark === '不支持退订' || this.data.orderStatus != 0) {
-      wx.showModal({
-        title: '提示',
-        showCancel: false,
-        content: '该房间类型不支持退订'
-      })
-      return;
-    }
+    let that = this; 
+    // if (this.data.systemDetail.remark === '不支持退订' || this.data.orderStatus != 0) {
+    //   wx.showModal({
+    //     title: '提示',
+    //     showCancel: false,
+    //     content: '该房间类型不支持退订'
+    //   })
+    //   return;
+    // }
     wx.showModal({
       title: '提示',
       content: '是否申请房间退订',
       success: function(res) {
         if (res.confirm) {
-          console.log('用户点击确定')
+          wx.request({
+            url: that.data.orderUrl + '/wx/cancel?orderId=' + that.data.systemDetail.id,
+            method: 'post',
+            header: {
+              'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+            },
+            data: that.data.systemDetail.id,
+            success: function (data) {
+              if (data.data.resultCode === 200) {
+
+              } else {
+                wx.showToast({
+                  title: '系统异常',
+                  icon: 'none',
+                  duration: 2000
+                })
+              }
+            },
+            fail: function () {
+              wx.showToast({
+                title: '网络异常',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          })
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
       }
     })
+
   },
   callClientTap: function(event) {
     wx.makePhoneCall({
@@ -204,11 +256,11 @@ Page({
         if (data.data.resultCode === 200) {
           let status = data.data.data.status;
           let orderStatus;
-          if (status === '已下订' || status === '退订中') {
+          if (status === '已下订' ) {
             orderStatus = 0;
           } else if (status === '已入住') {
             orderStatus = 1;
-          } else if (status === '已退订' || status === '订单完成') {
+          } else if (status === '已退订' || status === '订单完成' || status === '退订中') {
             orderStatus = 2;
           }
           that.setData({

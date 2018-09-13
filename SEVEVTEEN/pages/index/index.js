@@ -36,11 +36,11 @@ Page({
     popupShow: false, //弹窗是否显示
 
     popupIconList: [
-    // {
-    //     icon: '/imgs/timg.jpg',
-    //     name: '无线WIFI覆盖'
-    //   }
-     
+      // {
+      //     icon: '/imgs/timg.jpg',
+      //     name: '无线WIFI覆盖'
+      //   }
+
     ],
 
     Shops: [{
@@ -177,7 +177,7 @@ Page({
       }
     })
   },
-  showImgs: function (e) {
+  showImgs: function(e) {
     var roomType = e.currentTarget.dataset.roomType;
 
     let that = this;
@@ -187,7 +187,7 @@ Page({
       header: {
         'Authorization': 'Bearer ' + wx.getStorageSync('token'),
       },
-      success: function (data) {
+      success: function(data) {
         if (data.data.resultCode === 200) {
           wx.previewImage({
             current: data.data.data[0], // 当前显示图片的http链接
@@ -201,7 +201,7 @@ Page({
           })
         }
       },
-      fail: function () {
+      fail: function() {
         wx.showToast({
           title: '网络异常',
           icon: 'none',
@@ -262,7 +262,7 @@ Page({
   onLoad: function(options) {
     var that = this;
     var token = wx.getStorageSync('token');
-
+   
     this.setData({
       token: token
     });
@@ -364,7 +364,7 @@ function getCouponByRoomType(that, token) {
     _obj.name = anys[i].name;
     _obj.tagId = anys[i].tagId;
     _obj.price = anys[i].price;
-    if(i/2==0)
+    if (i / 2 == 0)
       _obj.isCoupon = 500;
     else
       _obj.isCoupon = 200;

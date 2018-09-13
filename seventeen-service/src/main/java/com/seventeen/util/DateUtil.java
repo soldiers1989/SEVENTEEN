@@ -73,6 +73,8 @@ public final class DateUtil {
 		return format(dateTime, DEFAULT_DATETIME_PATTERN);
 	}
 
+
+
 	public static String formatSimple(LocalDateTime dateTime) {
 		return format(dateTime, DEFAULT_DATE2_PATTERN);
 	}
@@ -80,6 +82,10 @@ public final class DateUtil {
 	public static String format(LocalDateTime dateTime, String pattern) {
 		return dateTime.format(formatter(pattern));
 	}
+
+    public static String format(LocalDate dateTime, String pattern) {
+        return dateTime.format(formatter(pattern));
+    }
 
 	public static String format(Date date, String pattern) {
 		return format(toLocalDateTime(date), pattern);

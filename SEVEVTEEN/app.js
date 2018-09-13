@@ -7,14 +7,8 @@ wxApiInterceptors({
       const code= res.statusCode;
       // 如果data里的code等于401就响应为失败,失效token
       if (code === 401) {
-         wx.showToast({
-            title: '身份失效',
-            icon: 'fail',
-            duration: 1500,
-            mask:true
-        })
         wx.redirectTo({
-          url: '/pages/auth/auth'
+          url: '/pages/auth/auth?flag=false'
         })
       }
       return res;
