@@ -207,7 +207,7 @@ Page({
     
    
     
-
+ 
     this.setData({
       roomId: options.roomId,
       price: options.price,
