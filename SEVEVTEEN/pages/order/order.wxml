@@ -39,14 +39,14 @@
     </view>
     <view class='ioDate-date'>
       <view class='ioDate-date-d'>
-        <text>星期四</text>
+        <text>{{wdayStr}}</text>
         <text>{{chooseDate==null?"-":chooseDate.start.month}}月{{chooseDate==null?"-":chooseDate.start.day}}日</text>
       </view>
       <view class='ioDate-date-d'>
         <view class='line-shu'></view>
       </view>
       <view class='ioDate-date-d'>
-        <text>星期四</text>
+        <text>{{wdayEnd}}</text>
         <text>{{chooseDate==null?"-":chooseDate.end.month}}月{{chooseDate==null?"-":chooseDate.end.day}}日</text>
       </view>
     </view>
@@ -55,8 +55,8 @@
 
 <view class='sum-room'>
   <text class='sum-room-title'>房间数量</text>
-
-
+  <view wx:if="{{roomName==shizu}}">
+  </view>
   <view style='flex:1;' class='user-info-pick'>
     <picker bindchange="bindPickerChange1" value="{{index1}}" range="{{array1}}">
       <text class='sum-room-num'>{{array1[index1]}}</text>

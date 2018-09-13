@@ -12,7 +12,8 @@ Page({
     index_sz: 0,
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl,
-
+    wdayStr:"星期一",
+    wdayEnd: "星期一",
     shizu: "钟点房3小时", //
 
     userInfo: {
@@ -191,7 +192,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var date = new Date();
+    
+
+   
 
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
@@ -201,6 +204,9 @@ Page({
     // console.log(outday)
     var outmonth = date.getMonth() + 1;
     var outyear = date.getFullYear();
+    
+   
+    
 
     this.setData({
       roomId: options.roomId,
@@ -212,7 +218,9 @@ Page({
       day: day,
       outday: outday,
       outmonth: outmonth,
-      outyear: outyear
+      outyear: outyear,
+      wdayStr: wdayStr,
+      wdayEnd: wdayEnd,
     })
 
     //获取用户是否已经做了实名制
@@ -239,10 +247,11 @@ Page({
   onShow: function() {
     // console.log("shohohsodhfosdhfo")
     var rl = this.data.roomList;
+    console.log(rl.length)
     if (rl != null) {
       if (rl.length <= 3) {
         var array1 = new Array();
-        for (var i = 0; i < rl.lenght; i++) {
+        for (var i = 0; i < rl.length; i++) {
           array1[i] = i + 1;
         }
         this.setData({
@@ -264,8 +273,32 @@ Page({
     var that = this;
     var cda = this.data.chooseDate;
 
+    
+
     if (cda != null) {
-      console.log(typeof cda.start.month)
+      var dateStr = new Date();
+      dateStr.setFullYear(cda.start.year, cda.start.month-1, cda.start.day);
+
+      var dateEnd = new Date();
+      dateEnd.setFullYear(cda.end.year, cda.end.month-1, cda.end.day);
+      var weekday = new Array(7)
+      weekday[0] = "星期天"
+      weekday[1] = "星期一"
+      weekday[2] = "星期二"
+      weekday[3] = "星期三"
+      weekday[4] = "星期四"
+      weekday[5] = "星期五"
+      weekday[6] = "星期六"
+      var wdayStr = weekday[dateStr.getDay()]
+      var wdayEnd = weekday[dateEnd.getDay()]
+
+      that.setData({
+        wdayStr: wdayStr,
+        wdayEnd: wdayEnd
+      })
+
+
+      // console.log(typeof cda.start.month)
       var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
       var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
       // var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + (cda.start.day.toString().length == 1 ? "0" + cda.start.day : cda.start.day);
@@ -431,7 +464,7 @@ Page({
     }
 
     var couponid = "0";
-    if (this.data.coupon != null) {
+    if (this.data.coupon != null && this.data.length>0) {
       couponid = this.data.coupon[this.data.couponIndex].id;
     }
 
@@ -443,7 +476,7 @@ Page({
       planTime = this.data.array2[this.data.index_sz];
     }
     else{
-      var price = this.data.price * this.data.array[index];
+      var price = this.data.price * this.data.array1[this.data.index1];
 
     }
 
@@ -503,6 +536,11 @@ Page({
             paySign: dd.paySign,
             'success': function(res) {
               console.log(res);
+              wx.navigateTo({
+                url: '/pages/my/myOrder/myOrder'
+            
+              })
+
             },
             'fail': function(res) {}
           })

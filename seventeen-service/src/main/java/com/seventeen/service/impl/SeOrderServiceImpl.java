@@ -303,7 +303,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
 
         setOrderCalendarAdd(orderId);
-
+//过时不支付
 
         //本系统业务下单生产订单ID
 
