@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -180,9 +181,15 @@ public class SeOrderServiceImpl implements SeOrderService {
             LocalDate now = LocalDate.now();
             Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(), sysUser);
             ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
-            for (String date : orderDates) {
-                if (!date.equals(DateUtil.nowDate())) {
-                    Result apartmentByTime = seApartmentService.getApartmentByTime("123", "123", orderInfo.getRoomType());
+//            for (String date : orderDates) {
+//                if (!date.equals(DateUtil.nowDate())) {
+                    String[] planTime = orderInfo.getPlanTime().split("~");
+
+                    String dates= LocalDate.now().format(dateTimeFormatter2);
+                    String inttime=dates+" "+planTime[0].trim()+":00";
+                    String ourtime=dates+" "+planTime[1].trim()+":00";
+
+                    Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
                     ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
                     orderInfo.setRoomId(data.get(0));
 //            System.out.println(apartmentByTime);
@@ -192,12 +199,12 @@ public class SeOrderServiceImpl implements SeOrderService {
                     orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
                     orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
-//                    MyTimer timer = new MyTimer();
-//                    timer.schedule(() -> {
-//                        this.checkOut();
-//                    }, 1000);
-                }
-            }
+                    MyTimer timer = new MyTimer();
+                    timer.schedule(() -> {
+                        this.checkOut(ourtime);
+                    }, 1000);
+//                }
+//            }
         }
 
 //        System.out.println("订单号:" + orderId);
@@ -282,7 +289,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
             SeOrderLiver ol = new SeOrderLiver();
             ol.setId(IDGenerator.getId());
-            ol.setOrderId(orderId);
+            ol.setOrderId(se.getId());
             ol.setCreateBy(se.getCreateBy());
             ol.setCreateTime(se.getCreateTime());
             ol.setPhone(se.getCreatorPhone());
@@ -294,6 +301,8 @@ public class SeOrderServiceImpl implements SeOrderService {
             ol.setIdCard(seUserAttestation.getIdCode());
             seOrderLiverMapper.insert(ol);
         }
+
+        setOrderCalendarAdd(orderId);
 
 
         //本系统业务下单生产订单ID
