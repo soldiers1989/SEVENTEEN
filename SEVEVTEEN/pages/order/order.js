@@ -9,9 +9,11 @@ Page({
     price: 0,
     index: 0,
     index1: 0,
+    index_sz: 0,
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl,
 
+    shizu: "钟点房3小时", //
 
     userInfo: {
       isVerify: false,
@@ -45,6 +47,20 @@ Page({
       '23:00 ~ 24:00',
       '入住次日凌晨'
     ],
+    array2: [
+      '9:00 ~ 11:00',
+      '10:00 ~ 12:00'
+    ],
+    objectArray2: [{
+        id: 0,
+        name: '9:00 ~ 11:00'
+      },
+      {
+        id: 1,
+        name: '9:00 ~ 11:00'
+      }
+    ],
+
     objectArray: [{
         id: 0,
         name: '14:00 ~ 15:00'
@@ -105,7 +121,7 @@ Page({
     outday: '',
     outmonth: '',
     outyear: '',
-    couponIndex:0
+    couponIndex: 0
 
   },
   choseLiveDateTap: function(e) {
@@ -235,13 +251,25 @@ Page({
       }
     }
 
-    var that=this;
+    if (this.data.roomName == this.data.shizu) {
+      console.log("时租")
+      this.setData({
+        array1: ["1"]
+
+      })
+
+    }
+
+
+    var that = this;
     var cda = this.data.chooseDate;
-   
+
     if (cda != null) {
       console.log(typeof cda.start.month)
-      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + (cda.start.day.toString().length == 1 ? "0" + cda.start.day : cda.start.day);
-      var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + ("" + cda.end.day.toString().length == 1 ? "0" + cda.end.day : cda.end.day)
+      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
+      var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
+      // var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + (cda.start.day.toString().length == 1 ? "0" + cda.start.day : cda.start.day);
+      // var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + ("" + cda.end.day.toString().length == 1 ? "0" + cda.end.day : cda.end.day)
       wx.request({
         url: this.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
         data: {
@@ -308,15 +336,26 @@ Page({
     console.log(this.data.objectArray[this.data.index].name);
   },
 
-  bindPickerChange1: function(e) {
+  bindPickerChange_sz: function(e) {
     // console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
-      index1: e.detail.value
+      index_sz: e.detail.value
+    })
+    //赋值
+    console.log(this.data.objectArray2[this.data.index_sz].name);
+  },
+
+  bindPickerChange1: function(e) {
+    // console.log('picker发送选择改变，携带值为', e.detail.value)
+    // var prices = this.data.price * this.data.array1[this.data.index1];
+    this.setData({
+      index1: e.detail.value,
+
     })
     //赋值
     console.log(this.data.array1[this.data.index1]);
   },
-  bindPickerChangeCoupon: function (e) {
+  bindPickerChangeCoupon: function(e) {
     // console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       couponIndex: e.detail.value
@@ -351,55 +390,69 @@ Page({
     var rlist = this.data.roomList;
 
     var roomNum = this.data.array1[this.data.index1];
-    if (rlist == null) {
-      wx.showToast({
-        title: '请先选择日期',
-        icon: 'none',
-        duration: 2000
-      })
-      return;
-    }
-    if (rlist.length > 0) {
-      if (roomNum == 1) {
-        roomId = rlist[0];
-      } else {
-        for (var i = 1; i <= roomNum; i++) {
-          roomId += rlist[i - 1];
-          if (i < roomNum) {
-            roomId += ",";
+    if (this.data.roomName != this.data.shizu) {
+      if (rlist == null) {
+        wx.showToast({
+          title: '请先选择日期',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
+
+      if (rlist.length > 0) {
+        if (roomNum == 1) {
+          roomId = rlist[0];
+        } else {
+          for (var i = 1; i <= roomNum; i++) {
+            roomId += rlist[i - 1];
+            if (i < roomNum) {
+              roomId += ",";
+            }
           }
         }
+      } else {
+        wx.showToast({
+          title: '房间已被订满了',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
       }
-    } else {
-      wx.showToast({
-        title: '房间已被订满了',
-        icon: 'none',
-        duration: 2000
-      })
-      return;
-    }
-    if (roomId == "") {
-      wx.showToast({
-        title: '房间已满,请稍后重试',
-        icon: 'none',
-        duration: 2000
-      })
-      return;
-    }
-    var couponid ="0";
-    if (this.data.coupon!=null){
-      couponid = this.data.coupon[this.data.couponIndex].id;     
+
+      if (roomId == "") {
+        wx.showToast({
+          title: '房间已满,请稍后重试',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
     }
 
+    var couponid = "0";
+    if (this.data.coupon != null) {
+      couponid = this.data.coupon[this.data.couponIndex].id;
+    }
 
-
-    var price = this.data.price;
+    var roomType="";
     var planTime = this.data.array[this.data.index];
+    if (this.data.roomName == this.data.shizu){
+      var price = this.data.price;
+      roomType = this.data.roomId;
+      planTime = this.data.array2[this.data.index_sz];
+    }
+    else{
+      var price = this.data.price * this.data.array[index];
+
+    }
+
     var userInfo = this.data.userInfo;
     var phone = this.data.phone;
-    var startTime = this.data.chooseDate.start.re + " 14:00:00"
-    var endTime = this.data.chooseDate.end.re + " 12:00:00"
-
+    if (this.data.chooseDate!=null){
+      var startTime = this.data.chooseDate.start.re + " 14:00:00"
+      var endTime = this.data.chooseDate.end.re + " 12:00:00"
+    }
     if (phone == "") {
       wx.showToast({
         title: '手机号不能为空',
@@ -415,7 +468,6 @@ Page({
 
     wx.request({
       url: this.data.baseUrl + '/order/wx/setOrder',
-
       data: {
         roomId: roomId,
         fee: price,
@@ -427,7 +479,8 @@ Page({
         couponId: couponid,
         price: price,
         roomNum: roomNum,
-        tagId: this.data.tagId
+        tagId: this.data.tagId,
+        roomType: roomType
         // apId: apId
       },
       header: {

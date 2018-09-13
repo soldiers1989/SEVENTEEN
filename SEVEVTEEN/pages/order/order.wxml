@@ -6,10 +6,10 @@
     <text>大床房</text>
     <text>可住2人</text>
   </view>
-</view> 
+</view>
 
-<view wx:if="{{roomName=='钟点房3小时'}}">
-  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' >
+<view wx:if="{{roomName==shizu}}">
+  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549'>
     <view class='ioDate-title'>
       <text>入住日期</text>
       <text>1日</text>
@@ -31,7 +31,7 @@
   </view>
 </view>
 <view wx:else>
- <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
+  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
     <view class='ioDate-title'>
       <text>入住日期</text>
       <text>{{chooseDate==null?1:chooseDate.day}}晚</text>
@@ -83,31 +83,49 @@
     <image src='/imgs/common/clear.png'></image>
     <!-- </view> -->
   </view>
-
-  <view class='user-info-floor'>
-    <text style='width:90px;'>预计到店时间</text>
-
-    <view style='flex:1;' class='user-info-pick'>
-      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-        <view class="picker">
-          {{array[index]}}
-        </view>
-      </picker>
+  <view wx:if="{{roomName==shizu}}">
+    <view class='user-info-floor'>
+      <text style='width:90px;'>入住时间</text>
+      <view style='flex:1;' class='user-info-pick'>
+        <picker bindchange="bindPickerChange_sz" value="{{index_sz}}" range="{{array2}}">
+          <view class="picker">
+            {{array2[index_sz]}}
+          </view>
+        </picker>
+      </view>
+      <image src='/imgs/common/arr-right.png' style=' align-items: right;'></image>
+    </view>
+  </view>
+  <view wx:else>
+    <view class='user-info-floor'>
+      <text style='width:90px;'>预计到店时间</text>
+      <view style='flex:1;' class='user-info-pick'>
+        <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <view class="picker">
+            {{array[index]}}
+          </view>
+        </picker>
+      </view>
+      <image src='/imgs/common/arr-right.png' style=' align-items: right;'></image>
     </view>
 
-    <image src='/imgs/common/arr-right.png' style=' align-items: right;'></image>
   </view>
 
-  <view class='user-info-floor'>
-    <text style='width:90px;'>优惠券</text>
-    <!-- <text style='flex:1'>20元优惠券</text> -->
+  <view wx:if="{{roomName==shizu}}">
+
+  </view>
+  <view wx:else>
+    <view class='user-info-floor'>
+      <text style='width:90px;'>优惠券</text>
+      <!-- <text style='flex:1'>20元优惠券</text> -->
       <picker bindchange="bindPickerChangeCoupon" value="{{index}}" range="{{coupon}}" range-key="name" style='flex:1'>
         <!-- <text > -->
-          {{coupon[index].name}}
+        {{coupon[index].name}}
         <!-- </text> -->
       </picker>
-    <image src='/imgs/common/arr-dwom.png'></image>
+      <image src='/imgs/common/arr-dwom.png'></image>
 
+    </view>
   </view>
 </view>
 
@@ -123,7 +141,7 @@
 
 <view class='addOrder'>
   <view class='order-money'>
-    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t{{price}}</text>
+    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t{{price*array1[index1]}}</text>
     <text class='order-money-2'>已减:\t¥ 0</text>
   </view>
   <view class='order-pay'>
