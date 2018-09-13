@@ -193,8 +193,8 @@ Page({
    */
   onLoad: function(options) {
     
+    var date=new Date();
 
-   
 
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
@@ -218,9 +218,8 @@ Page({
       day: day,
       outday: outday,
       outmonth: outmonth,
-      outyear: outyear,
-      wdayStr: wdayStr,
-      wdayEnd: wdayEnd,
+      outyear: outyear
+    
     })
 
     //获取用户是否已经做了实名制
@@ -247,7 +246,7 @@ Page({
   onShow: function() {
     // console.log("shohohsodhfosdhfo")
     var rl = this.data.roomList;
-    console.log(rl.length)
+    // console.log(rl.length)
     if (rl != null) {
       if (rl.length <= 3) {
         var array1 = new Array();
