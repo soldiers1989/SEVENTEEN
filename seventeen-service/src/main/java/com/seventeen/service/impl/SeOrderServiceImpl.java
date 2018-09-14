@@ -21,6 +21,7 @@ import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.MyTimer;
 import com.seventeen.util.PageInfo;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,8 +185,6 @@ public class SeOrderServiceImpl implements SeOrderService {
         if (orderInfo.getRoomId().equals("")) {
             LocalDate now = LocalDate.now();
 
-            Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType());
-            ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
             //orderDates.contains();
 
             String[] planTime = orderInfo.getPlanTime().split("~");
@@ -200,9 +199,9 @@ public class SeOrderServiceImpl implements SeOrderService {
             String[] split = orderInfo.getPlanTime().split("~");
             orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
             orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
-
-
         }
+
+
 
 
 //        System.out.println("订单号:" + orderId);
@@ -312,9 +311,23 @@ public class SeOrderServiceImpl implements SeOrderService {
         }, 600000);
 
 
+        String inTime="";
+        String outTime="";
+        if(orderInfo.getRoomId().equals("")){
+            /**
+             * 时租房sql特殊 所以+1日
+             */
+            inTime = LocalDate.now().format(dateTimeFormatter2);
+            outTime = LocalDate.now().plusDays(1).format(dateTimeFormatter2);
+        }else{
+            inTime = DateUtil.format(DateUtil.parseDateAndToDate(orderInfo.getStartTime(),DateUtil.DEFAULT_DATE_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
+            outTime = DateUtil.format(DateUtil.parseDateAndToDate(orderInfo.getEndTime(),DateUtil.DEFAULT_DATE_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
+        }
+        Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(),inTime,outTime);
+        ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
+        if(orderDates.isEmpty()) throw  new ServiceException(ResultCode.FAIL,"没有空房");
 
         //本系统业务下单生产订单ID
-
         //本次订单随机串
         String nonceStr = RandomStringUtils.randomAlphanumeric(32);
         try {
@@ -450,7 +463,8 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
             seOrderCalendar.setRoomTypeId(roomType);
             seOrderCalendar.setOrders(seApartments.size());
-            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDateFormat(seOrderCalendar);
+            String time = DateUtil.nowDate();
+            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDateFormat(seOrderCalendar,time);
             result.setData(seOrderCalendars);
         } catch (Exception e) {
             logger.error("e", e);
@@ -460,7 +474,7 @@ public class SeOrderServiceImpl implements SeOrderService {
     }
 
     @Override
-    public Result getOrderDate(String roomType) {
+    public Result getOrderDate(String roomType,String inTime ,String outTime) {
         Result result = new Result();
         try {
             ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
@@ -468,7 +482,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
             seOrderCalendar.setRoomTypeId(roomType);
             seOrderCalendar.setOrders(seApartments.size());
-            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
+            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar,inTime,outTime);
             result.setData(seOrderCalendars);
         } catch (Exception e) {
             logger.error("e", e);

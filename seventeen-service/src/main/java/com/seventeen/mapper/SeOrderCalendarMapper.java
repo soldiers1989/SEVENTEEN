@@ -18,10 +18,10 @@ public interface SeOrderCalendarMapper extends CoreMapper<SeOrderCalendar> {
             +"</script>")
     void addSeOrderCalendarList(@Param("list") List seOrderCalendars);
 
-    @Select("select year||'-'||CONVERT(month,SIGNED)||'-'||CONVERT(day,SIGNED) from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}")
-    List<String> getOrderDateFormat(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar);
+    @Select("select s.time from (select year||'-'||CONVERT(month,SIGNED)||'-'||CONVERT(day,SIGNED) as time  from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}) s where s.time >=#{time}")
+    List<String> getOrderDateFormat(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar,@Param("time") String time);
 
-    @Select("select year||'-'|| month||'-'||day from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}")
-    List<String> getOrderDate(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar);
+    @Select("select s.time from (select year||'-'|| month||'-'||day as time  from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}) s where s.time >= #{inTime} and s.time < #{outTime}")
+    List<String> getOrderDate(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar,@Param("inTime") String inTime,@Param("outTime") String outTime);
 
 }

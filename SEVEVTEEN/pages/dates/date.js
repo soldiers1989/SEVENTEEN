@@ -443,6 +443,9 @@ Page({
               month = month + 12
             }
             let day = fullHouseDate[2] - date[month][0].day;
+            if (day<0){
+              continue;
+            }
             date[month][day].selected = true;
             date[month][day].live = '满房';
             date[month][day].canUse = 0;
