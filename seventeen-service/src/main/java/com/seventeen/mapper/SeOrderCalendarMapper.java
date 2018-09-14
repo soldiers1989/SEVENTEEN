@@ -19,6 +19,9 @@ public interface SeOrderCalendarMapper extends CoreMapper<SeOrderCalendar> {
     void addSeOrderCalendarList(@Param("list") List seOrderCalendars);
 
     @Select("select year||'-'||CONVERT(month,SIGNED)||'-'||CONVERT(day,SIGNED) from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}")
+    List<String> getOrderDateFormat(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar);
+
+    @Select("select year||'-'|| month||'-'||day from se_order_calendar where room_type_id =#{seOrderCalendar.roomTypeId} and orders >= #{seOrderCalendar.orders}")
     List<String> getOrderDate(@Param("seOrderCalendar") SeOrderCalendar seOrderCalendar);
 
 }

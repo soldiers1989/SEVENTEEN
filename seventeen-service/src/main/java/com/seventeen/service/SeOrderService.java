@@ -68,6 +68,8 @@ public interface SeOrderService {
 
     Result getOrderDate(String roomType, SysUser sysUser);
 
+    Result getOrderDate(String roomType);
+
     Result cancelOrder(String order);
 
     Result cancelOrderConfirm(String order);
