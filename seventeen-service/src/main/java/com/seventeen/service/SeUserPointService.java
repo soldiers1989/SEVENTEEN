@@ -1,5 +1,6 @@
 package com.seventeen.service;
 
+import com.seventeen.bean.SeUserPoint;
 import com.seventeen.bean.SeUserPointLog;
 import com.seventeen.bean.UserPoint;
 import com.seventeen.core.Result;
@@ -36,5 +37,9 @@ public interface SeUserPointService {
      * @return
      */
     Result addPoint(SeUserPointLog seUserPointLog);
+
+    void orderAddPoint(SeUserPoint seUserPoint);
+
+    void getWXUserPoint(String userId);
 
 }

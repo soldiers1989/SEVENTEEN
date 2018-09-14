@@ -464,9 +464,16 @@ Page({
 
     var userInfo = this.data.userInfo;
     var phone = this.data.phone;
+
+
+
     if (this.data.chooseDate!=null){
-      var startTime = this.data.chooseDate.start.re + " 14:00:00"
-      var endTime = this.data.chooseDate.end.re + " 12:00:00"
+      var cda = this.data.chooseDate;
+      var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
+      var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
+
+      var startTime = sdate + " 14:00:00"
+      var endTime = edate + " 12:00:00"
     }
     if (phone == "") {
       wx.showToast({

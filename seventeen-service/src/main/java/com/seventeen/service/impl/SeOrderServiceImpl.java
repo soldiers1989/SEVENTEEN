@@ -16,6 +16,7 @@ import com.seventeen.pay.wx.util.MyConfig;
 import com.seventeen.service.LockService;
 import com.seventeen.service.SeApartmentService;
 import com.seventeen.service.SeOrderService;
+import com.seventeen.service.SeUserPointService;
 import com.seventeen.util.DateUtil;
 import com.seventeen.util.IDGenerator;
 import com.seventeen.util.MyTimer;
@@ -69,7 +70,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeOrderService seOrderService;
     @Autowired
     private SeCouponMapper seCouponMapper;
-
+    @Autowired
+    private SeUserPointService seUserPointService;
 
     @Autowired
     private WxPay wxPay;
@@ -762,6 +764,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         return new Result(seOrder.getLockPwd());
     }
 
+    @Transactional
     @Override
     public void checkOut(String date) {
         try {
@@ -777,6 +780,19 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
                     seApartment.setStatus("2");
                     seApartmentMapper.updateByPrimaryKeySelective(seApartment);
+
+
+                    seUserPointService.getWXUserPoint(seOrder.getUserId());
+
+                    SeUserPoint seUserPoint=new SeUserPoint();
+                    seUserPoint.setId(IDGenerator.getId());
+                    seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
+                    seUserPoint.setPoint(seOrder.getPrice());
+                    seUserPoint.setUserId(seOrder.getUserId());
+                    seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
+                    seUserPointService.orderAddPoint(seUserPoint);
+
+
                 }
             }
         } catch (Exception e) {

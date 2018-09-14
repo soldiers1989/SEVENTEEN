@@ -108,4 +108,14 @@ public class SeUserPointServiceImpl implements SeUserPointService {
         }
         return result;
     }
+
+    @Override
+    public void orderAddPoint(SeUserPoint seUserPoint) {
+
+    }
+
+    @Override
+    public void getWXUserPoint(String userId) {
+
+    }
 }
