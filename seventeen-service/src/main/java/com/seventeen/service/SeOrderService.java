@@ -78,6 +78,8 @@ public interface SeOrderService {
 
     void upgradeCleanRoom();
 
+    void setOutTimeCalendarReduce(String payId);
+
     Result addLiver(SysUser sysUser,AddLiver addLiver);
 
     Result<String> getWifi(SysUser sysUser, String orderId);

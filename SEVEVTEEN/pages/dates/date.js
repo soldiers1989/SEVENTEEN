@@ -435,7 +435,10 @@ Page({
           for (var d = 0; d < data.data.data.length; d++) {
             let fullHouseDate = data.data.data[d].split('-');
             let month = fullHouseDate[1] - date[0][0].month;
-            let day = fullHouseDate[2] - 1;
+            if (month<0){
+              month = month+12
+            }
+            let day = fullHouseDate[2] - date[month][0].day;
             date[month][day].selected = true;
             date[month][day].live = '满房';
             date[month][day].canUse = 0;
@@ -521,20 +524,20 @@ Page({
       // 月份不同判断方法不同
       if (startDate[0] == month) {
         for (var d = startDay; d < day; d++) {
-          if (date[startDate[0]][d].canUse === 0) {
-            date = this.data.oldDate;
-            this.data.endDate = null;
+          // if (date[startDate[0]][d].canUse === 0) {
+          //   date = this.data.oldDate;
+          //   this.data.endDate = null;
 
-            if (date[startDate[month]][day].canUse === 0) {
-              date = this.data.oldDate;
-              date[month][day].live = "满房";
-              date[month][day].selected = true;
-            } else {
-              date[month][day].live = "";
-              date[month][day].selected = false;
-            }
-            return date;
-          }
+          //   if (date[month][day].canUse === 0) {
+          //     date = this.data.oldDate;
+          //     date[month][day].live = "满房";
+          //     date[month][day].selected = true;
+          //   } else {
+          //     date[month][day].live = "";
+          //     date[month][day].selected = true;
+          //   }
+          //   return date;
+          // }
           var selected = !date[startDate[0]][d].selected
           if (!flag) {
             selected = true;
@@ -545,19 +548,20 @@ Page({
       } else {
         for (var d = startDay; d < spEndDay; d++) {
           if (date[m][d]) {
-            if (date[startDate[0]][d].canUse === 0) {
-              date = this.data.oldDate;
-              this.data.endDate = null;
-              if (date[startDate[month]][day].canUse === 0) {
-                date = this.data.oldDate;
-                date[month][day].live = "满房";
-                date[month][day].selected = true;
-              } else {
-                date[month][day].live = "";
-                date[month][day].selected = false;
-              }
-              return date;
-            }
+            // if (date[startDate[0]][d].canUse === 0) {
+            //   // date = this.data.oldDate;
+            //   // this.data.endDate = null;
+            //   // if (date[month][day].canUse === 0) {
+            //   //   date = this.data.oldDate;
+            //   //   date[month][day].live = "满房";
+            //   //   date[month][day].selected = true;
+            //   // } else {
+            //   //   date[month][day].live = "";
+            //   //   date[month][day].selected = true;
+            //   // }
+            //   // return date;
+            //   date[month][day].selected = true;
+            // }
             var selected = !date[m][d].selected;
             if (!flag) {
               selected = true;

@@ -183,26 +183,29 @@ public class SeOrderServiceImpl implements SeOrderService {
             ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
 //            for (String date : orderDates) {
 //                if (!date.equals(DateUtil.nowDate())) {
-                    String[] planTime = orderInfo.getPlanTime().split("~");
+            String[] planTime = orderInfo.getPlanTime().split("~");
 
-                    String dates= LocalDate.now().format(dateTimeFormatter2);
-                    String inttime=dates+" "+planTime[0].trim()+":00";
-                    String ourtime=dates+" "+planTime[1].trim()+":00";
+            String dates = LocalDate.now().format(dateTimeFormatter2);
+            String inttime = dates + " " + planTime[0].trim() + ":00";
+            String ourtime = dates + " " + planTime[1].trim() + ":00";
 
-                    Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
-                    ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
-                    orderInfo.setRoomId(data.get(0));
+            Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
+            ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
+            orderInfo.setRoomId(data.get(0));
 //            System.out.println(apartmentByTime);
-                    String[] split = orderInfo.getPlanTime().split("~");
+            String[] split = orderInfo.getPlanTime().split("~");
 //            String[] split1 = split[0].split(":");
 //            String[] split2 = split[1].split(":");
-                    orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
-                    orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
+            orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
+            orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
-                    MyTimer timer = new MyTimer();
-                    timer.schedule(() -> {
-                        this.checkOut(ourtime);
-                    }, 1000);
+            Calendar instance = Calendar.getInstance();
+            instance.setTime(DateUtil.parseDateAndToDate(ourtime,DateUtil.DEFAULT_DATETIME_PATTERN));
+            MyTimer timer = new MyTimer();
+            timer.schedule(() -> {
+                this.checkOut(ourtime);
+                timer.cancel();
+            }, instance.getTime());
 //                }
 //            }
         }
@@ -303,7 +306,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
 
         setOrderCalendarAdd(orderId);
-//过时不支付
+
 
         //本系统业务下单生产订单ID
 
@@ -436,15 +439,16 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Override
     public Result getOrderDate(String roomType, SysUser sysUser) {
         Result result = new Result();
-
         try {
-            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
-            seApartments.size();
-            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-            seOrderCalendar.setRoomTypeId(roomType);
-            seOrderCalendar.setOrders(seApartments.size());
-            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
-            result.setData(seOrderCalendars);
+//            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
+//            seApartments.size();
+//            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+//            seOrderCalendar.setRoomTypeId(roomType);
+//            seOrderCalendar.setOrders(seApartments.size());
+//            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
+            ArrayList<String> strings = new ArrayList<>();
+            strings.add("2018-10-1");
+            result.setData(strings);
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -460,7 +464,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             SeOrderPay so = new SeOrderPay();
             so.setSeOrderId(order);
             SeOrderPay orderPay = seOrderPayMapper.selectOne(so);
-            String result_code="SUCCESS";
+            String result_code = "SUCCESS";
 //            String result_code = wxPay.cancelOrder(orderPay.getId());
             if (result_code.equals("SUCCESS")) {
                 seOrderPayMapper.updateCancel(orderPay.getId());
@@ -526,12 +530,12 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seOrderCalendar.setDay(dateArr[2]);
 
                     seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
-                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1<0?0:seOrderCalendar.getOrders() - 1);
+                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1 < 0 ? 0 : seOrderCalendar.getOrders() - 1);
                     seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
                 }
-            }else{
+            } else {
                 SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-                String time  = DateUtil.format(startDate,DateUtil.DEFAULT_DATE_PATTERN);
+                String time = DateUtil.format(startDate, DateUtil.DEFAULT_DATE_PATTERN);
                 String[] dateArr = time.split("-");
                 seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
                 seOrderCalendar.setYear(dateArr[0]);
@@ -539,28 +543,66 @@ public class SeOrderServiceImpl implements SeOrderService {
                 seOrderCalendar.setDay(dateArr[2]);
 
                 seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
-                seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1<0?0:seOrderCalendar.getOrders() - 1);
+                seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1 < 0 ? 0 : seOrderCalendar.getOrders() - 1);
                 seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
             }
         }
     }
 
-    public static void main(String[] args) {
-        String inTime = "2018-09-13 09:00:00";
-        String outTime = "2018-09-13 19:00:00";
-        LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-        LocalDate endDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
-        List<String> list = new ArrayList();
 
-        long distance = ChronoUnit.DAYS.between(startDate, endDate);
-        if (distance >= 1) {
-            Stream.iterate(startDate, d -> {
-                return d.plusDays(1);
-            }).limit(distance + 1).forEach(f -> {
-                list.add(f.toString());
-            });
+    /**
+     * 时租房离店后 日历表-1
+     *
+     * @param payId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setOutTimeCalendarReduce(String payId) {
+        List<SeOrder> seOrders = seOrderPayMapper.getOrder(payId);
+        for (SeOrder seOrder : seOrders) {
+            String priceTagId = seOrder.getPriceTagId();
+            SeTag seTag = new SeTag();
+            seTag.setId(priceTagId);
+            SeTag seTag1 = seTagMapper.selectByPrimaryKey(seTag);
+            if (seTag1.getName().contains("时租房")) {
+
+                String outTime = seOrder.getOutTime().replace(".0", "");
+                Calendar instance = Calendar.getInstance();
+                instance.setTime(DateUtil.parseDateAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+
+                MyTimer timer = new MyTimer();
+                timer.schedule(() -> {
+
+                    /**
+                     * 房间日历表-1
+                     */
+                    String apId = seOrder.getApId();
+                    SeApartment seApartment = new SeApartment();
+                    seApartment.setId(apId);
+                    seApartment = seApartmentMapper.selectByPrimaryKey(seApartment);
+                    String inTime = seOrder.getInTime().replace(".0", "");
+                    LocalDate startDate = DateUtil.toLocalDate(DateUtil.parseDateAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
+                    SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+                    String time = DateUtil.format(startDate, DateUtil.DEFAULT_DATE_PATTERN);
+                    String[] dateArr = time.split("-");
+                    seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
+                    seOrderCalendar.setYear(dateArr[0]);
+                    seOrderCalendar.setMonth(dateArr[1]);
+                    seOrderCalendar.setDay(dateArr[2]);
+                    seOrderCalendar = seOrderCalendarMapper.selectOne(seOrderCalendar);
+                    seOrderCalendar.setOrders(seOrderCalendar.getOrders() - 1 < 0 ? 0 : seOrderCalendar.getOrders() - 1);
+                    seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
+
+                    timer.cancel();
+                }, instance.getTime());
+
+            } else {
+                return;
+            }
+
         }
     }
+
     @Transactional(rollbackFor = Exception.class)
     public void setOrderCalendarAdd(String payId) {
         List<SeOrder> seOrders = seOrderPayMapper.getOrder(payId);
@@ -600,9 +642,9 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seOrderCalendar.setOrders(seOrderCalendar.getOrders() + 1);
                     seOrderCalendarMapper.updateByPrimaryKeySelective(seOrderCalendar);
                 }
-            }else{
+            } else {
                 SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-                String time  = DateUtil.format(startDate,DateUtil.DEFAULT_DATE_PATTERN);
+                String time = DateUtil.format(startDate, DateUtil.DEFAULT_DATE_PATTERN);
                 String[] dateArr = time.split("-");
                 seOrderCalendar.setRoomTypeId(seApartment.getRoomType());
                 seOrderCalendar.setYear(dateArr[0]);

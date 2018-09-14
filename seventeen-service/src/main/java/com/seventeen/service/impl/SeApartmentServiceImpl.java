@@ -135,7 +135,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             seApartment.setId(IDGenerator.getId());
             seApartment.setCreateBy(authentication.getName());
-            seApartment.setStatus("1");
+            seApartment.setStatus("2");
             seApartment.setCreateTime(DateUtil.now());
             seApartmentMapper.insert(seApartment);
 
@@ -164,8 +164,7 @@ public class SeApartmentServiceImpl implements SeApartmentService {
         try {
             SeApartment seApartment = new SeApartment();
             seApartment.setApNum(apNum);
-            seApartment.setStatus("1");
-            List<SeApartment> select = seApartmentMapper.select(seApartment);
+            List<SeApartment> select = seApartmentMapper.apartmentCheck(apNum);
             if (select.size() > 0) {
                 result.setData(flag = true);
             }

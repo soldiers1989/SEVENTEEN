@@ -76,6 +76,11 @@ public class WXConntroller  {
         if (checkSign(xmlString)) {
             if(result_code.equals("SUCCESS")) {
                 seOrderService.updateOrderStatus(out_trade_no);
+                /**
+                 * 对时租房的特殊处理
+                 */
+                seOrderService.setOutTimeCalendarReduce(out_trade_no);
+
 
                 SeOrderPay seOrderPay=new SeOrderPay();
                 seOrderPay.setId(out_trade_no);
