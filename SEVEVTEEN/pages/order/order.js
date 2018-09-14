@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
+
     roomId: "",
     price: 0,
     index: 0,
@@ -13,7 +13,7 @@ Page({
     index_sz: 0,
     imgUrl: app.globalData.ImgUrl,
     baseUrl: app.globalData.baseUrl,
-    wdayStr:"星期一",
+    wdayStr: "星期一",
     wdayEnd: "星期一",
     shizu: "钟点房3小时", //
 
@@ -124,7 +124,7 @@ Page({
     outmonth: '',
     outyear: '',
     couponIndex: 0,
-    couponPrice:0,
+    couponPrice: 0,
 
   },
   choseLiveDateTap: function(e) {
@@ -194,8 +194,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    
-    var date=new Date();
+
+    var date = new Date();
 
 
     var year = date.getFullYear();
@@ -206,10 +206,10 @@ Page({
     // console.log(outday)
     var outmonth = date.getMonth() + 1;
     var outyear = date.getFullYear();
-    
-   
-    
- 
+
+
+
+
     this.setData({
       roomId: options.roomId,
       price: options.price,
@@ -221,7 +221,7 @@ Page({
       outday: outday,
       outmonth: outmonth,
       outyear: outyear
-    
+
     })
 
     //获取用户是否已经做了实名制
@@ -274,14 +274,14 @@ Page({
     var that = this;
     var cda = this.data.chooseDate;
 
-    
+
 
     if (cda != null) {
       var dateStr = new Date();
-      dateStr.setFullYear(cda.start.year, cda.start.month-1, cda.start.day);
+      dateStr.setFullYear(cda.start.year, cda.start.month - 1, cda.start.day);
 
       var dateEnd = new Date();
-      dateEnd.setFullYear(cda.end.year, cda.end.month-1, cda.end.day);
+      dateEnd.setFullYear(cda.end.year, cda.end.month - 1, cda.end.day);
       var weekday = new Array(7)
       weekday[0] = "星期天"
       weekday[1] = "星期一"
@@ -446,18 +446,17 @@ Page({
     }
 
     var couponid = "0";
-    if (this.data.coupon != null && this.data.length>0) {
+    if (this.data.coupon != null && this.data.length > 0) {
       couponid = this.data.coupon[this.data.couponIndex].id;
     }
 
-    var roomType="";
+    var roomType = "";
     var planTime = this.data.array[this.data.index];
-    if (this.data.roomName == this.data.shizu){
+    if (this.data.roomName == this.data.shizu) {
       var price = this.data.price;
       roomType = this.data.roomId;
       planTime = this.data.array2[this.data.index_sz];
-    }
-    else{
+    } else {
       var price = this.data.price * this.data.array1[this.data.index1];
       roomType = this.data.roomId;
     }
@@ -467,7 +466,7 @@ Page({
 
 
 
-    if (this.data.chooseDate!=null){
+    if (this.data.chooseDate != null) {
       var cda = this.data.chooseDate;
       var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + cda.start.day;
       var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
@@ -527,19 +526,23 @@ Page({
               console.log(res);
               wx.navigateTo({
                 url: '/pages/my/myOrder/myOrder'
-            
+
               })
 
             },
             'fail': function(res) {}
           })
-        } else if (res.data.resultCode == 500){
+        } else if (res.data.resultCode == 500) {
           wx.showToast({
             title: '当前日期没有空房',
             icon: 'none'
           })
+        } else {
+          wx.showToast({
+            title: '系统异常',
+            icon: 'none'
+          })
         }
-
       },
       fail: function(res) {},
       complete: function(res) {},
@@ -566,8 +569,8 @@ function getIsVerify(that, token) {
   })
 }
 
-function getCoupon(that, sdate, edate,price){
-  
+function getCoupon(that, sdate, edate, price) {
+
   wx.request({
     url: that.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
     data: {
@@ -582,12 +585,14 @@ function getCoupon(that, sdate, edate,price){
     },
     method: 'GET',
     // responseType: 'json',
-    success: function (res) {
+    success: function(res) {
       console.log(res)
-      that.setData({
-        coupon: res.data.data,
-        couponPrice: res.data.data[0].price
-      })
+      if (res.data.data.length > 0) {
+        that.setData({
+          coupon: res.data.data,
+          couponPrice: res.data.data[0].price
+        })
+      }
     }
   })
 
