@@ -181,8 +181,7 @@ public class SeOrderServiceImpl implements SeOrderService {
             LocalDate now = LocalDate.now();
             Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(), sysUser);
             ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
-//            for (String date : orderDates) {
-//                if (!date.equals(DateUtil.nowDate())) {
+//            orderDates.contains()
             String[] planTime = orderInfo.getPlanTime().split("~");
 
             String dates = LocalDate.now().format(dateTimeFormatter2);
@@ -200,19 +199,18 @@ public class SeOrderServiceImpl implements SeOrderService {
             orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
             Calendar instance = Calendar.getInstance();
-            instance.setTime(DateUtil.parseDateAndToDate(ourtime,DateUtil.DEFAULT_DATETIME_PATTERN));
+            instance.setTime(DateUtil.parseDateAndToDate(ourtime, DateUtil.DEFAULT_DATETIME_PATTERN));
             MyTimer timer = new MyTimer();
             timer.schedule(() -> {
                 this.checkOut(ourtime);
                 timer.cancel();
             }, instance.getTime());
-//                }
-//            }
         }
 
-//        System.out.println("订单号:" + orderId);
 
+//        System.out.println("订单号:" + orderId);
 //        System.out.println(LocalDateTime.now().format(dateTimeFormatter));
+
         Result result = new Result();
         SeOrderPay orderPay = new SeOrderPay();
         orderPay.setId(orderId);
@@ -440,14 +438,13 @@ public class SeOrderServiceImpl implements SeOrderService {
     public Result getOrderDate(String roomType, SysUser sysUser) {
         Result result = new Result();
         try {
-//            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
-//            seApartments.size();
-//            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
-//            seOrderCalendar.setRoomTypeId(roomType);
-//            seOrderCalendar.setOrders(seApartments.size());
-//            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
+            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
+            seApartments.size();
+            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+            seOrderCalendar.setRoomTypeId(roomType);
+            seOrderCalendar.setOrders(seApartments.size());
+            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
             ArrayList<String> strings = new ArrayList<>();
-            strings.add("2018-10-1");
             result.setData(strings);
         } catch (Exception e) {
             logger.error("e", e);

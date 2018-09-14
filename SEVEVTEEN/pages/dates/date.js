@@ -53,10 +53,10 @@ Page({
         end = date[enddate[0]][enddate[1]];
         start = date[startdate[0]][startdate[1]];
         time = this.data.startDate + "-" + this.data.endDate
-       
+
         sDate = start.date;
         eDate = end.date;
-       
+
         // var ssDate = new Date(2018, 8, 21)
         var start_date = new Date(start.re.replace(/-/g, "/"));
         var end_date = new Date(end.re.replace(/-/g, "/"));
@@ -77,7 +77,7 @@ Page({
         end: end,
         eDate: eDate,
         day: day
-      
+
       }
 
       wx.request({
@@ -87,13 +87,13 @@ Page({
           'Authorization': 'Bearer ' + wx.getStorageSync('token'),
         },
         // data: { pageInfo: pageInfo  },
-        success: function (data) {
+        success: function(data) {
           if (data.data.resultCode === 200) {
             //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
 
             prevPage.setData({
               chooseDate: chooseDate,
-              roomList:data.data.data
+              roomList: data.data.data
             })
             wx.navigateBack({
               url: '../order/order'
@@ -106,7 +106,7 @@ Page({
             })
           }
         },
-        fail: function () {
+        fail: function() {
           wx.showToast({
             title: '网络异常',
             icon: 'none',
@@ -372,6 +372,9 @@ Page({
     // }
 
     if (this.data.startDate && this.data.endDate && this.data.startDate != this.data.endDate) {
+      if (date[month][day].canUse === 0) {
+        return;
+      }
       this.dateData();
       var date = this.data.date;
       date[month][day].selected = !date[month][day].selected;
@@ -413,7 +416,8 @@ Page({
       this.data.endDate = null;
       date[month][day].live = "";
     } else {
-      date = this.setDate(month, day);
+      this.setDate(month, day);
+      return null;
     };
     //设置当前样式
     this.setData({
@@ -435,8 +439,8 @@ Page({
           for (var d = 0; d < data.data.data.length; d++) {
             let fullHouseDate = data.data.data[d].split('-');
             let month = fullHouseDate[1] - date[0][0].month;
-            if (month<0){
-              month = month+12
+            if (month < 0) {
+              month = month + 12
             }
             let day = fullHouseDate[2] - date[month][0].day;
             date[month][day].selected = true;
@@ -467,13 +471,13 @@ Page({
   },
   setDate: function(month, day) {
     var date = this.data.date;
+    let oldDate = this.data.date;
+
     this.setData({
       oldDate: this.data.date
     });
 
-    if (date[month][day].canUse === 1) {
-      date[month][day].live = "离店";
-    }
+
     this.data.endDate = null;
 
 
@@ -509,7 +513,7 @@ Page({
     } else {
       if (date[month][day].canUse === 0) {
         this.data.endDate = null;
-      }else{
+      } else {
         this.data.endDate = month + '/' + day;
       }
     }
@@ -517,6 +521,7 @@ Page({
 
 
     var spEndDay = 34;
+    var flag = true;
 
     for (var m = startDate[0]; m <= month; m++) {
       var days = date[m];
@@ -524,20 +529,9 @@ Page({
       // 月份不同判断方法不同
       if (startDate[0] == month) {
         for (var d = startDay; d < day; d++) {
-          // if (date[startDate[0]][d].canUse === 0) {
-          //   date = this.data.oldDate;
-          //   this.data.endDate = null;
-
-          //   if (date[month][day].canUse === 0) {
-          //     date = this.data.oldDate;
-          //     date[month][day].live = "满房";
-          //     date[month][day].selected = true;
-          //   } else {
-          //     date[month][day].live = "";
-          //     date[month][day].selected = true;
-          //   }
-          //   return date;
-          // }
+          if (date[m][d].canUse === 0) {
+            flag = false;
+          }
           var selected = !date[startDate[0]][d].selected
           if (!flag) {
             selected = true;
@@ -548,20 +542,9 @@ Page({
       } else {
         for (var d = startDay; d < spEndDay; d++) {
           if (date[m][d]) {
-            // if (date[startDate[0]][d].canUse === 0) {
-            //   // date = this.data.oldDate;
-            //   // this.data.endDate = null;
-            //   // if (date[month][day].canUse === 0) {
-            //   //   date = this.data.oldDate;
-            //   //   date[month][day].live = "满房";
-            //   //   date[month][day].selected = true;
-            //   // } else {
-            //   //   date[month][day].live = "";
-            //   //   date[month][day].selected = true;
-            //   // }
-            //   // return date;
-            //   date[month][day].selected = true;
-            // }
+            if (date[m][d].canUse === 0) {
+              flag = false;
+            }
             var selected = !date[m][d].selected;
             if (!flag) {
               selected = true;
@@ -579,6 +562,22 @@ Page({
         }
       }
     }
-    return date;
+
+    if (date[month][day].canUse === 1) {
+      date[month][day].live = "离店";
+    }
+    if (flag === false) {
+      this.dateData();
+      this.setData({
+        startDate: null,
+        endDate: null
+      })
+      return null;
+    }
+
+    //设置当前样式
+    this.setData({
+      date
+    })
   }
 })
