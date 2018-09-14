@@ -2,7 +2,6 @@ package com.seventeen.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.seventeen.bean.SeShop;
 import com.seventeen.bean.SeUserPoint;
 import com.seventeen.bean.SeUserPointLog;
 import com.seventeen.bean.UserPoint;
@@ -17,8 +16,6 @@ import com.seventeen.util.IDGenerator;
 import com.seventeen.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,11 +108,19 @@ public class SeUserPointServiceImpl implements SeUserPointService {
 
     @Override
     public void orderAddPoint(SeUserPoint seUserPoint) {
-
+        seUserPointMapper.insert(seUserPoint);
     }
 
     @Override
-    public void getWXUserPoint(String userId) {
+    public SeUserPoint getWXUserPoint(String userId) {
+        SeUserPoint seUserPoint = new SeUserPoint();
+        seUserPoint.setUserId(userId);
+        SeUserPoint seUserPoint1 = seUserPointMapper.selectOne(seUserPoint);
+        return seUserPoint1;
+    }
 
+    @Override
+    public void upDateUserPoint(SeUserPoint wxUserPoint) {
+        seUserPointMapper.updateByPrimaryKey(wxUserPoint);
     }
 }
