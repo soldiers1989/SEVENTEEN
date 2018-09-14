@@ -40,6 +40,7 @@ public interface SeUserPointService {
 
     void orderAddPoint(SeUserPoint seUserPoint);
 
-    void getWXUserPoint(String userId);
+    SeUserPoint getWXUserPoint(String userId);
 
+    void upDateUserPoint(SeUserPoint wxUserPoint);
 }

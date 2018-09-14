@@ -75,7 +75,12 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeUserPointService seUserPointService;
 
     @Autowired
+    private SeUserPointLogMapper seUserPointLogMapper;
+
+    @Autowired
     private WxPay wxPay;
+
+
 
     /**
      * @param status
@@ -796,17 +801,36 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seApartmentMapper.updateByPrimaryKeySelective(seApartment);
 
 
-                    seUserPointService.getWXUserPoint(seOrder.getUserId());
-
-                    SeUserPoint seUserPoint=new SeUserPoint();
-                    seUserPoint.setId(IDGenerator.getId());
-                    seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
-                    seUserPoint.setPoint(seOrder.getPrice());
-                    seUserPoint.setUserId(seOrder.getUserId());
-                    seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
-                    seUserPointService.orderAddPoint(seUserPoint);
+                    SeUserPoint wxUserPoint = seUserPointService.getWXUserPoint(seOrder.getUserId());
 
 
+                    if(wxUserPoint==null) {
+                        SeUserPoint seUserPoint = new SeUserPoint();
+                        seUserPoint.setId(IDGenerator.getId());
+                        seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
+                        seUserPoint.setPoint(seOrder.getPrice());
+                        seUserPoint.setUserId(seOrder.getUserId());
+                        seUserPoint.setCreateTime(DateUtil.format(LocalDateTime.now()));
+                        seUserPointService.orderAddPoint(seUserPoint);
+
+                    }else{
+                        Integer point = Integer.valueOf(wxUserPoint.getPoint());
+                        point=point+Integer.valueOf(seOrder.getPrice());
+                        wxUserPoint.setPoint(String.valueOf(point));
+                        wxUserPoint.setUpdateTime(DateUtil.format(LocalDateTime.now()));
+                        seUserPointService.upDateUserPoint(wxUserPoint);
+                    }
+
+                    SeUserPointLog pointLog=new SeUserPointLog();
+                    pointLog.setId(IDGenerator.getId());
+                    pointLog.setUserId(seOrder.getUserId());
+                    pointLog.setCreateBy(seOrder.getUserId());
+                    pointLog.setCreateTime(DateUtil.format(LocalDateTime.now()));
+                    pointLog.setOrderId(seOrder.getId());
+                    pointLog.setPoint("+"+seOrder.getPrice());
+                    pointLog.setRemark("订单完成加分");
+                    pointLog.setUpdateTime(DateUtil.format(LocalDateTime.now()));
+                    seUserPointLogMapper.insert(pointLog);
                 }
             }
         } catch (Exception e) {
