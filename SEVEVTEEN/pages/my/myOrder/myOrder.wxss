@@ -71,7 +71,7 @@ page {
   width: 100%;
   margin-top: 30px;
   border-left: 1px solid #bcbcbc;
-  height: 180px;
+  height: 192px;
   background: white;
 }
 .order_title{
