@@ -514,7 +514,7 @@ Page({
       responseType: 'text',
       success: function(res) {
         console.log(res)
-        if (res.statusCode == 200) {
+        if (res.data.resultCode == 200) {
           var dd = res.data.data;
           console.log()
           wx.requestPayment({
@@ -533,7 +533,7 @@ Page({
             },
             'fail': function(res) {}
           })
-        } else if (res.statusCode == -200){
+        } else if (res.data.resultCode == -200){
           wx.showToast({
             title: '当前日期没有空房',
             icon: 'none'

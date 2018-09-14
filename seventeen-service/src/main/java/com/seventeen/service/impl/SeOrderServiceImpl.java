@@ -181,6 +181,10 @@ public class SeOrderServiceImpl implements SeOrderService {
         return result;
     }
 
+    public static void main(String[] args) {
+        String inTime = DateUtil.format(DateUtil.parseAndToDate("2018-09-27 14:00:00",DateUtil.DEFAULT_DATETIME_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
+        System.out.println(inTime);
+    }
     @Override
     @Transactional
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
@@ -325,12 +329,12 @@ public class SeOrderServiceImpl implements SeOrderService {
             inTime = LocalDate.now().format(dateTimeFormatter2);
             outTime = LocalDate.now().plusDays(1).format(dateTimeFormatter2);
         }else{
-            inTime = DateUtil.format(DateUtil.parseDateAndToDate(orderInfo.getStartTime(),DateUtil.DEFAULT_DATE_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
-            outTime = DateUtil.format(DateUtil.parseDateAndToDate(orderInfo.getEndTime(),DateUtil.DEFAULT_DATE_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
+            inTime = DateUtil.format(DateUtil.parseAndToDate(orderInfo.getStartTime(),DateUtil.DEFAULT_DATETIME_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
+            outTime = DateUtil.format(DateUtil.parseAndToDate(orderInfo.getEndTime(),DateUtil.DEFAULT_DATETIME_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
         }
         Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(),inTime,outTime);
         ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
-        if(orderDates.isEmpty()) throw  new ServiceException(ResultCode.FAIL,"没有空房");
+        if(!orderDates.isEmpty()) throw  new ServiceException(ResultCode.FAIL,"没有空房");
 
         //本系统业务下单生产订单ID
         //本次订单随机串
@@ -373,6 +377,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
         } catch (Exception e) {
             logger.error("下的错误", e);
+            throw  new ServiceException(ResultCode.FAIL,e.getMessage());
         }
         return ResponseEntity.ok(result);
     }
