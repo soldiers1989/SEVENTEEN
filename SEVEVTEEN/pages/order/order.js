@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    
     roomId: "",
     price: 0,
     index: 0,
@@ -122,7 +123,8 @@ Page({
     outday: '',
     outmonth: '',
     outyear: '',
-    couponIndex: 0
+    couponIndex: 0,
+    couponPrice:0,
 
   },
   choseLiveDateTap: function(e) {
@@ -302,26 +304,7 @@ Page({
       var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + cda.end.day
       // var sdate = "" + cda.start.year + "-" + (cda.start.month.toString().length == 1 ? "0" + cda.start.month : cda.start.month) + "-" + (cda.start.day.toString().length == 1 ? "0" + cda.start.day : cda.start.day);
       // var edate = "" + cda.end.year + "-" + ("" + cda.end.month.toString().length == 1 ? "0" + cda.end.month : cda.end.month) + "-" + ("" + cda.end.day.toString().length == 1 ? "0" + cda.end.day : cda.end.day)
-      wx.request({
-        url: this.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
-        data: {
-          roomType: this.data.tagId,
-          startTime: sdate,
-          endTime: edate
-        },
-        header: {
-          "Authorization": "Bearer " + wx.getStorageSync('token')
-          // "Content-Type": "application/json"
-        },
-        method: 'GET',
-        // responseType: 'json',
-        success: function(res) {
-          console.log(res)
-          that.setData({
-            coupon: res.data.data
-          })
-        }
-      })
+      getCoupon(that, sdate, edate, that.data.price * that.data.array1[that.data.index1])
     }
   },
 
@@ -569,6 +552,33 @@ function getIsVerify(that, token) {
       })
     }
   })
+}
+
+function getCoupon(that, sdate, edate,price){
+  
+  wx.request({
+    url: that.data.baseUrl + '/coupon/wx/getCouponByOrderCanUse',
+    data: {
+      roomType: that.data.tagId,
+      startTime: sdate,
+      endTime: edate,
+      price: price
+    },
+    header: {
+      "Authorization": "Bearer " + wx.getStorageSync('token')
+      // "Content-Type": "application/json"
+    },
+    method: 'GET',
+    // responseType: 'json',
+    success: function (res) {
+      console.log(res)
+      that.setData({
+        coupon: res.data.data,
+        couponPrice: res.data.data[0].price
+      })
+    }
+  })
+
 }
 
 

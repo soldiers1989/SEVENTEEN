@@ -184,7 +184,7 @@ public class SeOrderServiceImpl implements SeOrderService {
 
             Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType());
             ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
-            orderDates.contains()
+            //orderDates.contains();
 
             String[] planTime = orderInfo.getPlanTime().split("~");
 

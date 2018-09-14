@@ -18,8 +18,8 @@ wxApiInterceptors({
 
 App({
   globalData: {
-    //  baseUrl:"https://www.17inn.com/seventeen",
-    baseUrl:"http://localhost",
+     baseUrl:"https://www.17inn.com/seventeen",
+    // baseUrl:"http://localhost",
     ImgUrl:"https://www.17inn.com/img/wxApp"
   }
 })

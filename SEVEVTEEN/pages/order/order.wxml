@@ -31,7 +31,7 @@
   </view>
 </view>
 <view wx:else>
-  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180712173607612892549' catchtap='choseLiveDateTap'>
+  <view class='ioDate' data-room-type-id='{{roomId}}' data-shop-id='20180904100652546305006' catchtap='choseLiveDateTap'>
     <view class='ioDate-title'>
       <text>入住日期</text>
       <text>{{chooseDate==null?1:chooseDate.day}}晚</text>
@@ -133,7 +133,7 @@
   <view class='warn'>
     <text>
       预定须知:\n
-      >\t订单确认并支付成功后,不可取消及退款,房间降整晚保留,请及时入住。\n
+      >\t订单确认并支付成功后,不可取消及退款,房间将整晚保留,请及时入住。\n
       >\t入住人姓名需填写真实姓名,到店需刷身份证验证入住
     </text>
   </view>
@@ -141,8 +141,8 @@
 
 <view class='addOrder'>
   <view class='order-money'>
-    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t{{price*array1[index1]}}</text>
-    <text class='order-money-2'>已减:\t¥ 0</text>
+    <text class='order-money-1'><text style='font-size:14px;'>¥</text>\t{{(price*array1[index1])-couponPrice}}</text>
+    <text class='order-money-2'>已减:\t¥ {{couponPrice}}</text>
   </view>
   <view class='order-pay'>
     <text catchtap='toPay'>去支付</text>

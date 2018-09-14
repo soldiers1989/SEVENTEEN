@@ -125,7 +125,7 @@ Page({
       success: function(res) {
 
         var _obj = that.data.routers;
-        _obj[3].flag = res.data.data == true ? false : true;
+        _obj[3].flag = res.data.data.isVerify == true ? false : true;
         that.setData({
           routers: _obj
         })
@@ -144,7 +144,25 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    var that = this;
+    var token = wx.getStorageSync('token');
     // loadIsVerify();
+    wx.request({
+      url: app.globalData.baseUrl + "/rlsb/isVerify",
+      method: "GET",
+      header: {
+        "Authorization": "Bearer " + token
+      },
+      success: function (res) {
+
+        var _obj = that.data.routers;
+        _obj[3].flag = res.data.data.isVerify == true ? false : true;
+        that.setData({
+          routers: _obj
+        })
+      }
+    })
+
   },
 
   /**
