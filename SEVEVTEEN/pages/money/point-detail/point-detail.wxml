@@ -1,17 +1,25 @@
 <view class='point-container'>
-  <text class='balance-point'>当前积分 :￥0.00 </text>
-  <view class='point-detail-container'>
-    <view class='point-container'> 
-      <text class='point-name'>离店送积分</text>
-      <text class='point-date'>2017-10-08</text>
+  <view wx:if="userPointDto!=null">
+    <text class='balance-point'>当前积分 :{{userPointDto.point}} </text>
+    <view wx:for="{{userPointDto.seUserPointLogs}}" wx:key="key" wx:for-item="itemStar" wx:for-index="idx">
+      <view class='point-detail-container'>
+        <view class='point-container'>
+          <text class='point-name'>{{itemStar.remark}}</text>
+          <text class='point-date'>{{itemStar.updateTime}}</text>
+        </view>
+        <text class='point-value'>{{itemStar.point}}</text>
+      </view>
     </view>
-    <text class='point-value'>+200</text>
   </view>
-  <view class='point-detail-container'>
-    <view class='point-container'> 
-      <text class='point-name'>积分商城兑换</text>
-      <text class='point-date'>2017-10-08</text>
+  <view wx:else>
+    <text class='balance-point'>当前积分 :0 </text>
+    <view class='point-detail-container'>
+      <view class='point-container'>
+        <text class='point-name'>离店送积分</text>
+        <text class='point-date'>2000-01-01</text>
+      </view>
+      <text class='point-value'>+0</text>
     </view>
-    <text class='point-value'>-5000</text>
+
   </view>
 </view>

@@ -43,4 +43,7 @@ public interface SeUserPointService {
     SeUserPoint getWXUserPoint(String userId);
 
     void upDateUserPoint(SeUserPoint wxUserPoint);
+
+
+    Result<UserPoint> getSeUserPointDetailList(String id);
 }

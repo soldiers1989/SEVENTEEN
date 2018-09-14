@@ -44,4 +44,20 @@ public interface SeUserPointMapper extends CoreMapper<SeUserPoint>{
             "AND sup.id = #{id}" +
             "</script>")
     UserPoint getSeUserPoint(@Param("id") String id);
+
+    @Select("<script> SELECT\n" +
+            "\tsup.id,\n" +
+            "\tsu.username userName,\n" +
+            "\tsu.id userId,\n" +
+            "\tsup.point,\n" +
+            "\tsup.update_time updateTime\n" +
+            "FROM\n" +
+            "\tse_user_point sup,\n" +
+            "\tsys_user su\n" +
+            "WHERE\n" +
+            "\t1 = 1\n" +
+            "AND su.id = sup.user_id " +
+            "AND sup.user_id = #{userId}" +
+            "</script>")
+    UserPoint getSeUserPoint1(String userId);
 }

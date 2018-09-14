@@ -123,4 +123,23 @@ public class SeUserPointServiceImpl implements SeUserPointService {
     public void upDateUserPoint(SeUserPoint wxUserPoint) {
         seUserPointMapper.updateByPrimaryKey(wxUserPoint);
     }
+
+    @Override
+    public Result<UserPoint> getSeUserPointDetailList(String userId) {
+        Result<UserPoint> result = new Result<>();
+        try {
+            UserPoint userPoints = seUserPointMapper.getSeUserPoint1(userId);
+            if(userPoints==null)
+                return result;
+            SeUserPointLog seUserPointLog = new SeUserPointLog();
+            seUserPointLog.setUserId(userId);
+            List<SeUserPointLog> seUserPointLogs = seUserPointLogMapper.select(seUserPointLog);
+            userPoints.setSeUserPointLogs(seUserPointLogs);
+            result.setData(userPoints);
+        } catch (Exception e) {
+            log.error("error", e);
+            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return result;
+    }
 }

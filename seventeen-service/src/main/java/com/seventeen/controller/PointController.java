@@ -1,8 +1,10 @@
 package com.seventeen.controller;
 
 
+import com.seventeen.bean.SeUserPoint;
 import com.seventeen.bean.SeUserPointLog;
 import com.seventeen.bean.UserPoint;
+import com.seventeen.bean.core.SysUser;
 import com.seventeen.core.Result;
 import com.seventeen.service.SeUserPointService;
 import com.seventeen.util.PageInfo;
@@ -12,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,4 +54,25 @@ public class PointController {
 	}
 
 
+    @GetMapping("/userPoint")
+    @ApiOperation(value = "WX获取用户积分信息")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity getSeUserPointDetail(@AuthenticationPrincipal SysUser sysUser) {
+        Result result=new Result();
+        SeUserPoint userPoint = seUserPointService.getWXUserPoint(sysUser.getId());
+        Integer point=0;
+        if(userPoint!=null)
+            point=Integer.valueOf(userPoint.getPoint());
+        result.setData(point);
+        return ResponseEntity.ok(result);
+    }
+
+
+    @GetMapping("/detailList")
+    @ApiOperation(value = "获取用户积分信息")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer token", paramType = "header", required = true, defaultValue = "Bearer ")
+    public ResponseEntity getSeUserPointDetailList(@AuthenticationPrincipal SysUser sysUser) {
+        Result<UserPoint> userPoint = seUserPointService.getSeUserPointDetailList(sysUser.getId());
+        return ResponseEntity.ok(userPoint);
+    }
 }

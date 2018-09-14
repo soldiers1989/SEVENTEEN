@@ -459,7 +459,7 @@ Page({
     }
     else{
       var price = this.data.price * this.data.array1[this.data.index1];
-
+      roomType = this.data.roomId;
     }
 
     var userInfo = this.data.userInfo;
