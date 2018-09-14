@@ -334,7 +334,7 @@ public class SeOrderServiceImpl implements SeOrderService {
         }
         Result orderDate = seOrderService.getOrderDate(orderInfo.getRoomType(),inTime,outTime);
         ArrayList<String> orderDates = (ArrayList<String>) orderDate.getData();
-        if(!orderDates.isEmpty()) throw  new ServiceException(ResultCode.FAIL,"没有空房");
+        if(!orderDates.isEmpty()) throw  new ServiceException(ResultCode.INTERNAL_SERVER_ERROR,"没有空房");
 
         //本系统业务下单生产订单ID
         //本次订单随机串
