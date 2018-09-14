@@ -533,6 +533,11 @@ Page({
             },
             'fail': function(res) {}
           })
+        } else if (res.statusCode == -200){
+          wx.showToast({
+            title: '当前日期没有空房',
+            icon: 'none'
+          })
         }
 
       },
