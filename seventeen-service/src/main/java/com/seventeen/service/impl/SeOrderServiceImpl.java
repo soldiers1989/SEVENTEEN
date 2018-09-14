@@ -444,14 +444,32 @@ public class SeOrderServiceImpl implements SeOrderService {
             seOrderCalendar.setRoomTypeId(roomType);
             seOrderCalendar.setOrders(seApartments.size());
             List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
-            ArrayList<String> strings = new ArrayList<>();
-            result.setData(strings);
+            result.setData(seOrderCalendars);
         } catch (Exception e) {
             logger.error("e", e);
             throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return result;
     }
+
+//    @Override
+//    public Result getOrderDateByTime(String roomType) {
+//        Result result = new Result();
+//        try {
+//            ArrayList seApartments = seApartmentMapper.getCanUseApartments(roomType);
+//            seApartments.size();
+//            SeOrderCalendar seOrderCalendar = new SeOrderCalendar();
+//            seOrderCalendar.setRoomTypeId(roomType);
+//            seOrderCalendar.setOrders(seApartments.size());
+//            List<String> seOrderCalendars = seOrderCalendarMapper.getOrderDate(seOrderCalendar);
+//            ArrayList<String> strings = new ArrayList<>();
+//            result.setData(strings);
+//        } catch (Exception e) {
+//            logger.error("e", e);
+//            throw new ServiceException(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+//        }
+//        return result;
+//    }
 
     @Transactional
     @Override
