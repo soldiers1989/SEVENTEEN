@@ -42,4 +42,6 @@ public interface SeCouponMapper extends CoreMapper<SeCoupon> {
 
     ArrayList<SeCoupon> getCouponByOrderCanUse(@Param("userId") String id, @Param("roomType") String roomType, @Param("containWeekEnd") int containWeekEnd);
 
+    @Update("UPDATE `se_user_coupon` SET `status`=#{status},update_time=#{updateTime} WHERE user_id=#{userId} AND coupon_id={couponId}")
+    void updateCouponStatus(@Param("status") String status,@Param("updateTime") String updateTime,@Param("userId") String userId,@Param("couponId") String couponId);
 }

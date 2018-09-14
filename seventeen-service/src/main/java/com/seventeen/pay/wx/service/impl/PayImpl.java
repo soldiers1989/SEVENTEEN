@@ -52,8 +52,6 @@ public class PayImpl implements WxPay {
             Map<String, String> refund = wxpay.refund(data);
             System.out.println(JSON.toJSONString(refund));
 
-
-
         return refund.get("result_code");
     }
 

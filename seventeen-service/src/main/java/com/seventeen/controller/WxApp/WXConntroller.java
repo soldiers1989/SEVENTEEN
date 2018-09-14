@@ -10,6 +10,8 @@ import com.seventeen.pay.wx.util.PayCommonUtil;
 import com.seventeen.pay.wx.util.XMLUtil;
 import com.seventeen.service.LockService;
 import com.seventeen.service.SeOrderService;
+import com.seventeen.util.DateUtil;
+import com.seventeen.util.MyTimer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +84,8 @@ public class WXConntroller  {
                 seOrderService.setOutTimeCalendarReduce(out_trade_no);
 
 
+
+
                 SeOrderPay seOrderPay=new SeOrderPay();
                 seOrderPay.setId(out_trade_no);
                 List<SeOrderPay> list = seOrderPayMapper.select(seOrderPay);
@@ -101,7 +105,19 @@ public class WXConntroller  {
                             Integer.valueOf(seOrder.getOutTime().substring(11, 13)), 0, 0);
 
 //                    lockService.updataLockPassWord(seOrder.getApId(),start,out,Integer.valueOf(seOrder.getLockPwd()));
+
+                    /**
+                     * 订单到点自动完成
+                     */
+
+                    MyTimer timer = new MyTimer();
+                    timer.schedule(() -> {
+                        seOrderService.checkOut(DateUtil.format(out));
+                        timer.cancel();
+                    },  DateUtil.toDate(out));
+
                 }
+
 
 
 
@@ -120,17 +136,20 @@ public class WXConntroller  {
 
     }
 
-    public static void main(String[] args) {
-        String s="2018-07-25 14:00:00";
-        LocalDateTime of = LocalDateTime.of(
-                Integer.valueOf(s.substring(0, 4)),
-                Integer.valueOf(s.substring(5, 7)),
-                Integer.valueOf(s.substring(8, 10)),
-                Integer.valueOf(s.substring(11, 13)), 0, 0);
-        System.out.println(of);
-        System.out.println(System.currentTimeMillis());
-        System.out.println();
-    }
+
+
+
+//    public static void main(String[] args) {
+//        String s="2018-07-25 14:00:00";
+//        LocalDateTime of = LocalDateTime.of(
+//                Integer.valueOf(s.substring(0, 4)),
+//                Integer.valueOf(s.substring(5, 7)),
+//                Integer.valueOf(s.substring(8, 10)),
+//                Integer.valueOf(s.substring(11, 13)), 0, 0);
+//        System.out.println(of);
+//        System.out.println(System.currentTimeMillis());
+//        System.out.println();
+//    }
 
     private boolean checkSign(String xmlString) {
 

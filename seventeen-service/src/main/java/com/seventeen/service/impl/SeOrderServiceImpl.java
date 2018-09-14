@@ -67,6 +67,8 @@ public class SeOrderServiceImpl implements SeOrderService {
     private SeApartmentService seApartmentService;
     @Autowired
     private SeOrderService seOrderService;
+    @Autowired
+    private SeCouponMapper seCouponMapper;
 
 
     @Autowired
@@ -192,20 +194,11 @@ public class SeOrderServiceImpl implements SeOrderService {
             Result apartmentByTime = seApartmentService.getApartmentByTime(inttime, ourtime, orderInfo.getRoomType());
             ArrayList<String> data = (ArrayList<String>) apartmentByTime.getData();
             orderInfo.setRoomId(data.get(0));
-//            System.out.println(apartmentByTime);
             String[] split = orderInfo.getPlanTime().split("~");
-//            String[] split1 = split[0].split(":");
-//            String[] split2 = split[1].split(":");
             orderInfo.setStartTime(now + " " + split[0].trim() + ":00");
             orderInfo.setEndTime(now + " " + split[1].trim() + ":00");
 
-            Calendar instance = Calendar.getInstance();
-            instance.setTime(DateUtil.parseDateAndToDate(ourtime,DateUtil.DEFAULT_DATETIME_PATTERN));
-            MyTimer timer = new MyTimer();
-            timer.schedule(() -> {
-                this.checkOut(ourtime);
-                timer.cancel();
-            }, instance.getTime());
+
 //                }
 //            }
         }
@@ -304,8 +297,18 @@ public class SeOrderServiceImpl implements SeOrderService {
             ol.setIdCard(seUserAttestation.getIdCode());
             seOrderLiverMapper.insert(ol);
         }
+        //优惠券
+        if(orderInfo.getCouponId()!=null&&!orderInfo.getCouponId().trim().equals("")&&!orderInfo.getCouponId().equals("0"))
+            seCouponMapper.updateCouponStatus("0",LocalDateTime.now().format(dateTimeFormatter),sysUser.getId(),orderInfo.getCouponId());
 
         setOrderCalendarAdd(orderId);
+        //过时不支付
+        MyTimer timer = new MyTimer();
+        timer.schedule(() -> {
+            this.setOrderCalendarReduce(orderId);
+            timer.cancel();
+        }, 600000);
+
 
 
         //本系统业务下单生产订单ID
@@ -459,13 +462,14 @@ public class SeOrderServiceImpl implements SeOrderService {
     @Transactional
     @Override
     public Result cancelOrder(String order) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Result result = new Result();
         try {
             SeOrderPay so = new SeOrderPay();
             so.setSeOrderId(order);
             SeOrderPay orderPay = seOrderPayMapper.selectOne(so);
-            String result_code = "SUCCESS";
-//            String result_code = wxPay.cancelOrder(orderPay.getId());
+//            String result_code = "SUCCESS";
+            String result_code = wxPay.cancelOrder(orderPay.getId());
             if (result_code.equals("SUCCESS")) {
                 seOrderPayMapper.updateCancel(orderPay.getId());
 
@@ -479,6 +483,8 @@ public class SeOrderServiceImpl implements SeOrderService {
                     SeOrder seOrder1 = seOrderMapper.selectByPrimaryKey(seOrder);
                     seOrder1.setStatus("4");
                     seOrderMapper.updateByPrimaryKeySelective(seOrder1);
+                    if(seOrder1.getCouponId()!=null&&!seOrder1.getCouponId().trim().equals("")&&!seOrder1.getCouponId().equals("0"))
+                        seCouponMapper.updateCouponStatus("1",LocalDateTime.now().format(dateTimeFormatter),seOrder1.getUserId(),seOrder1.getCouponId());
 
                 }
                 setOrderCalendarReduce(orderPay.getId());
@@ -757,6 +763,8 @@ public class SeOrderServiceImpl implements SeOrderService {
                     seApartmentMapper.updateByPrimaryKeySelective(seApartment);
                 }
             }
+            //添加积分
+
         } catch (Exception e) {
             logger.error("error", e);
         }
