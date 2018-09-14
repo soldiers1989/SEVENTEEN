@@ -199,7 +199,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let orderid = options.orderid;
+    var orderid = options.orderid;
     this.getReplyData(orderid);
   },
 

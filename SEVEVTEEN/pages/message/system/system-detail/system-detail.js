@@ -134,6 +134,7 @@ Page({
     })
   },
   replyToTap: function(e) {
+    var orderid = this.data.systemDetail.id;
     if (this.data.orderStatus === 0) {
       wx.showModal({
         title: '提示',
@@ -143,7 +144,7 @@ Page({
       return;
     }
     wx.navigateTo({
-      url: '/pages/message/reply/evaluate/evaluate',
+      url: '/pages/message/reply/evaluate/evaluate?orderid=' + orderid,
     })
   },
   openDoorTap: function(event) {
