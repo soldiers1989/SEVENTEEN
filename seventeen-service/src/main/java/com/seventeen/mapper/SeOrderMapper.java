@@ -33,7 +33,7 @@ public interface SeOrderMapper extends CoreMapper<SeOrder> {
     @Select("select * from se_order so where so.out_time  <= DATE_FORMAT(#{date},'%Y-%m-%d %H:%i:%s') and so.`status` in('2','1')")
     List<SeOrder> getCheckOut(@Param("date") String date);
 
-    @Select("SELECT so.* FROM se_order_liver sol,se_order so WHERE sol.id_card = #{idCard} AND sol.order_id = so.id AND so.`status`='1'")
+    @Select("SELECT so.* FROM se_order_liver sol,se_order so WHERE sol.liver = #{idCard} AND sol.order_id = so.id AND so.`status`='1'")
     List<SeOrder> getOrderByidCard(@Param("idCard")String idCard);
 
     @Select("SELECT ss.wifi FROM se_shop ss,se_order so,se_apartment sa WHERE so.ap_id = sa.id AND sa.shop_id = ss.id AND so.id = #{orderId}")
