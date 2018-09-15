@@ -847,6 +847,15 @@ public class SeOrderServiceImpl implements SeOrderService {
         try {
             List<SeOrder> seOrders = seOrderMapper.getOrderByidCard(liver);
             for (SeOrder seOrder : seOrders) {
+                String apId = seOrder.getApId();
+                SeApartment seApartment = new SeApartment();
+                seApartment.setId(apId);
+                SeApartment seApartment1 = seApartmentMapper.selectByPrimaryKey(seApartment);
+                if(seApartment1.getStatus().equals(1)){
+                    continue;
+                }
+
+                seApartment1.setStatus("2");
                 String inTime = seOrder.getInTime().replace(".0", "");
                 String outTime = seOrder.getOutTime().replace(".0", "");
                 LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));

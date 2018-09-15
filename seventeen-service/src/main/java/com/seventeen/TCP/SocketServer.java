@@ -45,7 +45,7 @@ public class SocketServer {
 		
 		ServerSocket ss = new ServerSocket(PORT);
 
-		InetAddress ia = InetAddress.getByName("192.168.1.100");
+		InetAddress ia = InetAddress.getByName("");
 		System.out.println("服务端@" + ia + " 已启动!");
 		
 		try {
