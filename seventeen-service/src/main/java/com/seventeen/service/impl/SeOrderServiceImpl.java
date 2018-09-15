@@ -181,10 +181,6 @@ public class SeOrderServiceImpl implements SeOrderService {
         return result;
     }
 
-    public static void main(String[] args) {
-        String inTime = DateUtil.format(DateUtil.parseAndToDate("2018-09-27 14:00:00",DateUtil.DEFAULT_DATETIME_PATTERN),DateUtil.DEFAULT_DATE_PATTERN);
-        System.out.println(inTime);
-    }
     @Override
     @Transactional
     public ResponseEntity setOrder(SysUser sysUser, OrderInfo orderInfo) {
@@ -846,12 +842,13 @@ public class SeOrderServiceImpl implements SeOrderService {
     /**
      * 门禁开门激活房间锁密码
      */
-    public void upgradeLockCron(String cardNo) {
+    public void
+    upgradeLockCron(String liver) {
         try {
-            List<SeOrder> seOrders = seOrderMapper.getOrderByidCard(cardNo);
+            List<SeOrder> seOrders = seOrderMapper.getOrderByidCard(liver);
             for (SeOrder seOrder : seOrders) {
-                String inTime = seOrder.getInTime();
-                String outTime = seOrder.getOutTime();
+                String inTime = seOrder.getInTime().replace(".0", "");
+                String outTime = seOrder.getOutTime().replace(".0", "");
                 LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
                 LocalDateTime endTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(outTime, DateUtil.DEFAULT_DATETIME_PATTERN));
 

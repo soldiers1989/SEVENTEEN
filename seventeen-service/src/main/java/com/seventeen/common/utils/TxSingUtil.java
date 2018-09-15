@@ -1,6 +1,7 @@
 package com.seventeen.common.utils;
 
 import com.alibaba.fastjson.JSON;
+
 import com.qcloud.image.ImageClient;
 import com.qcloud.image.request.FaceIdCardCompareRequest;
 import org.slf4j.Logger;

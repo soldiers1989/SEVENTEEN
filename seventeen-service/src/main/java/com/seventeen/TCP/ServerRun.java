@@ -1,5 +1,7 @@
 package com.seventeen.TCP;
 
+import com.seventeen.service.impl.SeOrderServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerRun  implements CommandLineRunner {
 
+	@Autowired
+	private SeOrderServiceImpl seOrderServiceImpl;
+
 	@Override
 	public void run(String... strings) throws Exception {
-		new SocketServer().run();
+
+		new SocketServer(seOrderServiceImpl).run();
 	}
 }
 
