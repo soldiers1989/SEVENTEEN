@@ -856,6 +856,8 @@ public class SeOrderServiceImpl implements SeOrderService {
                 }
 
                 seApartment1.setStatus("2");
+                seApartmentMapper.updateByPrimaryKeySelective(seApartment1);
+
                 String inTime = seOrder.getInTime().replace(".0", "");
                 String outTime = seOrder.getOutTime().replace(".0", "");
                 LocalDateTime startTime = DateUtil.toLocalDateTime(DateUtil.parseTimeAndToDate(inTime, DateUtil.DEFAULT_DATETIME_PATTERN));
